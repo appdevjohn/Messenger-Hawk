@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Messages from './containers/Messages/Messages';
+
+const dummyProps = {
+    highlightId: '1',
+    senders: [
+        {
+            id: '1',
+            name: 'John Doe',
+            img: 'https://dummyimage.com/128/f2efea/000000.png'
+        },
+        {
+            id: '2',
+            name: 'Jane Doe',
+            img: 'https://dummyimage.com/128/f2efea/000000.png'
+        }
+    ]
+}
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div>
+            <Messages
+                highlightId={dummyProps.highlightId}
+                senders={dummyProps.senders} />
+        </div>
+    );
 }
 
 export default App;

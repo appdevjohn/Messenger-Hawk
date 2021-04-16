@@ -1,0 +1,4 @@
+.MessageView {
+    width: calc(100% - 30px);
+    margin-bottom: 92px;
+}

@@ -1,5 +1,7 @@
 import Messages from './containers/Messages/Messages';
 
+import classes from './App.module.css';
+
 const dummyProps = {
     highlightId: '1',
     senders: [
@@ -18,7 +20,7 @@ const dummyProps = {
 
 function App() {
     return (
-        <div>
+        <div className={classes.App}>
             <Messages
                 highlightId={dummyProps.highlightId}
                 senders={dummyProps.senders} />

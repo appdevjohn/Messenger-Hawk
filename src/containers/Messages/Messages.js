@@ -76,12 +76,12 @@ const Messages = props => {
                         timestamp: new Date(),
                         content: message,
                         type: 'text'
-                    }
+                    };
                     setMessages(oldMessages => {
                         const newMessages = oldMessages.map(m => ({ ...m }));
                         newMessages.push(newMessage);
                         return newMessages;
-                    })
+                    });
                 }}
                 becameActive={() => {
                     window.scroll(0, document.body.scrollHeight);

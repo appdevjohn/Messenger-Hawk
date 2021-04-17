@@ -1,0 +1,29 @@
+.NavBar {
+    position: fixed;
+    top: env(safe-area-inset-top);
+    left: env(safe-area-inset-left);
+    right: env(safe-area-inset-right);
+    height: 64px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    background-color: white;
+    color: var(--accent-color);
+    box-shadow: 1px 0px 4px #ccc;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.spacer {
+    height: 64px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .NavBar {
+        background-color: #222222;
+        box-shadow: 1px 0px 4px #000000;
+    }
+}

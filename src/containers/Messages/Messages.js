@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 
+import NavBar from '../../navigation/NavBar/NavBar';
 import MessageView from '../../components/MessageView/MessageView';
 import ComposeBox from '../../components/ComposeBox/ComposeBox';
 
@@ -64,6 +65,7 @@ const Messages = props => {
 
     return (
         <div className={classes.Messages}>
+            <NavBar title="Messages" />
             <MessageView
                 highlightId={props.highlightId}
                 senders={props.senders}

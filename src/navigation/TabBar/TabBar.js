@@ -5,9 +5,8 @@ import classes from './TabBar.module.css';
 const TabBar = props => {
     return (
         <div className={classes.TabBar}>
-            <TabBarItem />
-            <TabBarItem />
-            <TabBarItem />
+            <TabBarItem link="/posts" title="Posts" />
+            <TabBarItem link="/conversations" title="Convos" />
         </div>
     )
 }

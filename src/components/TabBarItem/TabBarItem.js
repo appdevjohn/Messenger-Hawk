@@ -5,7 +5,7 @@ import classes from './TabBarItem.module.css';
 const TabBarItem = props => {
     return (
         <Link to={props.link || '/'} className={classes.TabBarItem}>
-            Tab Bar Item
+            {props.title}
         </Link>
     )
 }

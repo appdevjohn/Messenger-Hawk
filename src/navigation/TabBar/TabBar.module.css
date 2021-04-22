@@ -14,3 +14,10 @@
     backdrop-filter: blur(5px);
     box-shadow: -1px 0px 4px #cccccc;
 }
+
+@media (prefers-color-scheme: dark) {
+    .TabBar {
+        background-color: #222222;
+        box-shadow: -1px 0px 4px #000000;
+    }
+}

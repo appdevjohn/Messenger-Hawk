@@ -40,6 +40,9 @@ function App() {
                         highlightId={dummyProps.highlightId}
                         senders={dummyProps.senders} />
                 </Route>
+                <Route>
+                    <Posts />
+                </Route>
             </Switch>
         </div>
     );

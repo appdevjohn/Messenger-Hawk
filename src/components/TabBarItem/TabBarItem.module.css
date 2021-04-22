@@ -7,3 +7,9 @@
     text-decoration: none;
     color: black;
 }
+
+@media (prefers-color-scheme: dark) {
+    .TabBarItem {
+        color: white;
+    }
+}

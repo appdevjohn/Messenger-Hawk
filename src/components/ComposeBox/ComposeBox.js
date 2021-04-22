@@ -16,7 +16,7 @@ const ComposeBox = props => {
     return (
         <div className={containerClasses.join(' ')}>
             <div className={classes.ComposeBox}>
-                <div><input
+                <input
                     className={classes.Input}
                     type="text"
                     placeholder="Message"
@@ -36,15 +36,7 @@ const ComposeBox = props => {
                     onBlur={() => {
                         setActive(false);
                     }}
-                    ref={inputRef} /></div>
-                <div><button
-                    className={classes.Button}
-                    onClick={event => {
-                        event.preventDefault();
-                        props.sendMessage(message);
-                        setMessage('');
-                        inputRef.current.focus();
-                    }}></button></div>
+                    ref={inputRef} />
             </div>
         </div>
     )

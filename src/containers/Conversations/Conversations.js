@@ -10,9 +10,10 @@ const Conversations = props => {
         <div className={classes.Conversations}>
             <NavBar title="Conversations" />
             <TableView>
-                <ConvoCell data="Conversation 1" />
-                <ConvoCell data="Conversation 2" />
-                <ConvoCell data="Conversation 3" />
+                <ConvoCell name="George Washington" snippet="Here is a bit of my message." />
+                <ConvoCell name="John Adams" snippet="Here is a bit of my message." />
+                <ConvoCell name="Thomas Jefferson" snippet="Here is a bit of my message." />
+                <ConvoCell name="James Madison" snippet="Here is a bit of my message." />
             </TableView>
             <TabBar />
         </div>

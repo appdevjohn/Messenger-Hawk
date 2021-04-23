@@ -1,3 +1,42 @@
 .PostCell {
     display: block;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+    margin-bottom: 0.5rem;
+}
+
+.headerImage {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    margin-right: 8px;
+    border-radius: 2rem;
+    overflow: hidden;
+}
+
+.headerImage img {
+    height: 100%;
+}
+
+.headerName {
+    font-size: 0.875rem;
+    font-weight: 400;
+    padding-bottom: 2px;
+}
+
+.title {
+    font-size: 1.3125rem;
+    font-weight: 500;
+}
+
+.body {
+    font-size: 1rem;
+    font-weight: 400;
 }

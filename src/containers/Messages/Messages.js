@@ -65,7 +65,7 @@ const Messages = props => {
 
     return (
         <div className={classes.Messages}>
-            <NavBar title="Messages" />
+            <NavBar title="Messages" back="/conversations" add="/new-conversation" />
             <MessageView
                 highlightId={props.highlightId}
                 senders={props.senders}

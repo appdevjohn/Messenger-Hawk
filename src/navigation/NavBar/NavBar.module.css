@@ -21,9 +21,25 @@
     height: 64px;
 }
 
+.back, .add {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
+}
+
+.back img, .add img {
+    height: 100%;
+}
+
 @media (prefers-color-scheme: dark) {
     .NavBar {
         background-color: #222222;
         box-shadow: 1px 0px 4px #000000;
+    }
+
+    .back img, .add img {
+        filter: brightness(500%);
     }
 }

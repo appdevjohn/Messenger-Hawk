@@ -40,3 +40,13 @@
     font-size: 1rem;
     font-weight: 400;
 }
+
+@media (prefers-color-scheme: dark) {
+    .PostCell {
+        border-bottom: 1px solid #444444;
+    }
+
+    .body {
+        color: #999999;
+    }
+}

@@ -36,3 +36,10 @@
     font-weight: 400;
     color: #999999;
 }
+
+@media (prefers-color-scheme: dark) {
+    .ConvoCell {
+        color: white;
+        border-bottom: 1px solid #444444;
+    }
+}

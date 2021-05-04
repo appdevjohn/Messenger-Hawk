@@ -32,7 +32,7 @@ const Posts = props => {
 
     return (
         <div className={classes.Posts}>
-            <NavBar title="Posts" />
+            <NavBar title="Posts" add="/new-post" />
             <TableView>
                 {posts}
             </TableView>

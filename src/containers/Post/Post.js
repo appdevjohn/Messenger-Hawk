@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import NavBar from '../../navigation/NavBar/NavBar';
+import PostDetails from '../../components/PostDetails/PostDetails';
 import MessageView from '../../components/MessageView/MessageView';
 import ComposeBox from '../../components/ComposeBox/ComposeBox';
 
-import classes from './Messages.module.css';
+import classes from './Post.module.css';
 
-const Messages = props => {
+const Post = props => {
     const [messages, setMessages] = useState([
         {
             id: '2',
@@ -59,13 +60,15 @@ const Messages = props => {
         }
     ]);
 
-    useEffect(() => {
-        window.scroll(0, document.body.scrollHeight);
-    }, [messages.length]);
-
     return (
-        <div className={classes.Messages}>
-            <NavBar title="Messages" back="/conversations" />
+        <div className={classes.Post}>
+            <NavBar title="John's Post" back="/posts" />
+            <PostDetails
+                imgSrc="https://dummyimage.com/128/f2efea/000000.png"
+                name="John Champion"
+                time={new Date()}
+                title="Does anybody else absolutely love the feeling of airports?"
+                body="I know that airports are traditionally hated by everyone for the constant rush and anxiety, but for me, I love them. The feeling of sitting in a seat (especially at night) watching so much happen around me reminds me how small I am in relation to the rest of the world, and I love this feeling so much. Does anyone else feel like this in airports?" />
             <MessageView
                 highlightId={props.highlightId}
                 senders={props.senders}
@@ -92,4 +95,4 @@ const Messages = props => {
     )
 }
 
-export default Messages;
+export default Post;

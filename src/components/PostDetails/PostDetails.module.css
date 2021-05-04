@@ -1,9 +1,5 @@
-.PostCell {
-    display: block;
-    padding: 0.5rem 1rem;
-    border-bottom: 1px solid #eeeeee;
-    text-decoration: none;
-    color: black;
+.PostDetails {
+    margin: 1rem 0.5rem;
 }
 
 .header {
@@ -16,8 +12,9 @@
 
 .headerImage {
     display: inline-block;
-    width: 2rem;
-    height: 2rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    width: 44px;
+    height: 44px;
     margin-right: 8px;
     border-radius: 2rem;
     overflow: hidden;

@@ -1,6 +1,7 @@
 import { Switch, Route } from 'react-router-dom';
 
 import Posts from './containers/Posts/Posts';
+import Post from './containers/Post/Post';
 import Conversations from './containers/Conversations/Conversations';
 import Messages from './containers/Messages/Messages';
 
@@ -30,7 +31,7 @@ function App() {
                     <Posts />
                 </Route>
                 <Route path="/posts/:id" exact>
-                    <div>This view is not yet ready.</div>
+                    <Post highlightId={dummyProps.highlightId} senders={dummyProps.senders} />
                 </Route>
                 <Route path="/conversations" exact>
                     <Conversations />

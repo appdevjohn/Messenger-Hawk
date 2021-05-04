@@ -8,7 +8,7 @@ import classes from './Conversations.module.css';
 const Conversations = props => {
     return (
         <div className={classes.Conversations}>
-            <NavBar title="Conversations" />
+            <NavBar title="Conversations" add="/new-conversation" />
             <TableView>
                 <ConvoCell name="George Washington" snippet="Here is a bit of my message." />
                 <ConvoCell name="John Adams" snippet="Here is a bit of my message." />

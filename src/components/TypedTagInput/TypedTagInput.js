@@ -14,6 +14,8 @@ const TypedTagInput = props => {
         if (event.key === 'Enter') {
             props.addTag(input);
             setInput('');
+        } else if (event.key === 'Backspace' && input.length === 0) {
+            props.removeLastTag();
         }
     }
 
@@ -32,7 +34,7 @@ const TypedTagInput = props => {
             {displayedTags}
             <input
                 className={classes.input}
-                style={{ width: input.length + 'ch' }}
+                style={{ width: (input.length * 1.25) + 'ch' }}
                 ref={inputRef}
                 type="text"
                 placeholder={props.placeholder || 'Add...'}
@@ -47,6 +49,7 @@ TypedTagInput.propTypes = {
     tags: PropTypes.arrayOf(PropTypes.string).isRequired,
     addTag: PropTypes.func.isRequired,
     removeTag: PropTypes.func.isRequired,
+    removeLastTag: PropTypes.func.isRequired,
     onValidateTag: PropTypes.func,
     placeholder: PropTypes.string
 }

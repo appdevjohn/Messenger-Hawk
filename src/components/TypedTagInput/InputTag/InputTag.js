@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import InputTagSpinner from './InputTagSpinner/InputTagSpinner';
+
 import classes from './InputTag.module.css';
 
 const InputTag = props => {
@@ -36,6 +38,7 @@ const InputTag = props => {
             className={classNames.join(' ')}
             onClick={props.onRemove}>
             {text}
+            {valid === null ? <InputTagSpinner /> : null}
         </div>
     )
 }

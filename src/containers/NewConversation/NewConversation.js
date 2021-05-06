@@ -23,11 +23,18 @@ const NewConversation = props => {
                         return prevState.filter(recipient => recipient !== tag);
                     });
                 }}
+                removeLastTag={() => {
+                    setRecipients(prevState => {
+                        const newRecipients = [...prevState];
+                        newRecipients.pop();
+                        return newRecipients;
+                    })
+                }}
                 onValidateTag={useCallback((text) => {
                     return new Promise((resolve, reject) => {
                         setTimeout(() => {
                             resolve(text.charAt(0) !== 'F');
-                        }, 500);
+                        }, 2500);
                     });
                 }, [])} />
         </div>

@@ -44,7 +44,7 @@ const ComposeBox = props => {
 
 ComposeBox.propTypes = {
     sendMessage: PropTypes.func.isRequired,
-    becameActive: PropTypes.func.isRequired
+    becameActive: PropTypes.func
 }
 
 export default ComposeBox;

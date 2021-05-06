@@ -5,6 +5,7 @@
     --content-background: #F2EFEA;
     --accent-color: #403D58;
     --placeholder-text-color: #8e8e8e;
+    --invalid-color: #d14f4f;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -12,6 +13,7 @@
         --content-background: #8b8b8a;
         --accent-color: #7a68ff;
         --placeholder-text-color: #dddcdc;
+        --invalid-color: #d14f4f;
     }
 }
 

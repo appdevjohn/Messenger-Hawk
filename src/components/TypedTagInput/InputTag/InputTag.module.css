@@ -6,12 +6,15 @@
     margin: 4px;
     background-color: #ccc;
     border-radius: 6px;
+    cursor: pointer;
 }
 
 .valid {
-    background-color: green;
+    background-color: var(--accent-color);
+    color: white;
 }
 
 .invalid {
-    background-color: red;
+    background-color: var(--invalid-color);
+    color: white;
 }

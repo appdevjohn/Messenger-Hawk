@@ -1,14 +1,17 @@
 .TypedTagInput {
     display: block;
     padding: 0.25rem;
-    min-height: 4rem;
+    margin: 0.5rem;
+    min-height: 8rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    border-radius: 0.5rem;
 }
 
 .input {
     appearance: none;
     border: none;
     font-size: 1rem;
-    min-width: 10ch;
+    min-width: 12ch;
 }
 
 .input:focus {

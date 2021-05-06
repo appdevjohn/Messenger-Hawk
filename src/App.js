@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Posts from './containers/Posts/Posts';
 import Post from './containers/Post/Post';
 import Conversations from './containers/Conversations/Conversations';
+import NewConversation from './containers/NewConversation/NewConversation';
 import Messages from './containers/Messages/Messages';
 
 import classes from './App.module.css';
@@ -35,6 +36,9 @@ function App() {
                 </Route>
                 <Route path="/conversations" exact>
                     <Conversations />
+                </Route>
+                <Route path="/new-conversation" exact>
+                    <NewConversation />
                 </Route>
                 <Route path="/conversations/:id" exact>
                     <Messages

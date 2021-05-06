@@ -1,0 +1,17 @@
+.InputTag {
+    display: inline-block;
+    min-height: 1rem;
+    min-width: 1rem;
+    padding: 4px;
+    margin: 4px;
+    background-color: #ccc;
+    border-radius: 6px;
+}
+
+.valid {
+    background-color: green;
+}
+
+.invalid {
+    background-color: red;
+}

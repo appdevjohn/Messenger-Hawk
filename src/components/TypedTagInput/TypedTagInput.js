@@ -24,15 +24,23 @@ const TypedTagInput = props => {
             key={tag}
             text={tag}
             onValidate={props.onValidateTag}
-            onRemove={() => props.removeTag(tag)} />
+            onRemove={() => {
+                if (!props.finalized) {
+                    props.removeTag(tag);
+                }
+            }} />
     });
 
     return (
         <div
-            className={classes.TypedTagInput}
-            onClick={() => inputRef.current.focus()}>
+            className={props.finalized ? [classes.TypedTagInput, classes.finalized].join(' ') : classes.TypedTagInput}
+            onClick={() => {
+                if (!props.finalized) {
+                    inputRef.current.focus();
+                }
+            }}>
             {displayedTags}
-            <input
+            {!props.finalized ? <input
                 className={classes.input}
                 style={{ width: (input.length * 1.25) + 'ch' }}
                 ref={inputRef}
@@ -40,7 +48,7 @@ const TypedTagInput = props => {
                 placeholder={props.placeholder || 'Add...'}
                 value={input}
                 onChange={event => setInput(event.target.value)}
-                onKeyDown={inputEnteredHandler} />
+                onKeyDown={inputEnteredHandler} /> : null}
         </div>
     )
 }
@@ -51,7 +59,8 @@ TypedTagInput.propTypes = {
     removeTag: PropTypes.func.isRequired,
     removeLastTag: PropTypes.func.isRequired,
     onValidateTag: PropTypes.func,
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
+    finalized: PropTypes.bool
 }
 
 export default TypedTagInput;

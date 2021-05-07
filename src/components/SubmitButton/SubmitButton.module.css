@@ -1,0 +1,17 @@
+.SubmitButton {
+    cursor: pointer;
+    display: block;
+    width: calc(100% - 1rem);
+    padding: 1rem;
+    margin: 1rem 0.5rem;
+    border: none;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    border-radius: 0.5rem;
+    background-color: var(--accent-color);
+    color: white;
+    font-size: 1rem;
+}
+
+.disabled {
+    background-color: #ccc;
+}

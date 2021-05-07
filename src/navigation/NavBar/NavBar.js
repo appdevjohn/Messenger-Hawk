@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import classes from './NavBar.module.css';
 import backImg from '../../assets/back.png';
@@ -20,6 +21,12 @@ const NavBar = props => {
             <div className={classes.spacer}></div>
         </Fragment>
     )
+}
+
+NavBar.propTypes = {
+    title: PropTypes.string,
+    back: PropTypes.string,
+    add: PropTypes.string
 }
 
 export default NavBar;

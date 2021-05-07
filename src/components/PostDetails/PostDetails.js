@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import classes from './PostDetails.module.css';
 
 const PostDetails = props => {
@@ -11,6 +13,14 @@ const PostDetails = props => {
             <div className={classes.body}>{props.body}</div>
         </div>
     )
+}
+
+PostDetails.propTypes = {
+    imgSrc: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    time: PropTypes.instanceOf(Date).isRequired,
+    title: PropTypes.string.isRequired,
+    body: PropTypes.string.isRequired
 }
 
 export default PostDetails;

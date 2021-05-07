@@ -19,8 +19,15 @@
     border: none;
     font-size: 1rem;
     min-width: 12ch;
+    background-color: transparent;
 }
 
 .input:focus {
     outline: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    .TypedTagInput {
+        background-color: #444444;
+    }
 }

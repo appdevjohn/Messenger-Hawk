@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import { Link } from 'react-router-dom';
 
 import classes from './PostCell.module.css';
@@ -13,6 +15,14 @@ const PostCell = props => {
             <div className={classes.body}>{props.body}</div>
         </Link>
     )
+}
+
+PostCell.propTypes = {
+    imgSrc: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    time: PropTypes.instanceOf(Date).isRequired,
+    title: PropTypes.string.isRequired,
+    body: PropTypes.string.isRequired
 }
 
 export default PostCell;

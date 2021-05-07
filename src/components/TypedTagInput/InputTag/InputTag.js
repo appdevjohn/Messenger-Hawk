@@ -10,13 +10,22 @@ const InputTag = props => {
     const [valid, setValid] = useState(null);
 
     useEffect(() => {
+        let mounted = true;
+
         if (onValidate) {
             onValidate(text).then(result => {
-                setValid(result);
+                if (mounted) {
+                    setValid(result);
+                }
             });
         } else {
-            setValid(true);
+            if (mounted) {
+                setValid(true);
+            }
         }
+
+        return () => mounted = false;
+
     }, [onValidate, text]);
 
     let classNames = [classes.InputTag];

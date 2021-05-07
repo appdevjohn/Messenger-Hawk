@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import MessageBlock from '../../components/MessageBlock/MessageBlock';
 
 import classes from './MessageView.module.css';
@@ -42,6 +44,22 @@ const MessageView = props => {
             })}
         </div>
     )
+}
+
+MessageView.propTypes = {
+    messages: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string,
+        senderId: PropTypes.string,
+        timestamp: PropTypes.instanceOf(Date),
+        content: PropTypes.string,
+        type: PropTypes.string
+    })).isRequired,
+    senders: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+        img: PropTypes.string
+    })).isRequired,
+    highlightId: PropTypes.string.isRequired
 }
 
 export default MessageView;

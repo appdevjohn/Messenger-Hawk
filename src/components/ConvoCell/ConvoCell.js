@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import classes from './ConvoCell.module.css';
 
@@ -14,6 +15,11 @@ const ConvoCell = props => {
             </div>
         </Link>
     )
+}
+
+ConvoCell.propTypes = {
+    name: PropTypes.string.isRequired,
+    snippet: PropTypes.string.isRequired
 }
 
 export default ConvoCell;

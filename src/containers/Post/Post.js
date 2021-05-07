@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import NavBar from '../../navigation/NavBar/NavBar';
 import PostDetails from '../../components/PostDetails/PostDetails';
@@ -59,6 +59,14 @@ const Post = props => {
             type: 'text'
         }
     ]);
+
+    useEffect(() => {
+        window.scroll(0, document.body.scrollHeight);
+    }, [messages.length]);
+
+    useEffect(() => {
+        window.scroll(0, 0);
+    }, []);
 
     return (
         <div className={classes.Post}>

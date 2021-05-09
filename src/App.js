@@ -5,6 +5,8 @@ import Post from './containers/Post/Post';
 import Conversations from './containers/Conversations/Conversations';
 import NewConversation from './containers/NewConversation/NewConversation';
 import Messages from './containers/Messages/Messages';
+import Account from './containers/Account/Account';
+import SignUp from './containers/SignUp/SignUp';
 
 import classes from './App.module.css';
 
@@ -44,6 +46,12 @@ function App() {
                     <Messages
                         highlightId={dummyProps.highlightId}
                         senders={dummyProps.senders} />
+                </Route>
+                <Route path="/account" exact>
+                    <Account />
+                </Route>
+                <Route path="/signup">
+                    <SignUp />
                 </Route>
                 <Route>
                     <Posts />

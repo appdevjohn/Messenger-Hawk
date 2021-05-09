@@ -1,0 +1,21 @@
+.TextInput {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 8px;
+    background-color: #F2EFEA;
+    color: black;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0.5rem 0;
+    margin: 0.5rem 0;
+}
+
+.TextInput::placeholder {
+    color: #999999;
+}
+
+.TextInput:active, .TextInput:focus {
+    outline: none;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+}

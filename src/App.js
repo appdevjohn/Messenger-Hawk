@@ -6,7 +6,7 @@ import Conversations from './containers/Conversations/Conversations';
 import NewConversation from './containers/NewConversation/NewConversation';
 import Messages from './containers/Messages/Messages';
 import Account from './containers/Account/Account';
-import SignUp from './containers/SignUp/SignUp';
+import AuthForm from './containers/AuthForm/AuthForm';
 
 import classes from './App.module.css';
 
@@ -50,8 +50,8 @@ function App() {
                 <Route path="/account" exact>
                     <Account />
                 </Route>
-                <Route path="/signup">
-                    <SignUp />
+                <Route path="/auth">
+                    <AuthForm />
                 </Route>
                 <Route>
                     <Posts />

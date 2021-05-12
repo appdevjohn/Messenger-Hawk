@@ -27,7 +27,36 @@ export const startLogOut = () => {
         localStorage.removeItem('userId');
 
         // Remove items from localStorage
-        return dispatch({ type: actionTypes.AUTH_FAIL });
+        return dispatch({ type: actionTypes.AUTH_LOG_OUT });
+    }
+}
+
+export const authCheckState = () => {
+    return dispatch => {
+        dispatch({
+            type: actionTypes.AUTH_SET_LOADING,
+            loading: true
+        });
+
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
+
+        if (token && userId) {
+            return dispatch({
+                type: actionTypes.AUTH_SUCCESS,
+                token: token,
+                userId: userId
+            });
+        } else {
+            return dispatch({ type: actionTypes.AUTH_LOG_OUT });
+        }
+    }
+}
+
+export const setRedirectPath = redirectPath => {
+    return {
+        type: actionTypes.AUTH_SET_REDIRECT_PATH,
+        redirectPath: redirectPath
     }
 }
 

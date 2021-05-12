@@ -12,6 +12,7 @@ import classes from './AuthForm.module.css';
 const SignUp = props => {
     const token = useSelector(state => state.auth.token);
     const isLoading = useSelector(state => state.auth.loading);
+    const redirectPath = useSelector(state => state.auth.redirectPath);
     const dispatch = useDispatch();
 
     const [email, setEmail] = useState('');
@@ -23,9 +24,9 @@ const SignUp = props => {
     useEffect(() => {
         console.log(token);
         if (token) {
-            history.push('/');
+            history.push(redirectPath);
         }
-    }, [token, history]);
+    }, [token, history, redirectPath]);
 
     const onSignUp = () => {
         // mock a call to the server

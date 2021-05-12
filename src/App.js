@@ -1,5 +1,8 @@
+import { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
+import * as authActions from './store/actions/auth';
 import Posts from './containers/Posts/Posts';
 import Post from './containers/Post/Post';
 import Conversations from './containers/Conversations/Conversations';
@@ -27,6 +30,12 @@ const dummyProps = {
 }
 
 function App() {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(authActions.authCheckState());
+    }, [dispatch]);
+
     return (
         <div className={classes.App}>
             <Switch>

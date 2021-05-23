@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import * as authActions from './store/actions/auth';
 import Posts from './containers/Posts/Posts';
@@ -30,11 +30,21 @@ const dummyProps = {
 }
 
 function App() {
+    const token = useSelector(state => state.auth.token);
+    const activated = useSelector(state => state.auth.activated);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(authActions.authCheckState());
     }, [dispatch]);
+    
+    if (!token || !activated) {
+        return (
+            <div className={classes.App}>
+                <AuthForm />
+            </div>
+        )
+    }
 
     return (
         <div className={classes.App}>

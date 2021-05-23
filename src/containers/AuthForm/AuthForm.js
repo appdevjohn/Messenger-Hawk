@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { withRouter, Link, Switch, Route } from 'react-router-dom';
+import { withRouter, Link, Switch, Route, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import * as authActions from '../../store/actions/auth';
@@ -11,7 +11,9 @@ import classes from './AuthForm.module.css';
 
 const SignUp = props => {
     const token = useSelector(state => state.auth.token);
+    const activated = useSelector(state => state.auth.activated);
     const isLoading = useSelector(state => state.auth.loading);
+    const authError = useSelector(state => state.auth.error);
     const redirectPath = useSelector(state => state.auth.redirectPath);
     const dispatch = useDispatch();
 
@@ -22,56 +24,57 @@ const SignUp = props => {
 
     const { history } = props;
     useEffect(() => {
-        console.log(token);
-        if (token) {
-            history.push(redirectPath);
+        if (token && activated) {
+            history.replace(redirectPath);
+        } else if (token && !activated) {
+            history.replace('/auth/confirm-email');
+        } else if (!token && !activated) {
+            history.replace('/auth/signup');
         }
-    }, [token, history, redirectPath]);
+    }, [token, activated, history, redirectPath]);
+
+    const { pathname } = history.location;
+    useEffect(() => {
+        dispatch(authActions.clearError());
+    }, [pathname, dispatch])
 
     const onSignUp = () => {
-        // mock a call to the server
-        dispatch(authActions.setLoading(true));
-        setTimeout(() => {
-            history.push('/auth/confirm-email');
-            dispatch(authActions.setLoading(false));
-        }, 1000);
+        dispatch(authActions.startSignUp('John', 'Champion', email, password, confirmPassword));
     }
 
     const onConfirmEmail = () => {
-        // mock a call to the server
-        dispatch(authActions.setLoading(true));
-        setTimeout(() => {
-            history.push('/auth/login');
-            dispatch(authActions.setLoading(false));
-        }, 1000);
+        dispatch(authActions.startConfirmEmail(token, confirmationNum));
     }
 
     const onLogIn = () => {
-        // log in the user
-        dispatch(authActions.startLogIn('email@example.com', 'password'));
+        dispatch(authActions.startLogIn(email, password));
     }
 
     return (
         <div className={classes.SignUp}>
-            <Route path={['/auth/signup', '/auth/login']}>
+            <Route path={['/auth/signup', '/auth/login']} exact>
                 <TextInput type="text" placeholder="email" value={email} onChange={event => setEmail(event.target.value)} />
                 <TextInput type="password" placeholder="password" value={password} onChange={event => setPassword(event.target.value)} />
             </Route>
             <Switch>
-                <Route path="/auth/signup">
+                <Route path="/auth/signup" exact>
                     <TextInput type="password" placeholder="confirm password" value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)} />
                     <SubmitButton title="Sign Up" onClick={onSignUp} />
                     <Link to="/auth/login" className={classes.alternateModeLink}>or Log In</Link>
                 </Route>
-                <Route path="/auth/login">
+                <Route path="/auth/login" exact>
                     <SubmitButton title="Log In" onClick={onLogIn} />
                     <Link to="/auth/signup" className={classes.alternateModeLink}>or Sign Up</Link>
                 </Route>
-                <Route path="/auth/confirm-email">
-                    <TextInput type="text" placeholder="Confirmation NUmber" value={confirmationNum} onChange={event => setConfirmationNum(event.target.value)} />
+                <Route path="/auth/confirm-email" exact>
+                    <TextInput type="text" placeholder="Verification Code" value={confirmationNum} onChange={event => setConfirmationNum(event.target.value)} />
                     <SubmitButton title="Confirm" onClick={onConfirmEmail} />
                 </Route>
+                <Route>
+                    <Redirect to="/auth/login" />
+                </Route>
             </Switch>
+            <p>{authError}</p>
             {isLoading ? <LoadingIndicator /> : null}
         </div>
     )

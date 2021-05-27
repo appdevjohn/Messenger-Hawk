@@ -38,7 +38,7 @@ function App() {
         dispatch(authActions.authCheckState());
     }, [dispatch]);
     
-    if (!token || !activated) {
+    if (token === null || activated === false) {
         return (
             <div className={classes.App}>
                 <AuthForm />

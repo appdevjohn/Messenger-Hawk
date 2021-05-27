@@ -29,13 +29,16 @@ const SignUp = props => {
         } else if (token && !activated) {
             history.replace('/auth/confirm-email');
         } else if (!token && !activated) {
-            history.replace('/auth/signup');
+            history.replace('/auth/login');
         }
     }, [token, activated, history, redirectPath]);
 
     const { pathname } = history.location;
     useEffect(() => {
         dispatch(authActions.clearError());
+        setPassword('');
+        setConfirmPassword('');
+        setConfirmationNum('');
     }, [pathname, dispatch])
 
     const onSignUp = () => {
@@ -53,7 +56,7 @@ const SignUp = props => {
     return (
         <div className={classes.SignUp}>
             <Route path={['/auth/signup', '/auth/login']} exact>
-                <TextInput type="text" placeholder="email" value={email} onChange={event => setEmail(event.target.value)} />
+                <TextInput type="email" placeholder="email" value={email} onChange={event => setEmail(event.target.value)} />
                 <TextInput type="password" placeholder="password" value={password} onChange={event => setPassword(event.target.value)} />
             </Route>
             <Switch>

@@ -1,8 +1,8 @@
 import * as actionTypes from '../actionTypes';
 
 const initialState = {
-    token: null,
-    activated: false,
+    token: undefined,
+    activated: undefined,
     loading: false,
     error: null,
     redirectPath: '/'

@@ -42,7 +42,7 @@ const SignUp = props => {
     }, [pathname, dispatch])
 
     const onSignUp = () => {
-        dispatch(authActions.startSignUp('John', 'Champion', email, password, confirmPassword));
+        dispatch(authActions.startSignUp('John', 'Champion', email, 'appdevjohn', password, confirmPassword));
     }
 
     const onConfirmEmail = () => {

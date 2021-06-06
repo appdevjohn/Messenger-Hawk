@@ -1,7 +1,7 @@
 import api from '../../api';
 import * as actionTypes from '../actionTypes';
 
-export const startSignUp = (firstName, lastName, email, password, confirmPassword) => {
+export const startSignUp = (firstName, lastName, email, username, password, confirmPassword) => {
     return dispatch => {
         dispatch({ type: actionTypes.AUTH_START });
 
@@ -16,6 +16,7 @@ export const startSignUp = (firstName, lastName, email, password, confirmPasswor
             firstName: firstName,
             lastName: lastName,
             email: email,
+            username: username,
             password: password
         }).then(response => {
             localStorage.setItem('token', response.data.token);
@@ -45,7 +46,7 @@ export const startLogIn = (email, password) => {
     return dispatch => {
         dispatch({ type: actionTypes.AUTH_START });
 
-        return api.post('/auth/login', {
+        return api.put('/auth/login', {
             email: email,
             password: password
         }).then(response => {
@@ -76,7 +77,7 @@ export const startConfirmEmail = (token, code) => {
     return dispatch => {
         dispatch({ type: actionTypes.AUTH_ACTIVATE });
 
-        return api.post('/auth/confirm-email', {
+        return api.put('/auth/confirm-email', {
             activateToken: code
         }, {
             headers: {

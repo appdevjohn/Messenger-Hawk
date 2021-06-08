@@ -1,6 +1,9 @@
 import { useState, useCallback } from 'react';
 import { withRouter } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
+import api from '../../api';
+import * as errorActions from '../../store/actions/error';
 import NavBar from '../../navigation/NavBar/NavBar';
 import TypedTagInput from '../../components/TypedTagInput/TypedTagInput';
 import SubmitButton from '../../components/SubmitButton/SubmitButton';
@@ -12,17 +15,25 @@ import classes from './NewConversation.module.css';
 const NewConversation = props => {
     const [recipients, setRecipients] = useState([]);
     const [creatingConvo, setCreatingConvo] = useState(false);
+    const dispatch = useDispatch();
 
     const createConversationHandler = () => {
-        /**
-         * 1.) Create conversation on server
-         * 2.) Get conversation ID
-         * 3.) Redirect to /conversations/convoID
-         */
         setCreatingConvo(true);
-        setTimeout(() => {
-            props.history.push('/conversations/asdf');
-        }, 1000);
+        api.post('/conversations/new', {
+            name: 'New Conversation',
+            members: JSON.stringify(recipients)
+        }, {
+            headers: {
+                Authorization: 'Bearer ' + props.props.token,
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            setCreatingConvo(false);
+            props.history.push('/conversations/' + response.data.conversation.id);
+        }).catch(error => {
+            setCreatingConvo(false);
+            dispatch(errorActions.setError('Error', error.response.data.message));
+        });
     }
 
     return (
@@ -47,13 +58,22 @@ const NewConversation = props => {
                         return newRecipients;
                     })
                 }}
-                onValidateTag={useCallback((text) => {
-                    return new Promise((resolve, reject) => {
-                        setTimeout(() => {
-                            resolve(text.charAt(0) !== 'F');
-                        }, 2500);
+                onValidateTag={useCallback(text => {
+                    return api.get('/validate-recipient/' + text, {
+                        headers: {
+                            Authorization: 'Bearer ' + props.token,
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(response => {
+                        if (response.status === 200) {
+                            return response.data.valid
+                        } else {
+                            return false;
+                        }
+                    }).catch(() => {
+                        return false;
                     });
-                }, [])} />
+                }, [props.token])} />
             {creatingConvo ? <LoadingIndicator /> : <SubmitButton
                 title="Create New Conversation"
                 disabled={recipients.length === 0}

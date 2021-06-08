@@ -19,10 +19,12 @@ export const startSignUp = (firstName, lastName, email, username, password, conf
             username: username,
             password: password
         }).then(response => {
+            localStorage.setItem('userId', response.data.userId);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('activated', response.data.activated);
             return dispatch({
                 type: actionTypes.AUTH_SUCCESS,
+                userId: response.data.userId,
                 token: response.data.token,
                 activated: response.data.activated
             });
@@ -50,10 +52,13 @@ export const startLogIn = (email, password) => {
             email: email,
             password: password
         }).then(response => {
+            console.log(response);
+            localStorage.setItem('userId', response.data.userId);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('activated', response.data.activated);
             return dispatch({
                 type: actionTypes.AUTH_SUCCESS,
+                userId: response.data.userId,
                 token: response.data.token,
                 activated: response.data.activated
             });
@@ -111,6 +116,7 @@ export const startConfirmEmail = (token, code) => {
 
 export const startLogOut = () => {
     return dispatch => {
+        localStorage.removeItem('userId');
         localStorage.removeItem('token');
         localStorage.removeItem('activated');
 
@@ -126,6 +132,7 @@ export const authCheckState = () => {
             loading: true
         });
 
+        const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
         const activated = localStorage.getItem('activated') === 'true';
 
@@ -145,6 +152,7 @@ export const authCheckState = () => {
         if (token) {
             return dispatch({
                 type: actionTypes.AUTH_SUCCESS,
+                userId: userId,
                 token: token,
                 activated: activated
             });

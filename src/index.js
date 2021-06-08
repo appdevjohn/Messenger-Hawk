@@ -4,14 +4,18 @@ import { BrowserRouter } from 'react-router-dom';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import authStore from './store/reducers/auth';
+
 import './index.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
+import authStore from './store/reducers/auth';
+import errorStore from './store/reducers/error';
+
 const rootReducer = combineReducers({
-    auth: authStore
+    auth: authStore,
+    error: errorStore
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

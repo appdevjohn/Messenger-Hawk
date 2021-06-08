@@ -1,6 +1,7 @@
 import * as actionTypes from '../actionTypes';
 
 const initialState = {
+    userId: undefined,
     token: undefined,
     activated: undefined,
     loading: false,
@@ -11,6 +12,7 @@ const initialState = {
 const authStart = (state, action) => {
     return {
         ...state,
+        userId: null,
         token: null,
         activated: false,
         loading: true,
@@ -21,6 +23,7 @@ const authStart = (state, action) => {
 const authSuccess = (state, action) => {
     return {
         ...state,
+        userId: action.userId,
         token: action.token,
         activated: action.activated,
         loading: false,
@@ -31,6 +34,7 @@ const authSuccess = (state, action) => {
 const authFail = (state, action) => {
     return {
         ...state,
+        userId: null,
         token: null,
         activated: false,
         loading: false,
@@ -41,6 +45,7 @@ const authFail = (state, action) => {
 const authLogOut = (state, action) => {
     return {
         ...state,
+        userId: null,
         token: null,
         activated: false,
         loading: false,

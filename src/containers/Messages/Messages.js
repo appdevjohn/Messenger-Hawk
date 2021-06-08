@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
+import { withRouter } from 'react-router';
+import { useDispatch } from 'react-redux';
 
+import api from '../../api';
+import * as errorActions from '../../store/actions/error';
 import NavBar from '../../navigation/NavBar/NavBar';
 import MessageView from '../../components/MessageView/MessageView';
 import ComposeBox from '../../components/ComposeBox/ComposeBox';
@@ -7,57 +11,47 @@ import ComposeBox from '../../components/ComposeBox/ComposeBox';
 import classes from './Messages.module.css';
 
 const Messages = props => {
-    const [messages, setMessages] = useState([
-        {
-            id: '2',
-            senderId: '1',
-            timestamp: new Date(Date.now() - 256),
-            content: 'sit amet, consectetuer',
-            type: 'text'
-        },
-        {
-            id: '1',
-            senderId: '1',
-            timestamp: new Date(Date.now() - 512),
-            content: 'Lorem ipsum dolor',
-            type: 'text'
-        },
-        {
-            id: '3',
-            senderId: '2',
-            timestamp: new Date(Date.now() - 128),
-            content: 'adipiscing elit. Aenean commodo ligula',
-            type: 'text'
-        },
-        {
-            id: '4',
-            senderId: '1',
-            timestamp: new Date(Date.now() - 64),
-            content: 'eget dolor. Aenean massa.',
-            type: 'text'
-        },
-        {
-            id: '5',
-            senderId: '2',
-            timestamp: new Date(Date.now() - 32),
-            content: 'Cum sociis',
-            type: 'text'
-        },
-        {
-            id: '6',
-            senderId: '2',
-            timestamp: new Date(Date.now() - 16),
-            content: 'natoque penatibus et magnis dis',
-            type: 'text'
-        },
-        {
-            id: '7',
-            senderId: '1',
-            timestamp: new Date(Date.now() - 8),
-            content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
-            type: 'text'
+    const convoId = props.match.params.id;
+    const { userId, token, history } = props;
+    const dispatch = useDispatch();
+
+    const [convoName, setConvoName] = useState('');
+    const [members, setMembers] = useState([]);
+    const [messages, setMessages] = useState([]);
+
+    useEffect(() => {
+        if (token) {
+            api.get('/conversations/' + convoId, {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                const members = response.data.members.map(member => {
+                    return {
+                        id: member.id,
+                        name: member.firstName + ' ' + member.lastName,
+                        img: 'https://dummyimage.com/128/f2efea/000000.png'
+                    }
+                });
+                const messages = response.data.messages.map(message => {
+                    return {
+                        id: message.id,
+                        userId: message.userId,
+                        timestamp: new Date(),
+                        content: message.content,
+                        type: message.type
+                    }
+                });
+                setConvoName(response.data.conversation.name);
+                setMembers(members);
+                setMessages(messages);
+            }).catch(error => {
+                history.replace('/conversations');
+                dispatch(errorActions.setError('Error', error.response.data.message));
+            });
         }
-    ]);
+    }, [convoId, history, token, userId, setMessages, dispatch]);
 
     useEffect(() => {
         window.scroll(0, document.body.scrollHeight);
@@ -65,16 +59,18 @@ const Messages = props => {
 
     return (
         <div className={classes.Messages}>
-            <NavBar title="Messages" back="/conversations" />
-            <MessageView
-                highlightId={props.highlightId}
-                senders={props.senders}
-                messages={messages} />
+            <NavBar title={convoName} back="/conversations" />
+            {userId ?
+                <MessageView
+                    highlightId={userId}
+                    senders={members}
+                    messages={messages} />
+                : null}
             <ComposeBox
                 sendMessage={message => {
                     const newMessage = {
                         id: Math.random().toString(),
-                        senderId: '1',
+                        userId: userId,
                         timestamp: new Date(),
                         content: message,
                         type: 'text'
@@ -92,4 +88,4 @@ const Messages = props => {
     )
 }
 
-export default Messages;
+export default withRouter(Messages);

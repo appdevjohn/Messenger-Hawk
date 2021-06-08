@@ -1,0 +1,63 @@
+.backdrop {
+    z-index: 100;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    padding: 32px;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    animation: appear 0.2s;
+}
+
+.Modal {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 32px;
+    grid-template-columns: 100%;
+    width: 100%;
+    min-height: 150px;
+    border-radius: 16px;
+    padding: 16px;
+    background-color: white;
+    animation: move-up 0.2s;
+}
+
+.content {
+    display: block;
+}
+
+.contentTitle {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.options {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+@keyframes move-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(10px);
+    }
+}

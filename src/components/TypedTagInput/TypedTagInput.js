@@ -11,9 +11,11 @@ const TypedTagInput = props => {
     const inputRef = useRef(null);
 
     const inputEnteredHandler = event => {
-        if (event.key === 'Enter') {
-            props.addTag(input);
-            setInput('');
+        if (event.key === 'Enter' || event.key === ' ') {
+            if (input.length > 0 && input !== ' ') {
+                props.addTag(input);
+                setInput('');
+            }
         } else if (event.key === 'Backspace' && input.length === 0) {
             props.removeLastTag();
         }
@@ -47,7 +49,7 @@ const TypedTagInput = props => {
                 type="text"
                 placeholder={props.placeholder || 'Add...'}
                 value={input}
-                onChange={event => setInput(event.target.value)}
+                onChange={event => setInput(event.target.value.trim())}
                 onKeyDown={inputEnteredHandler} /> : null}
         </div>
     )

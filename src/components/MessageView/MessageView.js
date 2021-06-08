@@ -14,15 +14,15 @@ const MessageView = props => {
 
         if (message.type === 'text') {
             if (messageBlocks.length > 0 &&
-                messageBlocks[messageBlocks.length - 1].senderId === message.senderId && 
+                messageBlocks[messageBlocks.length - 1].senderId === message.userId && 
                 Math.abs(messageBlocks[messageBlocks.length - 1].messages[messageBlocks[messageBlocks.length - 1].messages.length - 1].timestamp - message.timestamp) < 60000) {
 
                 messageBlocks[messageBlocks.length - 1].messages.push({ ...message });
                 
             } else {
-                const sender = props.senders.find(sender => sender.id === message.senderId);
+                const sender = props.senders.find(sender => sender.id === message.userId);
                 const newBlock = {
-                    senderId: message.senderId,
+                    senderId: message.userId,
                     senderImg: sender.img,
                     senderName: sender.name,
                     messages: [{ ...message }]
@@ -49,7 +49,7 @@ const MessageView = props => {
 MessageView.propTypes = {
     messages: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string,
-        senderId: PropTypes.string,
+        userId: PropTypes.string,
         timestamp: PropTypes.instanceOf(Date),
         content: PropTypes.string,
         type: PropTypes.string

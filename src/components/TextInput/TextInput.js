@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import classes from './TextInput.module.css';
 
 const TextInput = props => (
-    <input
-        className={classes.TextInput}
-        type={props.type}
-        placeholder={props.placeholder}
-        value={props.value}
-        onChange={props.onChange}
-        {...props} />
+    <div className={classes.container}>
+        <input
+            className={classes.TextInput}
+            type={props.type}
+            placeholder={props.placeholder}
+            value={props.value}
+            onChange={props.onChange}
+            {...props} />
+    </div>
 )
 
 TextInput.propTypes = {

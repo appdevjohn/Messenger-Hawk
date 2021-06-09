@@ -20,7 +20,7 @@
     height: 64px;
 }
 
-.title, .back, .add {
+.title, .back, .option {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -36,11 +36,11 @@
     align-items: flex-start;
 }
 
-.add {
+.option {
     align-items: flex-end;
 }
 
-.back img, .add img {
+.back img, .option img {
     height: 100%;
 }
 
@@ -50,7 +50,7 @@
         box-shadow: 1px 0px 4px #000000;
     }
 
-    .back img, .add img {
+    .back img, .option img {
         filter: brightness(500%);
     }
 }

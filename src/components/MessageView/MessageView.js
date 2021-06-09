@@ -20,11 +20,10 @@ const MessageView = props => {
                 messageBlocks[messageBlocks.length - 1].messages.push({ ...message });
                 
             } else {
-                const sender = props.senders.find(sender => sender.id === message.userId);
                 const newBlock = {
                     senderId: message.userId,
-                    senderImg: sender.img,
-                    senderName: sender.name,
+                    senderImg: message.userProfilePic,
+                    senderName: message.userFullName,
                     messages: [{ ...message }]
                 }
                 messageBlocks.push(newBlock);
@@ -53,11 +52,6 @@ MessageView.propTypes = {
         timestamp: PropTypes.instanceOf(Date),
         content: PropTypes.string,
         type: PropTypes.string
-    })).isRequired,
-    senders: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string,
-        name: PropTypes.string,
-        img: PropTypes.string
     })).isRequired,
     highlightId: PropTypes.string.isRequired
 }

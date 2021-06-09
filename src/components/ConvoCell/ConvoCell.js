@@ -5,7 +5,7 @@ import classes from './ConvoCell.module.css';
 
 const ConvoCell = props => {
     return (
-        <Link to="/conversations/asdf" className={classes.ConvoCell}>
+        <Link to={'/conversations/' + props.convoId} className={classes.ConvoCell}>
             <div className={classes.imageContainer}>
                 <img src="https://dummyimage.com/128/f2efea/000000.png" alt={props.name} />
             </div>
@@ -19,7 +19,8 @@ const ConvoCell = props => {
 
 ConvoCell.propTypes = {
     name: PropTypes.string.isRequired,
-    snippet: PropTypes.string.isRequired
+    snippet: PropTypes.string.isRequired,
+    convoId: PropTypes.string.isRequired
 }
 
 export default ConvoCell;

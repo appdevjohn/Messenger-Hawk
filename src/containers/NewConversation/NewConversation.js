@@ -24,7 +24,7 @@ const NewConversation = props => {
             members: JSON.stringify(recipients)
         }, {
             headers: {
-                Authorization: 'Bearer ' + props.props.token,
+                Authorization: 'Bearer ' + props.token,
                 'Content-Type': 'application/json'
             }
         }).then(response => {

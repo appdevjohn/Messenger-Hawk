@@ -8,7 +8,8 @@ import Posts from './containers/Posts/Posts';
 import Post from './containers/Post/Post';
 import Conversations from './containers/Conversations/Conversations';
 import NewConversation from './containers/NewConversation/NewConversation';
-import Messages from './containers/Messages/Messages';
+import Messages from './containers/Conversations/Messages/Messages';
+import ConversationOptions from './containers/Conversations/Options/Options';
 import Account from './containers/Account/Account';
 import AuthForm from './containers/AuthForm/AuthForm';
 import Modal from './components/Modal/Modal';
@@ -65,13 +66,13 @@ function App() {
                 : null}
             <Switch>
                 <Route path="/posts" exact>
-                    <Posts />
+                    <Posts userId={userId} token={token} />
                 </Route>
                 <Route path="/posts/:id" exact>
-                    <Post highlightId={dummyProps.highlightId} senders={dummyProps.senders} />
+                    <Post userId={userId} token={token} highlightId={dummyProps.highlightId} senders={dummyProps.senders} />
                 </Route>
                 <Route path="/conversations" exact>
-                    <Conversations />
+                    <Conversations userId={userId} token={token} />
                 </Route>
                 <Route path="/new-conversation" exact>
                     <NewConversation userId={userId} token={token} />
@@ -79,14 +80,17 @@ function App() {
                 <Route path="/conversations/:id" exact>
                     <Messages userId={userId} token={token} />
                 </Route>
+                <Route path="/conversations/:id/options" exact>
+                    <ConversationOptions userId={userId} token={token} />
+                </Route>
                 <Route path="/account" exact>
-                    <Account />
+                    <Account userId={userId} token={token} />
                 </Route>
                 <Route path="/auth">
                     <AuthForm />
                 </Route>
                 <Route>
-                    <Posts />
+                    <Posts userId={userId} token={token} />
                 </Route>
             </Switch>
         </div>

@@ -65,6 +65,7 @@ const authSetActivated = (state, action) => {
     return {
         ...state,
         activated: action.activated,
+        token: action.token,
         loading: false,
         error: action.error
     }

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import MessageBlock from '../../components/MessageBlock/MessageBlock';
+import MessageBlock from './MessageBlock/MessageBlock';
 
 import classes from './MessageView.module.css';
 

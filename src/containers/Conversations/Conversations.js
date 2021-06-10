@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import api from '../../api';
+import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 import NavBar from '../../navigation/NavBar/NavBar';
 import TabBar from '../../navigation/TabBar/TabBar';
 import TableView from '../../components/TableView/TableView';
@@ -10,6 +11,7 @@ import classes from './Conversations.module.css';
 
 const Conversations = props => {
     const { token } = props;
+    const [didFinishLoading, setDidFinishLoading] = useState(false);
     const [conversations, setConversations] = useState([]);
 
     useEffect(() => {
@@ -28,9 +30,11 @@ const Conversations = props => {
                     }
                 });
                 setConversations(newConversations);
+                setDidFinishLoading(true);
     
             }).catch(error => {
-                console.error(error);
+                setDidFinishLoading(true);
+                console.error(error.response.data.message);
             })
         }
     }, [token]);
@@ -43,7 +47,7 @@ const Conversations = props => {
         <div className={classes.Conversations}>
             <NavBar title="Conversations" add="/new-conversation" />
             <TableView>
-                {conversationListings}
+                {didFinishLoading ? conversationListings : <LoadingIndicator />}
             </TableView>
             <TabBar />
         </div>

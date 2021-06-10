@@ -90,9 +90,11 @@ export const startConfirmEmail = (token, code) => {
             }
         }).then(response => {
             localStorage.setItem('activated', response.data.activated);
+            localStorage.setItem('token', response.data.token);
             dispatch({
                 type: actionTypes.AUTH_SET_ACTIVATED,
                 activated: response.data.activated,
+                token: response.data.token,
                 error: null
             });
         }).catch(error => {

@@ -14,3 +14,7 @@
     background-color: var(--accent-color);
     color: white;
 }
+
+.disabled {
+    background-color: gray;
+}

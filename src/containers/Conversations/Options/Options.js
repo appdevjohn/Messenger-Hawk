@@ -1,16 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import api from '../../../api';
+import * as errorActions from '../../../store/actions/error';
 import NavBar from '../../../navigation/NavBar/NavBar';
+import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator';
 import TextInput from '../../../components/TextInput/TextInput';
 import SubmitButton from '../../../components/SubmitButton/SubmitButton';
 
 import classes from './Options.module.css';
 
 const Options = props => {
+    const dispatch = useDispatch();
+
     const { token } = props;
     const convoId = props.match.params.id;
+    const [didFinishLoading, setDidFinishLoading] = useState(false);
     const [members, setMembers] = useState([]);
     const [convoName, setConvoName] = useState('');
 
@@ -24,12 +30,15 @@ const Options = props => {
             }).then(response => {
                 setMembers(response.data.members);
                 setConvoName(response.data.conversation.name);
+                setDidFinishLoading(true);
 
             }).catch(error => {
                 console.error(error);
+                setDidFinishLoading(true);
+                dispatch(errorActions.setError('Error', error.response.data.message));
             });
         }
-    }, [token, convoId]);
+    }, [token, convoId, dispatch]);
 
     useEffect(() => {
         if (token && convoId && convoName.length > 0) {
@@ -44,6 +53,7 @@ const Options = props => {
                     }
                 }).catch(error => {
                     console.error(error.response.data.message);
+                    dispatch(errorActions.setError('Error', error.response.data.message));
                 });
             }, 500);
             return () => {
@@ -51,7 +61,7 @@ const Options = props => {
             }
         }
 
-    }, [token, convoId, convoName]);
+    }, [token, convoId, convoName, dispatch]);
 
     const leaveConversationHandler = () => {
         if (token && convoId) {
@@ -78,14 +88,20 @@ const Options = props => {
         )
     })
 
-    return (
-        <div className={classes.Options}>
-            <NavBar title="Options" back={'/conversations/' + convoId} />
+    const optionsContent = (
+        <Fragment>
             <TextInput type="text" placeholder="Conversation Name" value={convoName} onChange={e => setConvoName(e.target.value)} />
             <div className={classes.membersContainer}>
                 {memberTable}
             </div>
-            <SubmitButton title="Leave Conversation" onClick={leaveConversationHandler} />
+        </Fragment>
+    )
+
+    return (
+        <div className={classes.Options}>
+            <NavBar title="Options" back={'/conversations/' + convoId} />
+            {didFinishLoading ? optionsContent : <LoadingIndicator />}
+            <SubmitButton title="Leave Conversation" onClick={leaveConversationHandler} disabled={!didFinishLoading} />
         </div>
     )
 }

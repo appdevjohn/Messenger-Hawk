@@ -7,7 +7,7 @@ import classes from './MessageBlock.module.css';
 const MessageBlock = props => {
     let messageBubbles = [];
     props.messages.forEach(message => {
-        messageBubbles.push(<MessageBubble text={message.content} highlighted={props.highlighted} key={message.id} />);
+        messageBubbles.push(<MessageBubble text={message.content} highlighted={props.highlighted} delivered={message.delivered} key={message.id} />);
     });
 
     return (

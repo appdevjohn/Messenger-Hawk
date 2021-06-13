@@ -19,12 +19,19 @@ export const startSignUp = (firstName, lastName, email, username, password, conf
             username: username,
             password: password
         }).then(response => {
-            localStorage.setItem('userId', response.data.userId);
+            localStorage.setItem('userId', response.data.user.id);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('activated', response.data.activated);
+            dispatch({
+                type: actionTypes.USER_SET,
+                firstName: response.data.user.firstName,
+                lastName: response.data.user.lastName,
+                username: response.data.user.username,
+                email: response.data.user.email,
+            });
             return dispatch({
                 type: actionTypes.AUTH_SUCCESS,
-                userId: response.data.userId,
+                userId: response.data.user.id,
                 token: response.data.token,
                 activated: response.data.activated
             });
@@ -53,12 +60,19 @@ export const startLogIn = (email, password) => {
             password: password
         }).then(response => {
             console.log(response);
-            localStorage.setItem('userId', response.data.userId);
+            localStorage.setItem('userId', response.data.user.id);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('activated', response.data.activated);
+            dispatch({
+                type: actionTypes.USER_SET,
+                firstName: response.data.user.firstName,
+                lastName: response.data.user.lastName,
+                username: response.data.user.username,
+                email: response.data.user.email,
+            });
             return dispatch({
                 type: actionTypes.AUTH_SUCCESS,
-                userId: response.data.userId,
+                userId: response.data.user.id,
                 token: response.data.token,
                 activated: response.data.activated
             });
@@ -122,7 +136,7 @@ export const startLogOut = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('activated');
 
-        // Remove items from localStorage
+        dispatch({ type: actionTypes.USER_CLEAR });
         return dispatch({ type: actionTypes.AUTH_LOG_OUT });
     }
 }

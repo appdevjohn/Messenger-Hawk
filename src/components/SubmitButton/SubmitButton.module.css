@@ -10,7 +10,6 @@
     background-color: var(--accent-color);
     color: white;
     font-size: 1rem;
-    max-width: 30rem;
 }
 
 .disabled {

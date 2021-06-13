@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { withRouter } from 'react-router';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import api from '../../../api';
 import * as errorActions from '../../../store/actions/error';
@@ -14,6 +14,7 @@ import classes from './Messages.module.css';
 const Messages = props => {
     const convoId = props.match.params.id;
     const { userId, token, history } = props;
+    const user = useSelector(state => state.user);
     const dispatch = useDispatch();
 
     const [didFinishLoading, setDidFinishLoading] = useState(false);
@@ -36,7 +37,7 @@ const Messages = props => {
                         userFullName: message.userData.firstName + ' ' + message.userData.lastName,
                         userUsername: message.userData.username,
                         userProfilePic: 'https://dummyimage.com/128/f2efea/000000.png',
-                        timestamp: new Date(),
+                        timestamp: message.createdAt,
                         content: message.content,
                         type: message.type,
                         delivered: true
@@ -96,8 +97,8 @@ const Messages = props => {
         const newMsg = {
             id: Math.random().toString(),
             userId: userId,
-            userFullName: 'Temporary Name',
-            userUsername: 'tempUsername',
+            userFullName: user.firstName + ' ' + user.lastName,
+            userUsername: user.username,
             userProfilePic: 'https://dummyimage.com/128/f2efea/000000.png',
             timestamp: new Date(),
             content: message,

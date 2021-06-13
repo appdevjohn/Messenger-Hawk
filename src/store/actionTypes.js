@@ -11,3 +11,6 @@ export const AUTH_CLEAR_ERROR = 'AUTH_CLEAR_ERROR';
 
 export const ERROR_SET = 'ERROR_SET';
 export const ERROR_CLEAR = 'ERROR_CLEAR';
+
+export const USER_SET = 'USER_SET';
+export const USER_CLEAR = 'USER_CLEAR';

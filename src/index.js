@@ -12,10 +12,12 @@ import reportWebVitals from './reportWebVitals';
 
 import authStore from './store/reducers/auth';
 import errorStore from './store/reducers/error';
+import userStore from './store/reducers/user';
 
 const rootReducer = combineReducers({
     auth: authStore,
-    error: errorStore
+    error: errorStore,
+    user: userStore
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

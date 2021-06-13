@@ -90,7 +90,11 @@ const Options = props => {
 
     const optionsContent = (
         <Fragment>
-            <TextInput type="text" placeholder="Conversation Name" value={convoName} onChange={e => setConvoName(e.target.value)} />
+            <TextInput
+                type="text"
+                placeholder="Conversation Name"
+                value={convoName}
+                onChange={e => setConvoName(e.target.value)} />
             <div className={classes.membersContainer}>
                 {memberTable}
             </div>

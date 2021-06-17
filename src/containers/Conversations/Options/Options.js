@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import api from '../../../api';
+import * as localDB from '../../../localDatabase';
 import * as errorActions from '../../../store/actions/error';
 import NavBar from '../../../navigation/NavBar/NavBar';
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator';
@@ -21,6 +22,11 @@ const Options = props => {
     const [convoName, setConvoName] = useState('');
 
     useEffect(() => {
+        localDB.getConversationWithId(convoId).then(convo => {
+            setMembers(convo.members);
+            setConvoName(convo.name);
+        });
+
         if (token && convoId) {
             api.get('/conversations/' + convoId, {
                 headers: {
@@ -75,7 +81,11 @@ const Options = props => {
             }).then(() => {
                 props.history.push('/conversations');
             }).catch(error => {
-                console.error(error.response.data.message);
+                let errorMessage = 'You cannot leave this conversation while you are offline.';
+                if (error.response) {
+                    errorMessage = error.response.data.message
+                }
+                dispatch(errorActions.setError('Error', errorMessage));
             });
         }
     }

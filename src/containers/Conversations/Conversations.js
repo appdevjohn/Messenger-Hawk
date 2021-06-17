@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import api from '../../api';
+import * as localDB from '../../localDatabase';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 import NavBar from '../../navigation/NavBar/NavBar';
 import TabBar from '../../navigation/TabBar/TabBar';
@@ -15,6 +16,10 @@ const Conversations = props => {
     const [conversations, setConversations] = useState([]);
 
     useEffect(() => {
+        localDB.getConversations().then(convos => {
+            setConversations(convos);
+        });
+
         if (token) {
             api.get('/conversations', {
                 headers: {
@@ -31,10 +36,13 @@ const Conversations = props => {
                 });
                 setConversations(newConversations);
                 setDidFinishLoading(true);
+                localDB.deleteAllConversations();
+                newConversations.forEach(convo => {
+                    localDB.addConversation(convo);
+                });
     
             }).catch(error => {
                 setDidFinishLoading(true);
-                console.error(error.response.data.message);
             })
         }
     }, [token]);
@@ -47,7 +55,8 @@ const Conversations = props => {
         <div className={classes.Conversations}>
             <NavBar title="Conversations" add="/new-conversation" />
             <TableView>
-                {didFinishLoading ? conversationListings : <LoadingIndicator />}
+                {conversationListings}
+                {!didFinishLoading ? <LoadingIndicator /> : null}
             </TableView>
             <TabBar />
         </div>

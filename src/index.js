@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 
 import './index.css';
 import App from './App';
+import { initDatabase } from './localDatabase';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
@@ -14,13 +15,16 @@ import authStore from './store/reducers/auth';
 import errorStore from './store/reducers/error';
 import userStore from './store/reducers/user';
 
+// Setting up Redux store
 const rootReducer = combineReducers({
     auth: authStore,
     error: errorStore,
     user: userStore
 });
-
 const store = createStore(rootReducer, applyMiddleware(thunk));
+
+// Initializing IndexedDB database.
+initDatabase();
 
 ReactDOM.render(
     <React.StrictMode>

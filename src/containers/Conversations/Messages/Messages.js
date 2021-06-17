@@ -3,6 +3,7 @@ import { withRouter } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 
 import api from '../../../api';
+import * as localDB from '../../../localDatabase';
 import * as errorActions from '../../../store/actions/error';
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator';
 import NavBar from '../../../navigation/NavBar/NavBar';
@@ -23,6 +24,15 @@ const Messages = props => {
 
     // Queries for messages when the component is initially displayed.
     useEffect(() => {
+        localDB.getMessagesWithConvoId(convoId).then(msgs => {
+            setMessages(msgs);
+        });
+        localDB.getConversationWithId(convoId).then(convo => {
+            if (convo) {
+                setConvoName(convo.name);
+            }
+        })
+
         if (token) {
             api.get('/conversations/' + convoId, {
                 headers: {
@@ -34,10 +44,11 @@ const Messages = props => {
                     return {
                         id: message.id,
                         userId: message.userId,
+                        convoId: message.convoId,
                         userFullName: message.userData.firstName + ' ' + message.userData.lastName,
                         userUsername: message.userData.username,
                         userProfilePic: 'https://dummyimage.com/128/f2efea/000000.png',
-                        timestamp: message.createdAt,
+                        timestamp: new Date(message.createdAt),
                         content: message.content,
                         type: message.type,
                         delivered: true
@@ -46,10 +57,20 @@ const Messages = props => {
                 setConvoName(response.data.conversation.name);
                 setMessages(messages);
                 setDidFinishLoading(true);
+                localDB.getConversationWithId(convoId).then(convo => {
+                    const newConvoData = {
+                        ...convo,
+                        members: response.data.members
+                    }
+                    localDB.updateConversation(newConvoData);
+                })
+                localDB.deleteMessagesWithConvoId(convoId);
+                messages.forEach(msg => {
+                    localDB.addMessage(msg);
+                });
 
             }).catch(error => {
                 setDidFinishLoading(true);
-                history.replace('/conversations');
                 dispatch(errorActions.setError('Error', error.response.data.message));
             });
         }
@@ -75,6 +96,7 @@ const Messages = props => {
                 const updatedMessage = {
                     ...message,
                     id: response.data.message.id,
+                    convoId: response.data.message.convoId,
                     userFullName: response.data.message.userData.firstName + ' ' + response.data.message.userData.lastName,
                     userUsername: response.data.message.userData.username,
                     timestamp: new Date(response.data.message.createdAt),
@@ -85,6 +107,7 @@ const Messages = props => {
                     newMessages.push(updatedMessage);
                     return newMessages
                 });
+                localDB.addMessage(updatedMessage);
 
             }).catch(error => {
                 console.error(error);
@@ -115,11 +138,10 @@ const Messages = props => {
     return (
         <div className={classes.Messages}>
             <NavBar title={convoName} back="/conversations" options={'/conversations/' + convoId + '/options'} />
-            {didFinishLoading ?
-                <MessageView
+            <MessageView
                     highlightId={userId}
                     messages={messages} />
-                : <LoadingIndicator />}
+            {!didFinishLoading ? <LoadingIndicator /> : null}
             <ComposeBox
                 sendMessage={sendMessageHandler}
                 becameActive={() => {

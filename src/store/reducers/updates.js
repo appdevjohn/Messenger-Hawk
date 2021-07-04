@@ -24,9 +24,11 @@ const removeMessage = (state, action) => {
 }
 
 const clearMessages = (state, action) => {
+    const newMessages = state.messages.map(msg => ({ ...msg })).filter(msg => msg.convoId !== action.convoId);
+
     return {
         ...state,
-        messages: []
+        messages: newMessages
     }
 }
 

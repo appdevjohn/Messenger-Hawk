@@ -26,15 +26,19 @@ const Messages = props => {
 
     // Queries for messages when the component is initially displayed.
     useEffect(() => {
+
+        // Get any messages locally stored.
         localDB.getMessagesWithConvoId(convoId).then(msgs => {
             setMessages(msgs);
         });
         localDB.getConversationWithId(convoId).then(convo => {
             if (convo) {
+                console.log(convo.name);
                 setConvoName(convo.name);
             }
-        })
+        });
 
+        // Fetch this conversation
         if (token) {
             api.get('/conversations/' + convoId, {
                 headers: {
@@ -42,6 +46,8 @@ const Messages = props => {
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
+
+                // Set the state with convo data.
                 const messages = response.data.messages.map(message => {
                     return {
                         id: message.id,
@@ -53,15 +59,18 @@ const Messages = props => {
                         timestamp: new Date(message.createdAt),
                         content: message.content,
                         type: message.type,
-                        delivered: true
+                        delivered: 'delivered'
                     }
                 });
                 setConvoName(response.data.conversation.name);
                 setMessages(messages);
                 setDidFinishLoading(true);
+
+                // Save this conversation to IndexedDB.
                 localDB.getConversationWithId(convoId).then(convo => {
                     const newConvoData = {
                         ...convo,
+                        name: response.data.conversation.name,
                         members: response.data.members
                     }
                     localDB.updateConversation(newConvoData);
@@ -80,10 +89,9 @@ const Messages = props => {
 
     // Update the thread if any new messages have been recieved.
     useEffect(() => {
-        const updateMessages = messageUpdates.filter(msg =>
-            msg.convoId === convoId &&
-            messages.findIndex(msg2 => msg2.id === msg.id) === -1
-        ).map(msg => {
+
+        // Get new messages for this conversation.
+        const updateMessages = messageUpdates.filter(msg => msg.convoId === convoId).map(msg => {
             return {
                 id: msg.id,
                 userId: msg.userId,
@@ -94,22 +102,52 @@ const Messages = props => {
                 timestamp: new Date(msg.createdAt),
                 content: msg.content,
                 type: msg.type,
-                delivered: true
+                delivered: 'delivered'
             }
         });
-        if (updateMessages.length > 0) {
-            setMessages(prevMessages => prevMessages.map(msg => ({ ...msg })).concat(updateMessages));
-        }
-        dispatch(updateActions.updateClearMessages);
 
-    }, [dispatch, convoId, messages, messageUpdates]);
+        // If there are new messages, add them to the messages state.
+        if (updateMessages.length > 0) {
+            setMessages(prevMessages => {
+                const messagesToAdd = [];
+
+                updateMessages.forEach(updateMsg => {
+                    // If a message is already in the thread, skip it.
+                    if (prevMessages.findIndex(msg => msg.id === updateMsg.id) === -1) {
+                        messagesToAdd.push(updateMsg);
+                    }
+                });
+
+                return prevMessages.map(msg => ({ ...msg })).concat(messagesToAdd)
+            });
+
+            // Clear message updates for this conversation.
+            dispatch(updateActions.updateClearMessages(convoId));
+        }
+
+    }, [dispatch, convoId, messageUpdates, setMessages]);
 
     // Sends a message through the API when it sees a new one has been sent.
     useEffect(() => {
         window.scroll(0, document.body.scrollHeight);
 
-        const undeliveredMessages = messages.filter(msg => msg.delivered === false);
+        // Get all messages that have not started the delivery process.
+        const undeliveredMessages = messages.filter(msg => msg.delivered === 'not delivered');
+
         for (const message of undeliveredMessages) {
+
+            // Set a new delivered status for this message so it won't be sent twice.
+            setMessages(oldMessages => {
+                const updatedMessage = {
+                    ...message,
+                    delivered: 'delivering'
+                }
+                const newMessages = oldMessages.filter(msg => msg.id !== updatedMessage.id);
+                newMessages.push(updatedMessage);
+                return newMessages
+            });
+
+            // Send the message.
             api.post('/messages/new', {
                 convoId: convoId,
                 content: message.content,
@@ -120,6 +158,8 @@ const Messages = props => {
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
+
+                // Update the displayed message with updated information from the server.
                 const updatedMessage = {
                     ...message,
                     id: response.data.message.id,
@@ -127,7 +167,7 @@ const Messages = props => {
                     userFullName: response.data.message.userData.firstName + ' ' + response.data.message.userData.lastName,
                     userUsername: response.data.message.userData.username,
                     timestamp: new Date(response.data.message.createdAt),
-                    delivered: true
+                    delivered: 'delivered'
                 }
                 setMessages(oldMessages => {
                     const newMessages = oldMessages.filter(msg => msg.id !== message.id);
@@ -143,6 +183,7 @@ const Messages = props => {
 
     }, [token, convoId, messages, setMessages]);
 
+    // Adds message to messages state. A different function handles the sending of the message.
     const sendMessageHandler = message => {
         const newMsg = {
             id: Math.random().toString(),
@@ -153,7 +194,7 @@ const Messages = props => {
             timestamp: new Date(),
             content: message,
             type: 'text',
-            delivered: false
+            delivered: 'not delivered'
         };
         setMessages(oldMessages => {
             const newMessages = oldMessages.map(m => ({ ...m }));

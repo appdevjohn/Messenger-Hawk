@@ -7,7 +7,7 @@ const MessageBubble = props => {
     if (props.highlighted) {
         messageClasses.push(classes.highlighted);
     }
-    if (!props.delivered) {
+    if (props.delivered !== 'delivered') {
         messageClasses.push(classes.disabled);
     }
 
@@ -19,7 +19,7 @@ const MessageBubble = props => {
 MessageBubble.propTypes = {
     text: PropTypes.string.isRequired,
     highlighted: PropTypes.bool,
-    delivered: PropTypes.bool.isRequired
+    delivered: PropTypes.oneOf(['delivered', 'delivering', 'not delivered'])
 }
 
 export default MessageBubble;

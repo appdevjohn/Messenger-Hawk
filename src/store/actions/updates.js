@@ -14,8 +14,9 @@ export const updateRemoveMessage = messageId => {
     }
 }
 
-export const updateClearMessages = () => {
+export const updateClearMessages = convoId => {
     return {
-        type: actionTypes.UPDATE_CLEAR_MESSAGES
+        type: actionTypes.UPDATE_CLEAR_MESSAGES,
+        convoId: convoId
     }
 }

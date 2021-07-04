@@ -1,10 +1,11 @@
 import Localbase from 'localbase';
 
-let db;
+let db = new Localbase('db');
 
+// Localbase does not actually set up a database until something is done with it. This may cause a crash the first time its set up if the conditions are right. This is a workaround that forces a database to be set up.
 export const initDatabase = () => {
-    db = new Localbase('db');
     db.config.debug = false;
+    db.collection('conversations').get();
 }
 
 // Conversations
@@ -24,7 +25,7 @@ export const updateConversation = conversation => {
     return db.collection('conversations').doc({ id: conversation.id }).set(conversation);
 }
 
-export const deleteAllConversations = convoId => {
+export const deleteAllConversations = () => {
     return db.collection('conversations').delete();
 }
 

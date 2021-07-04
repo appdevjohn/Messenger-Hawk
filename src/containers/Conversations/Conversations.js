@@ -31,7 +31,7 @@ const Conversations = props => {
                     return {
                         id: convo.id,
                         name: convo.name,
-                        snippet: 'Snippet Text'
+                        snippet: convo.snippet ? (convo.snippet.type === 'text' ? convo.snippet.content : 'Media') : 'No messages'
                     }
                 });
                 setConversations(newConversations);

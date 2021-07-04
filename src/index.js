@@ -14,12 +14,14 @@ import reportWebVitals from './reportWebVitals';
 import authStore from './store/reducers/auth';
 import errorStore from './store/reducers/error';
 import userStore from './store/reducers/user';
+import updateStore from './store/reducers/updates';
 
 // Setting up Redux store
 const rootReducer = combineReducers({
     auth: authStore,
     error: errorStore,
-    user: userStore
+    user: userStore,
+    updates: updateStore
 });
 const store = createStore(rootReducer, applyMiddleware(thunk));
 

@@ -59,7 +59,6 @@ export const startLogIn = (email, password) => {
             email: email,
             password: password
         }).then(response => {
-            console.log(response);
             localStorage.setItem('userId', response.data.user.id);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('activated', response.data.activated);
@@ -112,7 +111,6 @@ export const startConfirmEmail = (token, code) => {
                 error: null
             });
         }).catch(error => {
-            console.log(error.response);
             let errorMessage = 'There was an error activating your account.';
             if (error.response) {
                 errorMessage = error.response.data.message;

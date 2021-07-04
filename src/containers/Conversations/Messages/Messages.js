@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import api from '../../../api';
 import * as localDB from '../../../localDatabase';
 import * as errorActions from '../../../store/actions/error';
+import * as updateActions from '../../../store/actions/updates';
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator';
 import NavBar from '../../../navigation/NavBar/NavBar';
 import MessageView from '../../../components/MessageView/MessageView';
@@ -16,6 +17,7 @@ const Messages = props => {
     const convoId = props.match.params.id;
     const { userId, token, history } = props;
     const user = useSelector(state => state.user);
+    const messageUpdates = useSelector(state => state.updates.messages);
     const dispatch = useDispatch();
 
     const [didFinishLoading, setDidFinishLoading] = useState(false);
@@ -76,6 +78,32 @@ const Messages = props => {
         }
     }, [convoId, history, token, userId, setMessages, dispatch]);
 
+    // Update the thread if any new messages have been recieved.
+    useEffect(() => {
+        const updateMessages = messageUpdates.filter(msg =>
+            msg.convoId === convoId &&
+            messages.findIndex(msg2 => msg2.id === msg.id) === -1
+        ).map(msg => {
+            return {
+                id: msg.id,
+                userId: msg.userId,
+                convoId: msg.convoId,
+                userFullName: msg.userData.firstName + ' ' + msg.userData.lastName,
+                userUsername: msg.userData.username,
+                userProfilePic: 'https://dummyimage.com/128/f2efea/000000.png',
+                timestamp: new Date(msg.createdAt),
+                content: msg.content,
+                type: msg.type,
+                delivered: true
+            }
+        });
+        if (updateMessages.length > 0) {
+            setMessages(prevMessages => prevMessages.map(msg => ({ ...msg })).concat(updateMessages));
+        }
+        dispatch(updateActions.updateClearMessages);
+
+    }, [dispatch, convoId, messages, messageUpdates]);
+
     // Sends a message through the API when it sees a new one has been sent.
     useEffect(() => {
         window.scroll(0, document.body.scrollHeight);
@@ -92,7 +120,6 @@ const Messages = props => {
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
-                console.log(response);
                 const updatedMessage = {
                     ...message,
                     id: response.data.message.id,
@@ -139,8 +166,8 @@ const Messages = props => {
         <div className={classes.Messages}>
             <NavBar title={convoName} back="/conversations" options={'/conversations/' + convoId + '/options'} />
             <MessageView
-                    highlightId={userId}
-                    messages={messages} />
+                highlightId={userId}
+                messages={messages} />
             {!didFinishLoading ? <LoadingIndicator /> : null}
             <ComposeBox
                 sendMessage={sendMessageHandler}

@@ -1,9 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { io } from 'socket.io-client';
 
+import api from './api';
 import * as authActions from './store/actions/auth';
 import * as errorActions from './store/actions/error';
+import * as updateActions from './store/actions/updates';
 import Posts from './containers/Posts/Posts';
 import Post from './containers/Post/Post';
 import Conversations from './containers/Conversations/Conversations';
@@ -39,9 +42,31 @@ function App() {
     const error = useSelector(state => state.error);
     const dispatch = useDispatch();
 
+    const socketRef = useRef();
+
     useEffect(() => {
         dispatch(authActions.authCheckState());
     }, [dispatch]);
+
+    useEffect(() => {
+        // Initializaing Socket.IO
+        if (!socketRef.current && userId) {
+            socketRef.current = io(api.defaults.baseURL);
+
+            socketRef.current.on('message', message => {
+                dispatch(updateActions.updateAddMessage(message));
+            });
+            socketRef.current.on('disconnect', () => {
+                console.log('Disconnected from Server');
+            });
+
+            socketRef.current.on('connect', () => {
+                console.log('Connected to Server');
+                socketRef.current.emit('subscribe', { userId: userId });
+            });
+        }
+
+    }, [dispatch, userId]);
 
     if (token === null || activated === false) {
         return (

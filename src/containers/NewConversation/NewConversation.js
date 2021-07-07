@@ -40,7 +40,7 @@ const NewConversation = props => {
 
     return (
         <div className={classes.NewConversation}>
-            <NavBar title="New Conversation" back="/conversations" />
+            <NavBar title="New Conversation" leftButton={{ type: 'back', to: '/conversations' }} />
             <TypedTagInput
                 placeholder="add user..."
                 tags={recipients}

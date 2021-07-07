@@ -8,24 +8,43 @@ import addImg from '../../assets/add.png';
 import optionsImg from '../../assets/options.png';
 
 const NavBar = props => {
+
+    let rightButtonImg;
+    let rightButtonAlt;
+
+    if (props.rightButton) {
+        switch (props.rightButton.type) {
+            case 'add':
+                rightButtonImg = addImg;
+                rightButtonAlt = 'Add';
+                break;
+
+            case 'options':
+                rightButtonImg = optionsImg;
+                rightButtonAlt = 'Options';
+                break;
+
+            default:
+                rightButtonImg = null;
+                rightButtonAlt = props.rightButton.type;
+                break;
+        }
+    }
+
     return (
         <Fragment>
             <div className={classes.NavBar}>
-                {props.back ?
-                    <Link to={props.back} className={classes.back}>
+                {props.leftButton ?
+                    <Link to={props.leftButton.to} className={classes.leftButton}>
                         <img src={backImg} alt="Back" />
                     </Link>
-                    : <div className={classes.back}></div>}
+                    : <div className={classes.leftButton}></div>}
                 <div className={classes.title}>{props.title}</div>
-                {props.add ?
-                    <Link to={props.add} className={classes.option}>
-                        <img src={addImg} alt="Add" />
+                {props.rightButton ?
+                    <Link to={props.rightButton.to} className={classes.rightButton}>
+                        {rightButtonImg ? <img src={rightButtonImg} alt={rightButtonAlt} /> : rightButtonAlt}
                     </Link>
-                    : props.options ?
-                        <Link to={props.options} className={classes.option}>
-                            <img src={optionsImg} alt="Options" />
-                        </Link>
-                        : <div className={classes.option}></div>}
+                    : <div className={classes.rightButton}></div>}
             </div>
             <div className={classes.spacer}></div>
         </Fragment>
@@ -34,9 +53,14 @@ const NavBar = props => {
 
 NavBar.propTypes = {
     title: PropTypes.string,
-    back: PropTypes.string,
-    add: PropTypes.string,
-    options: PropTypes.string
+    leftButton: PropTypes.shape({
+        type: PropTypes.string,
+        to: PropTypes.string
+    }),
+    rightButton: PropTypes.shape({
+        type: PropTypes.string,
+        to: PropTypes.string
+    })
 }
 
 export default NavBar;

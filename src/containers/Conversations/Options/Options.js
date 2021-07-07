@@ -113,7 +113,7 @@ const Options = props => {
 
     return (
         <div className={classes.Options}>
-            <NavBar title="Options" back={'/conversations/' + convoId} />
+            <NavBar title="Options" leftButton={{ type: 'back', to: '/conversations/' + convoId }} />
             {didFinishLoading ? optionsContent : <LoadingIndicator />}
             <SubmitButton title="Leave Conversation" onClick={leaveConversationHandler} disabled={!didFinishLoading} />
         </div>

@@ -1,4 +1,5 @@
 import api from '../../api';
+import * as localDB from '../../localDatabase';
 import * as actionTypes from '../actionTypes';
 
 export const startSignUp = (firstName, lastName, email, username, password, confirmPassword) => {
@@ -22,6 +23,15 @@ export const startSignUp = (firstName, lastName, email, username, password, conf
             localStorage.setItem('userId', response.data.user.id);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('activated', response.data.activated);
+
+            localDB.getUserWithId(response.data.user.id).then(user => {
+                if (user) {
+                    localDB.updateUser(response.data.user);
+                } else {
+                    localDB.addUser(response.data.user);
+                }
+            });
+
             dispatch({
                 type: actionTypes.USER_SET,
                 firstName: response.data.user.firstName,
@@ -29,6 +39,7 @@ export const startSignUp = (firstName, lastName, email, username, password, conf
                 username: response.data.user.username,
                 email: response.data.user.email,
             });
+
             return dispatch({
                 type: actionTypes.AUTH_SUCCESS,
                 userId: response.data.user.id,
@@ -62,6 +73,15 @@ export const startLogIn = (email, password) => {
             localStorage.setItem('userId', response.data.user.id);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('activated', response.data.activated);
+
+            localDB.getUserWithId(response.data.user.id).then(user => {
+                if (user) {
+                    localDB.updateUser(response.data.user);
+                } else {
+                    localDB.addUser(response.data.user);
+                }
+            });
+
             dispatch({
                 type: actionTypes.USER_SET,
                 firstName: response.data.user.firstName,
@@ -69,6 +89,7 @@ export const startLogIn = (email, password) => {
                 username: response.data.user.username,
                 email: response.data.user.email,
             });
+            
             return dispatch({
                 type: actionTypes.AUTH_SUCCESS,
                 userId: response.data.user.id,

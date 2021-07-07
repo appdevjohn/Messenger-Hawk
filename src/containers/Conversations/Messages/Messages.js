@@ -33,7 +33,6 @@ const Messages = props => {
         });
         localDB.getConversationWithId(convoId).then(convo => {
             if (convo) {
-                console.log(convo.name);
                 setConvoName(convo.name);
             }
         });
@@ -205,7 +204,10 @@ const Messages = props => {
 
     return (
         <div className={classes.Messages}>
-            <NavBar title={convoName} back="/conversations" options={'/conversations/' + convoId + '/options'} />
+            <NavBar
+                title={convoName}
+                leftButton={{ type: 'back', to: '/conversations' }}
+                rightButton={{ type: 'options', to: '/conversations/' + convoId + '/options' }} />
             <MessageView
                 highlightId={userId}
                 messages={messages} />

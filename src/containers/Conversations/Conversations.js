@@ -40,7 +40,7 @@ const Conversations = props => {
                 newConversations.forEach(convo => {
                     localDB.addConversation(convo);
                 });
-    
+
             }).catch(error => {
                 setDidFinishLoading(true);
             })
@@ -50,10 +50,10 @@ const Conversations = props => {
     const conversationListings = conversations.map(convo => {
         return <ConvoCell name={convo.name} snippet={convo.snippet} convoId={convo.id} key={convo.id} />
     });
-    
+
     return (
         <div className={classes.Conversations}>
-            <NavBar title="Conversations" add="/new-conversation" />
+            <NavBar title="Conversations" rightButton={{ type: 'add', to: '/new-conversation' }} />
             <TableView>
                 {conversationListings}
                 {!didFinishLoading ? <LoadingIndicator /> : null}

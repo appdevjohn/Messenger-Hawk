@@ -16,7 +16,7 @@
 .Modal {
     position: relative;
     display: grid;
-    grid-template-rows: auto 32px;
+    grid-template-rows: auto 38px;
     grid-template-columns: 100%;
     width: 100%;
     min-height: 150px;

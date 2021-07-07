@@ -21,8 +21,13 @@ const SignUp = props => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [confirmationNum, setConfirmationNum] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [username, setUsername] = useState('');
 
     const { history } = props;
+    const { pathname } = history.location;
+
     useEffect(() => {
         if (token && activated) {
             history.replace(redirectPath);
@@ -33,8 +38,10 @@ const SignUp = props => {
         }
     }, [token, activated, history, redirectPath]);
 
-    const { pathname } = history.location;
     useEffect(() => {
+        if (pathname === '/auth/logout') {
+            dispatch(authActions.startLogOut());
+        }
         dispatch(authActions.clearError());
         setPassword('');
         setConfirmPassword('');
@@ -42,7 +49,7 @@ const SignUp = props => {
     }, [pathname, dispatch])
 
     const onSignUp = () => {
-        dispatch(authActions.startSignUp('John', 'Champion', email, 'appdevjohn', password, confirmPassword));
+        dispatch(authActions.startSignUp(firstName, lastName, email, username, password, confirmPassword));
     }
 
     const onConfirmEmail = () => {
@@ -62,6 +69,9 @@ const SignUp = props => {
             <Switch>
                 <Route path="/auth/signup" exact>
                     <TextInput type="password" placeholder="confirm password" value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)} />
+                    <TextInput type="text" placeholder="first name" value={firstName} onChange={event => setFirstName(event.target.value)} />
+                    <TextInput type="text" placeholder="last name" value={lastName} onChange={event => setLastName(event.target.value)} />
+                    <TextInput type="text" placeholder="username" value={username} onChange={event => setUsername(event.target.value)} />
                     <SubmitButton title="Sign Up" onClick={onSignUp} />
                     <Link to="/auth/login" className={classes.alternateModeLink}>or Log In</Link>
                 </Route>

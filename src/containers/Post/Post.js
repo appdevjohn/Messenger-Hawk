@@ -70,7 +70,7 @@ const Post = props => {
 
     return (
         <div className={classes.Post}>
-            <NavBar title="John's Post" back="/posts" />
+            <NavBar title="John's Post" leftButton={{ type: 'back', to: '/posts' }} />
             <PostDetails
                 imgSrc="https://dummyimage.com/128/f2efea/000000.png"
                 name="John Champion"

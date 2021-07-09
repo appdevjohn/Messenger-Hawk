@@ -64,3 +64,13 @@ export const deleteUserWithId = userId => {
 export const updateUser = user => {
     return db.collection('users').doc({ id: user.id }).set(user);
 }
+
+export const ensureUserIsSaved = user => {
+    return getUserWithId(user.id).then(responseUser => {
+        if (responseUser) {
+            return updateUser(user);
+        } else {
+            return addUser(user);
+        }
+    });
+}

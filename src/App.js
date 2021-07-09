@@ -7,7 +7,6 @@ import api from './api';
 import * as authActions from './store/actions/auth';
 import * as errorActions from './store/actions/error';
 import * as updateActions from './store/actions/updates';
-import * as userActions from './store/actions/user';
 import Posts from './containers/Posts/Posts';
 import Post from './containers/Post/Post';
 import Conversations from './containers/Conversations/Conversations';
@@ -48,12 +47,6 @@ function App() {
     useEffect(() => {
         dispatch(authActions.authCheckState());
     }, [dispatch]);
-
-    useEffect(() => {
-        if (userId) {
-            dispatch(userActions.setUpUser(userId));
-        }
-    }, [dispatch, userId]);
 
     useEffect(() => {
         // Initializaing Socket.IO

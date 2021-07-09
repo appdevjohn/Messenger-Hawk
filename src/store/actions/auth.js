@@ -1,6 +1,7 @@
 import api from '../../api';
 import * as localDB from '../../localDatabase';
 import * as actionTypes from '../actionTypes';
+import * as userActions from '../actions/user';
 
 export const startSignUp = (firstName, lastName, email, username, password, confirmPassword) => {
     return dispatch => {
@@ -24,12 +25,12 @@ export const startSignUp = (firstName, lastName, email, username, password, conf
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('activated', response.data.activated);
 
-            localDB.getUserWithId(response.data.user.id).then(user => {
-                if (user) {
-                    localDB.updateUser(response.data.user);
-                } else {
-                    localDB.addUser(response.data.user);
-                }
+            localDB.ensureUserIsSaved({
+                id: response.data.user.id,
+                firstName: response.data.user.firstName,
+                lastName: response.data.user.lastName,
+                username: response.data.user.username,
+                email: response.data.user.email
             });
 
             dispatch({
@@ -74,12 +75,12 @@ export const startLogIn = (email, password) => {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('activated', response.data.activated);
 
-            localDB.getUserWithId(response.data.user.id).then(user => {
-                if (user) {
-                    localDB.updateUser(response.data.user);
-                } else {
-                    localDB.addUser(response.data.user);
-                }
+            localDB.ensureUserIsSaved({
+                id: response.data.user.id,
+                firstName: response.data.user.firstName,
+                lastName: response.data.user.lastName,
+                username: response.data.user.username,
+                email: response.data.user.email
             });
 
             dispatch({
@@ -179,8 +180,12 @@ export const authCheckState = () => {
         }).then(response => {
             if (response.data.message !== 'Authenticated') {
                 dispatch(startLogOut());
+                dispatch(userActions.clearUser());
+            } else {
+                localDB.ensureUserIsSaved(response.data.user);
+                dispatch(userActions.setUser(response.data.user.firstName, response.data.user.lastName, response.data.user.username, response.data.user.email));
             }
-        }).catch(error => {
+        }).catch(() => {
             dispatch(startLogOut());
         })
 

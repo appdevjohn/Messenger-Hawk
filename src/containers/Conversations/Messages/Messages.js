@@ -27,63 +27,74 @@ const Messages = props => {
     // Queries for messages when the component is initially displayed.
     useEffect(() => {
 
+        // Fetch this conversation
+        const fetchConversation = () => {
+            if (token) {
+                api.get('/conversations/' + convoId, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+
+                    // Set the state with convo data.
+                    const messages = response.data.messages.map(message => {
+                        return {
+                            id: message.id,
+                            userId: message.userId,
+                            convoId: message.convoId,
+                            userFullName: message.userData.firstName + ' ' + message.userData.lastName,
+                            userUsername: message.userData.username,
+                            userProfilePic: 'https://dummyimage.com/128/f2efea/000000.png',
+                            timestamp: new Date(message.createdAt),
+                            content: message.content,
+                            type: message.type,
+                            delivered: 'delivered'
+                        }
+                    });
+                    setConvoName(response.data.conversation.name);
+                    setMessages(messages);
+                    setDidFinishLoading(true);
+
+                    // Save this conversation to IndexedDB.
+                    localDB.getConversationWithId(convoId).then(convo => {
+                        const newConvoData = {
+                            ...convo,
+                            name: response.data.conversation.name,
+                            members: response.data.members
+                        }
+                        localDB.updateConversation(newConvoData);
+                    });
+                    localDB.deleteMessagesWithConvoId(convoId).then(() => {
+                        messages.forEach(msg => {
+                            localDB.addMessage(msg);
+                        });
+                    });
+
+                }).catch(error => {
+                    setDidFinishLoading(true);
+                    if (error.response) {
+                        dispatch(errorActions.setError('Error', error.response.data.message));
+                    }
+                });
+            }
+        }
+
         // Get any messages locally stored.
         localDB.getMessagesWithConvoId(convoId).then(msgs => {
             setMessages(msgs);
-        });
-        localDB.getConversationWithId(convoId).then(convo => {
+            return localDB.getConversationWithId(convoId);
+
+        }).then(convo => {
             if (convo) {
                 setConvoName(convo.name);
             }
+            fetchConversation();
+
+        }).catch(() => {
+            fetchConversation();
         });
 
-        // Fetch this conversation
-        if (token) {
-            api.get('/conversations/' + convoId, {
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-
-                // Set the state with convo data.
-                const messages = response.data.messages.map(message => {
-                    return {
-                        id: message.id,
-                        userId: message.userId,
-                        convoId: message.convoId,
-                        userFullName: message.userData.firstName + ' ' + message.userData.lastName,
-                        userUsername: message.userData.username,
-                        userProfilePic: 'https://dummyimage.com/128/f2efea/000000.png',
-                        timestamp: new Date(message.createdAt),
-                        content: message.content,
-                        type: message.type,
-                        delivered: 'delivered'
-                    }
-                });
-                setConvoName(response.data.conversation.name);
-                setMessages(messages);
-                setDidFinishLoading(true);
-
-                // Save this conversation to IndexedDB.
-                localDB.getConversationWithId(convoId).then(convo => {
-                    const newConvoData = {
-                        ...convo,
-                        name: response.data.conversation.name,
-                        members: response.data.members
-                    }
-                    localDB.updateConversation(newConvoData);
-                })
-                localDB.deleteMessagesWithConvoId(convoId);
-                messages.forEach(msg => {
-                    localDB.addMessage(msg);
-                });
-
-            }).catch(error => {
-                setDidFinishLoading(true);
-                dispatch(errorActions.setError('Error', error.response.data.message));
-            });
-        }
     }, [convoId, history, token, userId, setMessages, dispatch]);
 
     // Update the thread if any new messages have been recieved.
@@ -209,7 +220,7 @@ const Messages = props => {
                 leftButton={{ type: 'back', to: '/conversations' }}
                 rightButton={{ type: 'options', to: '/conversations/' + convoId + '/options' }} />
             <MessageView
-                highlightId={userId}
+                highlightId={userId || ''}
                 messages={messages} />
             {!didFinishLoading ? <LoadingIndicator /> : null}
             <ComposeBox

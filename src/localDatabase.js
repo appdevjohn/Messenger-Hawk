@@ -45,7 +45,11 @@ export const addMessage = message => {
 }
 
 export const deleteMessagesWithConvoId = convoId => {
-    return db.collection('messages').doc({ convoId: convoId }).delete();
+    return db.collection('messages').doc({ convoId: convoId }).get().then(msg => {
+        if (msg) {
+            return db.collection('messages').doc({ convoId: convoId }).delete();
+        }
+    });
 }
 
 // Users

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import api from '../../api';
 import * as localDB from '../../localDatabase';
@@ -12,43 +13,68 @@ import classes from './Conversations.module.css';
 
 const Conversations = props => {
     const { token } = props;
+    const newMessages = useSelector(state => state.updates.messages);
+
     const [didFinishLoading, setDidFinishLoading] = useState(false);
     const [conversations, setConversations] = useState([]);
+    const [convoUpdates, setConvoUpdates] = useState({});
 
     useEffect(() => {
+        const getConversations = () => {
+            if (token) {
+                api.get('/conversations', {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    const newConversations = response.data.conversations.map(convo => {
+                        return {
+                            id: convo.id,
+                            name: convo.name,
+                            unread: false,
+                            snippet: convo.snippet ? (convo.snippet.type === 'text' ? convo.snippet.content : 'Media') : 'No messages'
+                        }
+                    });
+                    setConversations(newConversations);
+                    setDidFinishLoading(true);
+                    localDB.deleteAllConversations().then(() => {
+                        newConversations.forEach(convo => {
+                            localDB.addConversation(convo);
+                        });
+                    });
+
+                }).catch(error => {
+                    setDidFinishLoading(true);
+                })
+            }
+        }
+
         localDB.getConversations().then(convos => {
-            setConversations(convos);
+            setConversations(convos || []);
+            getConversations();
+        }).catch(() => {
+            getConversations();
         });
 
-        if (token) {
-            api.get('/conversations', {
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                const newConversations = response.data.conversations.map(convo => {
-                    return {
-                        id: convo.id,
-                        name: convo.name,
-                        snippet: convo.snippet ? (convo.snippet.type === 'text' ? convo.snippet.content : 'Media') : 'No messages'
-                    }
-                });
-                setConversations(newConversations);
-                setDidFinishLoading(true);
-                localDB.deleteAllConversations();
-                newConversations.forEach(convo => {
-                    localDB.addConversation(convo);
-                });
-
-            }).catch(error => {
-                setDidFinishLoading(true);
-            })
-        }
     }, [token]);
 
+    // When a new message is recieved, highlight the cell.
+    useEffect(() => {
+        const updates = {};
+        newMessages.forEach(msg => {
+            updates[msg.convoId] = msg.content;
+        });
+        setConvoUpdates(updates);
+    }, [newMessages]);
+
     const conversationListings = conversations.map(convo => {
-        return <ConvoCell name={convo.name} snippet={convo.snippet} convoId={convo.id} key={convo.id} />
+        return <ConvoCell
+            name={convoUpdates[convo.id] ? '*' + convo.name : convo.name}
+            snippet={convoUpdates[convo.id] || convo.snippet}
+            convoId={convo.id}
+            unread={convoUpdates[convo.id]}
+            key={convo.id} />
     });
 
     return (

@@ -15,7 +15,7 @@ import classes from './Messages.module.css';
 
 const Messages = props => {
     const convoId = props.match.params.id;
-    const { userId, token, history } = props;
+    const { userId, token, history, onReadMessage } = props;
     const user = useSelector(state => state.user);
     const messageUpdates = useSelector(state => state.updates.messages);
     const dispatch = useDispatch();
@@ -192,6 +192,20 @@ const Messages = props => {
         }
 
     }, [token, convoId, messages, setMessages]);
+
+    // Sends the ID of the last read message to the API.
+    useEffect(() => {
+        if (userId && convoId && messages.length > 0) {
+            const latestMessage = messages.reduce((latest, current) => {
+                if (current.timestamp > latest.timestamp && current.delivered === 'delivered') {
+                    return current;
+                } else {
+                    return latest;
+                }
+            });
+            onReadMessage(convoId, latestMessage.id);
+        }
+    }, [userId, convoId, messages, onReadMessage]);
 
     // Adds message to messages state. A different function handles the sending of the message.
     const sendMessageHandler = message => {

@@ -10,7 +10,7 @@ const ConvoCell = props => {
                 <img src="https://dummyimage.com/128/f2efea/000000.png" alt={props.name} />
             </div>
             <div>
-                <div className={classes.name}>{props.name}</div>
+                <div className={classes.name}>{props.unread ? '*' + props.name : props.name}</div>
                 <div className={classes.snippet}>{props.snippet}</div>
             </div>
         </Link>
@@ -20,7 +20,8 @@ const ConvoCell = props => {
 ConvoCell.propTypes = {
     name: PropTypes.string.isRequired,
     snippet: PropTypes.string.isRequired,
-    convoId: PropTypes.string.isRequired
+    convoId: PropTypes.string.isRequired,
+    unread: PropTypes.bool
 }
 
 export default ConvoCell;

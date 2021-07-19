@@ -68,6 +68,12 @@ function App() {
 
     }, [dispatch, userId]);
 
+    const messageReadHandler = (convoId, messageId) => {
+        if (socketRef.current && userId) {
+            socketRef.current.emit('read-message', { userId: userId, convoId: convoId, messageId: messageId });
+        }
+    }
+
     if (token === null || activated === false) {
         return (
             <div className={classes.App}>
@@ -103,7 +109,7 @@ function App() {
                     <NewConversation userId={userId} token={token} />
                 </Route>
                 <Route path="/conversations/:id" exact>
-                    <Messages userId={userId} token={token} />
+                    <Messages userId={userId} token={token} onReadMessage={messageReadHandler} />
                 </Route>
                 <Route path="/conversations/:id/options" exact>
                     <ConversationOptions userId={userId} token={token} />

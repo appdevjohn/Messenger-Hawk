@@ -32,7 +32,7 @@ const Conversations = props => {
                         return {
                             id: convo.id,
                             name: convo.name,
-                            unread: false,
+                            unread: convo.snippet ? convo.lastReadMessageId !== convo.snippet.id : false,
                             snippet: convo.snippet ? (convo.snippet.type === 'text' ? convo.snippet.content : 'Media') : 'No messages'
                         }
                     });
@@ -70,10 +70,10 @@ const Conversations = props => {
 
     const conversationListings = conversations.map(convo => {
         return <ConvoCell
-            name={convoUpdates[convo.id] ? '*' + convo.name : convo.name}
+            name={convo.name}
             snippet={convoUpdates[convo.id] || convo.snippet}
             convoId={convo.id}
-            unread={convoUpdates[convo.id]}
+            unread={convoUpdates[convo.id] !== undefined || convo.unread}
             key={convo.id} />
     });
 

@@ -38,14 +38,14 @@ const Messages = props => {
                 }).then(response => {
 
                     // Set the state with convo data.
-                    const messages = response.data.messages.map(message => {
+                    const newMessages = response.data.messages.map(message => {
                         return {
                             id: message.id,
                             userId: message.userId,
                             convoId: message.convoId,
                             userFullName: message.userData.firstName + ' ' + message.userData.lastName,
                             userUsername: message.userData.username,
-                            userProfilePic: 'https://dummyimage.com/128/f2efea/000000.png',
+                            userProfilePic: message.userData.profilePicURL,
                             timestamp: new Date(message.createdAt),
                             content: message.content,
                             type: message.type,
@@ -53,7 +53,7 @@ const Messages = props => {
                         }
                     });
                     setConvoName(response.data.conversation.name);
-                    setMessages(messages);
+                    setMessages(newMessages);
                     setDidFinishLoading(true);
 
                     // Save this conversation to IndexedDB.
@@ -66,7 +66,7 @@ const Messages = props => {
                         localDB.updateConversation(newConvoData);
                     });
                     localDB.deleteMessagesWithConvoId(convoId).then(() => {
-                        messages.forEach(msg => {
+                        newMessages.forEach(msg => {
                             localDB.addMessage(msg);
                         });
                     });
@@ -108,7 +108,7 @@ const Messages = props => {
                 convoId: msg.convoId,
                 userFullName: msg.userData.firstName + ' ' + msg.userData.lastName,
                 userUsername: msg.userData.username,
-                userProfilePic: 'https://dummyimage.com/128/f2efea/000000.png',
+                userProfilePic: msg.userData.profilePicURL,
                 timestamp: new Date(msg.createdAt),
                 content: msg.content,
                 type: msg.type,
@@ -214,7 +214,7 @@ const Messages = props => {
             userId: userId,
             userFullName: user.firstName + ' ' + user.lastName,
             userUsername: user.username,
-            userProfilePic: 'https://dummyimage.com/128/f2efea/000000.png',
+            userProfilePic: user.profilePicURL,
             timestamp: new Date(),
             content: message,
             type: 'text',

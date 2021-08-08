@@ -33,7 +33,7 @@ export const deleteAllConversations = () => {
 export const getMessagesWithConvoId = convoId => {
     return db.collection('messages').get().then(messages => {
         if (messages) {
-            return messages.filter(message => message.convoId = convoId);
+            return messages.filter(message => message.convoId === convoId);
         } else {
             return [];
         }

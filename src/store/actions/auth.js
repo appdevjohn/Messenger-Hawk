@@ -165,7 +165,7 @@ export const authCheckState = () => {
                 dispatch(userActions.clearUser());
             } else {
                 localDB.ensureUserIsSaved(response.data.user);
-                console.log(response.data.user);
+                
                 dispatch(userActions.setUser(response.data.user.firstName, response.data.user.lastName, response.data.user.username, response.data.user.email, response.data.user.profilePicURL));
             }
         }).catch(() => {

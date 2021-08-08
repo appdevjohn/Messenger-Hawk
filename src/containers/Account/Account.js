@@ -22,16 +22,34 @@ const Account = props => {
     const firstName = useSelector(state => state.user.firstName);
     const lastName = useSelector(state => state.user.lastName);
     const username = useSelector(state => state.user.username);
+    const [profilePicURL, setProfilePicURL] = useState(null);
 
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [editingFirstName, setFirstName] = useState('');
     const [editingLastName, setLastName] = useState('');
     const [editingUsername, setUsername] = useState('');
+    const [editingProfilePic, setEditingProfilePic] = useState(null);
 
     useEffect(() => { setFirstName(firstName || ''); }, [firstName]);
     useEffect(() => { setLastName(lastName || ''); }, [lastName]);
     useEffect(() => { setUsername(username || ''); }, [username]);
+
+    const uploadProfilePicHandler = () => {
+        const formData = new FormData();
+        formData.append('image', editingProfilePic, editingProfilePic.name);
+
+        api.put('/users/edit-image', formData, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(res => {
+            setProfilePicURL(res.data.user.profilePicURL);
+        }).catch(error => {
+            dispatch(errorActions.setError('Error', error.response.data.message));
+        });
+    }
 
     const toggleEditHandler = () => {
         if (isEditing) {
@@ -98,13 +116,20 @@ const Account = props => {
     return (
         <div className={classes.Account}>
             <NavBar title="Account" rightButton={{ type: 'Log Out', to: '/auth/logout' }} />
-            <div className={classes.profilePicture}>Profile Picture</div>
+
+            <div className={classes.profilePicture}>
+                <img src={profilePicURL} alt={`${firstName} ${lastName}`} />
+            </div>
+            <input type="file" onChange={e => setEditingProfilePic(e.target.files[0])} />
+            <button onClick={uploadProfilePicHandler}>Change Image</button>
+
             {isEditing ? editingInfoUI : displayedInfoUI}
             {isLoading ? <LoadingIndicator /> :
                 <div className={classes.editButtonContainer}>
                     <Button title={isEditing ? 'Done' : 'Edit'} onClick={toggleEditHandler} />
                 </div>
             }
+
             <div className={classes.destructiveButtonsContainer}>
                 <SubmitButton title="Reset Password" onClick={() => { }} disabled />
                 <SubmitButton title="Delete Account" onClick={() => { }} disabled />

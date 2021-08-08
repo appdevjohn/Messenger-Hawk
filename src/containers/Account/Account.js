@@ -22,7 +22,7 @@ const Account = props => {
     const firstName = useSelector(state => state.user.firstName);
     const lastName = useSelector(state => state.user.lastName);
     const username = useSelector(state => state.user.username);
-    const [profilePicURL, setProfilePicURL] = useState(null);
+    const profilePicURL = useSelector(state => state.user.profilePicURL);
 
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -44,8 +44,11 @@ const Account = props => {
                 Authorization: 'Bearer ' + token,
                 'Content-Type': 'multipart/form-data'
             }
-        }).then(res => {
-            setProfilePicURL(res.data.user.profilePicURL);
+        }).then(response => {
+            const userData = response.data.user;
+            dispatch(userActions.setUser(userData.firstName, userData.lastName, userData.username, userData.email, userData.profilePicURL));
+            localDB.ensureUserIsSaved(userData);
+            
         }).catch(error => {
             dispatch(errorActions.setError('Error', error.response.data.message));
         });
@@ -71,7 +74,7 @@ const Account = props => {
                 setIsLoading(false);
 
                 const userData = response.data.user;
-                dispatch(userActions.setUser(userData.firstName, userData.lastName, userData.username, userData.email));
+                dispatch(userActions.setUser(userData.firstName, userData.lastName, userData.username, userData.email, userData.profilePicURL));
                 localDB.ensureUserIsSaved(userData);
 
             }).catch(error => {

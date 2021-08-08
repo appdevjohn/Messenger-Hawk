@@ -4,7 +4,8 @@ const initialState = {
     firstName: null,
     lastName: null,
     username: null,
-    email: null
+    email: null,
+    profilePicURL: null
 }
 
 const setUser = (state, action) => {
@@ -13,7 +14,8 @@ const setUser = (state, action) => {
         firstName: action.firstName,
         lastName: action.lastName,
         username: action.username,
-        email: action.email
+        email: action.email,
+        profilePicURL: action.profilePicURL
     }
 }
 
@@ -22,7 +24,8 @@ const clearUser = (state, action) => {
         firstName: null,
         lastName: null,
         username: null,
-        email: null
+        email: null,
+        profilePicURL: null
     }
 }
 

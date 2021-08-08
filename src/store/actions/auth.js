@@ -21,32 +21,23 @@ export const startSignUp = (firstName, lastName, email, username, password, conf
             username: username,
             password: password
         }).then(response => {
-            localStorage.setItem('userId', response.data.user.id);
+            const userData = response.data.user;
+
+            localStorage.setItem('userId', userData.id);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('activated', response.data.activated);
 
-            localDB.ensureUserIsSaved({
-                id: response.data.user.id,
-                firstName: response.data.user.firstName,
-                lastName: response.data.user.lastName,
-                username: response.data.user.username,
-                email: response.data.user.email
-            });
+            localDB.ensureUserIsSaved(userData);
 
-            dispatch({
-                type: actionTypes.USER_SET,
-                firstName: response.data.user.firstName,
-                lastName: response.data.user.lastName,
-                username: response.data.user.username,
-                email: response.data.user.email,
-            });
+            dispatch(userActions.setUser(userData.firstName, userData.lastName, userData.username, userData.email, userData.profilePicURL));
 
             return dispatch({
                 type: actionTypes.AUTH_SUCCESS,
-                userId: response.data.user.id,
+                userId: userData.id,
                 token: response.data.token,
                 activated: response.data.activated
             });
+
         }).catch(error => {
             if (error.response) {
                 return dispatch({
@@ -71,32 +62,23 @@ export const startLogIn = (email, password) => {
             email: email,
             password: password
         }).then(response => {
-            localStorage.setItem('userId', response.data.user.id);
+            const userData = response.data.user;
+
+            localStorage.setItem('userId', userData.id);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('activated', response.data.activated);
 
-            localDB.ensureUserIsSaved({
-                id: response.data.user.id,
-                firstName: response.data.user.firstName,
-                lastName: response.data.user.lastName,
-                username: response.data.user.username,
-                email: response.data.user.email
-            });
+            localDB.ensureUserIsSaved(userData);
 
-            dispatch({
-                type: actionTypes.USER_SET,
-                firstName: response.data.user.firstName,
-                lastName: response.data.user.lastName,
-                username: response.data.user.username,
-                email: response.data.user.email,
-            });
+            dispatch(userActions.setUser(userData.firstName, userData.lastName, userData.username, userData.email, userData.profilePicURL));
             
             return dispatch({
                 type: actionTypes.AUTH_SUCCESS,
-                userId: response.data.user.id,
+                userId: userData.id,
                 token: response.data.token,
                 activated: response.data.activated
             });
+
         }).catch(error => {
             if (error.response) {
                 return dispatch({
@@ -183,7 +165,8 @@ export const authCheckState = () => {
                 dispatch(userActions.clearUser());
             } else {
                 localDB.ensureUserIsSaved(response.data.user);
-                dispatch(userActions.setUser(response.data.user.firstName, response.data.user.lastName, response.data.user.username, response.data.user.email));
+                console.log(response.data.user);
+                dispatch(userActions.setUser(response.data.user.firstName, response.data.user.lastName, response.data.user.username, response.data.user.email, response.data.user.profilePicURL));
             }
         }).catch(() => {
             dispatch(startLogOut());

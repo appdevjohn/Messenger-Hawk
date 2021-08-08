@@ -1,12 +1,13 @@
 import * as actionTypes from '../actionTypes';
 
-export const setUser = (firstName, lastName, username, email) => {
+export const setUser = (firstName, lastName, username, email, profilePicURL) => {
     return {
         type: actionTypes.USER_SET,
         firstName: firstName,
         lastName: lastName,
         username: username,
-        email: email
+        email: email,
+        profilePicURL: profilePicURL
     }
 }
 

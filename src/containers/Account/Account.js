@@ -1,4 +1,4 @@
-import { useState, Fragment, useEffect } from 'react';
+import { useState, Fragment, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import api from '../../api';
@@ -35,6 +35,8 @@ const Account = props => {
     useEffect(() => { setLastName(lastName || ''); }, [lastName]);
     useEffect(() => { setUsername(username || ''); }, [username]);
 
+    const uploadRef = useRef(null);
+
     const uploadProfilePicHandler = () => {
         const formData = new FormData();
         formData.append('image', editingProfilePic, editingProfilePic.name);
@@ -43,11 +45,16 @@ const Account = props => {
             headers: {
                 Authorization: 'Bearer ' + token,
                 'Content-Type': 'multipart/form-data'
+            },
+            onUploadProgress: progressEvent => {
+                console.log(progressEvent);
             }
         }).then(response => {
             const userData = response.data.user;
             dispatch(userActions.setUser(userData.firstName, userData.lastName, userData.username, userData.email, userData.profilePicURL));
             localDB.ensureUserIsSaved(userData);
+
+            setEditingProfilePic(null);
             
         }).catch(error => {
             dispatch(errorActions.setError('Error', error.response.data.message));
@@ -89,6 +96,11 @@ const Account = props => {
         }
     }
 
+    let localProfilePicURL = null;
+    if (editingProfilePic) {
+        localProfilePicURL = URL.createObjectURL(editingProfilePic);
+    }
+
     const displayedInfoUI = (
         <Fragment>
             <div className={classes.fullName}>{firstName + ' ' + lastName}</div>
@@ -120,11 +132,15 @@ const Account = props => {
         <div className={classes.Account}>
             <NavBar title="Account" rightButton={{ type: 'Log Out', to: '/auth/logout' }} />
 
-            <div className={classes.profilePicture}>
-                <img src={profilePicURL} alt={`${firstName} ${lastName}`} />
+            <div className={classes.profilePicture} onClick={() => { uploadRef.current.click() }}>
+                <img src={localProfilePicURL || profilePicURL} alt={`${firstName} ${lastName}`} />
+                <div className={classes.profilePictureEdit}>Edit</div>
             </div>
-            <input type="file" onChange={e => setEditingProfilePic(e.target.files[0])} />
-            <button onClick={uploadProfilePicHandler}>Change Image</button>
+            <input type="file" onChange={e => setEditingProfilePic(e.target.files[0])} ref={uploadRef} style={{ display: 'none' }} />
+            {editingProfilePic ? <div className={classes.imageUploadOptions}>
+                <Button title="Upload" onClick={uploadProfilePicHandler} />
+                <Button title="Cancel" onClick={() => setEditingProfilePic(null)} />
+            </div> : null}
 
             {isEditing ? editingInfoUI : displayedInfoUI}
             {isLoading ? <LoadingIndicator /> :

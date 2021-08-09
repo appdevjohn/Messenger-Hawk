@@ -241,7 +241,8 @@ const Messages = props => {
                 sendMessage={sendMessageHandler}
                 becameActive={() => {
                     window.scroll(0, document.body.scrollHeight);
-                }} />
+                }}
+                onUploadFile={event => { console.log(event) }} />
         </div>
     )
 }

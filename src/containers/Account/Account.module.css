@@ -3,6 +3,7 @@
 }
 
 .profilePicture {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -16,12 +17,33 @@
     width: 100px;
     border-radius: 50px;
     overflow: hidden;
+    backdrop-filter: opacity(100%); /* Some backdrop-filter is required so the 'Edit' caption will respect 'overflow: hidden'. */
 }
 
 .profilePicture img {
     height: 100%;
     width: 100%;
     object-fit: cover;
+}
+
+.profilePictureEdit {
+    position: absolute;
+    height: 0.75rem;
+    width: 100%;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(2px); /* Since a backdrop-filter is used, one has to be used on the parent so this will respect 'overflow: hidden'. */
+    font-size: 0.7rem;
+    color: white;
+}
+
+.imageUploadOptions {
+    text-align: center;
+    margin: 0.5rem 0 1rem 0;
+}
+
+.imageUploadOptions Button {
+    margin: 0 0.5rem;
 }
 
 .fullName {

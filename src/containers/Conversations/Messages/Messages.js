@@ -160,8 +160,7 @@ const Messages = props => {
             // Send the message.
             api.post('/messages/new', {
                 convoId: convoId,
-                content: message.content,
-                type: 'text'
+                content: message.content
             }, {
                 headers: {
                     Authorization: 'Bearer ' + token,

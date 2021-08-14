@@ -31,7 +31,7 @@ const Messages = props => {
         // Fetch this conversation
         const fetchConversation = () => {
             if (token) {
-                api.get('/conversations/' + convoId, {
+                api.get('/conversations/' + convoId + '?limit=256', {
                     headers: {
                         Authorization: 'Bearer ' + token,
                         'Content-Type': 'application/json'

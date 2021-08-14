@@ -5,9 +5,8 @@ import MessageBubble from './MessageBubble/MessageBubble';
 import classes from './MessageBlock.module.css';
 
 const MessageBlock = props => {
-    let messageBubbles = [];
-    props.messages.forEach(message => {
-        messageBubbles.push(<MessageBubble text={message.content} highlighted={props.highlighted} delivered={message.delivered} key={message.id} />);
+    let messageBubbles = props.messages.map(message => {
+        return <MessageBubble content={message.content} highlighted={props.highlighted} delivered={message.delivered} type={message.type} key={message.id} />
     });
 
     return (
@@ -28,6 +27,7 @@ MessageBlock.propTypes = {
     senderName: PropTypes.string,
     messages: PropTypes.arrayOf(PropTypes.shape({
         content: PropTypes.string,
+        type: PropTypes.string,
         id: PropTypes.string
     })).isRequired
 }

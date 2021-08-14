@@ -11,13 +11,20 @@ const MessageBubble = props => {
         messageClasses.push(classes.disabled);
     }
 
-    return (
-        <div><div className={messageClasses.join(' ')}>{props.text}</div></div>
-    )
+    if (props.type === 'image') {
+        return (
+            <div className={classes.imgDiv}><img src={props.content} alt="Message Attachment" /></div>
+        )
+    } else {
+        return (
+            <div><div className={messageClasses.join(' ')}>{props.content}</div></div>
+        )
+    }
 }
 
 MessageBubble.propTypes = {
-    text: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
     highlighted: PropTypes.bool,
     delivered: PropTypes.oneOf(['delivered', 'delivering', 'not delivered'])
 }

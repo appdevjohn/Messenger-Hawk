@@ -12,22 +12,20 @@ const MessageView = props => {
     for (let i = 0; i < sortedMessages.length; i++) {
         const message = sortedMessages[i];
 
-        if (message.type === 'text') {
-            if (messageBlocks.length > 0 &&
-                messageBlocks[messageBlocks.length - 1].senderId === message.userId && 
-                Math.abs(messageBlocks[messageBlocks.length - 1].messages[messageBlocks[messageBlocks.length - 1].messages.length - 1].timestamp - message.timestamp) < 60000) {
+        if (messageBlocks.length > 0 &&
+            messageBlocks[messageBlocks.length - 1].senderId === message.userId &&
+            Math.abs(messageBlocks[messageBlocks.length - 1].messages[messageBlocks[messageBlocks.length - 1].messages.length - 1].timestamp - message.timestamp) < 60000) {
 
-                messageBlocks[messageBlocks.length - 1].messages.push({ ...message });
-                
-            } else {
-                const newBlock = {
-                    senderId: message.userId,
-                    senderImg: message.userProfilePic,
-                    senderName: message.userFullName,
-                    messages: [{ ...message }]
-                }
-                messageBlocks.push(newBlock);
+            messageBlocks[messageBlocks.length - 1].messages.push({ ...message });
+
+        } else {
+            const newBlock = {
+                senderId: message.userId,
+                senderImg: message.userProfilePic,
+                senderName: message.userFullName,
+                messages: [{ ...message }]
             }
+            messageBlocks.push(newBlock);
         }
     }
 

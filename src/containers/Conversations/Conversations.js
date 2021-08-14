@@ -33,7 +33,7 @@ const Conversations = props => {
                             id: convo.id,
                             name: convo.name,
                             unread: convo.snippet ? convo.lastReadMessageId !== convo.snippet.id : false,
-                            snippet: convo.snippet ? (convo.snippet.type === 'text' ? convo.snippet.content : 'Media') : 'No messages'
+                            snippet: convo.snippet ? (convo.snippet.type === 'text' ? convo.snippet.content : 'Attachment') : 'No messages'
                         }
                     });
                     setConversations(newConversations);

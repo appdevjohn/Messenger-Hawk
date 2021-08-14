@@ -44,6 +44,7 @@
 
 .leftButton img, .rightButton img {
     height: 100%;
+    width: 44px;
 }
 
 @media (prefers-color-scheme: dark) {

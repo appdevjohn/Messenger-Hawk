@@ -21,7 +21,7 @@ const ComposeBox = props => {
                 <div className={classes.uploadButtonContainer}>
                     <button className={classes.UploadButton} onClick={() => {
                         uploadRef.current.click()
-                    }}>
+                    }} disabled={props.disableUpload}>
                         <img src={fileUpload} alt="File Upload" />
                     </button>
                     <input type="file" onChange={props.onUploadFile} ref={uploadRef} style={{ display: 'none' }} />
@@ -57,7 +57,8 @@ const ComposeBox = props => {
 ComposeBox.propTypes = {
     sendMessage: PropTypes.func.isRequired,
     becameActive: PropTypes.func,
-    onUploadFile: PropTypes.func.isRequired
+    onUploadFile: PropTypes.func.isRequired,
+    disableUpload: PropTypes.bool
 }
 
 export default ComposeBox;

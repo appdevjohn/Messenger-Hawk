@@ -21,6 +21,7 @@ const Messages = props => {
     const dispatch = useDispatch();
 
     const [didFinishLoading, setDidFinishLoading] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
     const [convoName, setConvoName] = useState('');
     const [messages, setMessages] = useState([]);
 
@@ -226,6 +227,54 @@ const Messages = props => {
         });
     }
 
+    const uploadAttachmentHandler = event => {
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append('attachment', file, file.name);
+        formData.append('convoId', convoId);
+
+        setIsUploading(true);
+
+        api.post('/messages/new', formData, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'multipart/form-data'
+            },
+            onUploadProgress: progressEvent => {
+                console.log(progressEvent);
+            }
+        }).then(response => {
+            setIsUploading(false);
+
+            const message = response.data.message;
+            const newMessage = {
+                id: message.id,
+                userId: message.userId,
+                convoId: message.convoId,
+                userFullName: message.userData.firstName + ' ' + message.userData.lastName,
+                userUsername: message.userData.username,
+                userProfilePic: message.userData.profilePicURL,
+                timestamp: new Date(message.createdAt),
+                content: message.content,
+                type: message.type,
+                delivered: 'delivered'
+            }
+
+            console.log(newMessage);
+
+            setMessages(oldMessages => {
+                const newMessages = oldMessages.map(msg => ({ ...msg }));
+                newMessages.push(newMessage);
+                return newMessages;
+            });
+            localDB.addMessage(newMessage);
+
+        }).catch(error => {
+            setIsUploading(false);
+            console.error(error);
+        });
+    }
+
     return (
         <div className={classes.Messages}>
             <NavBar
@@ -241,7 +290,8 @@ const Messages = props => {
                 becameActive={() => {
                     window.scroll(0, document.body.scrollHeight);
                 }}
-                onUploadFile={event => { console.log(event) }} />
+                onUploadFile={event => uploadAttachmentHandler(event)}
+                disableUpload={isUploading} />
         </div>
     )
 }

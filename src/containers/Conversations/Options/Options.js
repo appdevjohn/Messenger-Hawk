@@ -43,7 +43,7 @@ const Options = props => {
             }).catch(error => {
                 console.error(error);
                 setDidFinishLoading(true);
-                dispatch(errorActions.setError('Error', error.response.data.message));
+                dispatch(errorActions.setError('Error', error.response?.data?.message));
             });
         }
     }, [token, convoId, dispatch]);

@@ -209,7 +209,9 @@ const Messages = props => {
                     return latest;
                 }
             });
-            onReadMessage(convoId, latestMessage.id);
+            if (latestMessage.delivered === 'delivered') {
+                onReadMessage(convoId, latestMessage.id);
+            }
         }
     }, [userId, convoId, messages, onReadMessage]);
 

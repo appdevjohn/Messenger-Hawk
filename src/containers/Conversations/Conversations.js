@@ -51,6 +51,9 @@ const Conversations = props => {
         }
 
         localDB.getConversations().then(convos => {
+            if (!Array.isArray(convos)) {
+                convos = [convos];
+            }
             setConversations(convos || []);
             getConversations();
         }).catch(() => {

@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import api from '../../api';
+import * as localDB from '../../localDatabase';
 import * as errorActions from '../../store/actions/error';
 import NavBar from '../../navigation/NavBar/NavBar';
 import TypedTagInput from '../../components/TypedTagInput/TypedTagInput';
@@ -30,8 +31,20 @@ const NewConversation = props => {
                 'Content-Type': 'application/json'
             }
         }).then(response => {
+            const conversation = response.data.conversation;
+
             setCreatingConvo(false);
-            props.history.push('/conversations/' + response.data.conversation.id);
+
+            const newConvo = {
+                id: conversation.id,
+                name: conversation.name,
+                unread: false,
+                snippet: 'No messages'
+            }
+            return localDB.addConversation(newConvo).then(() => {
+                props.history.push('/conversations/' + conversation.id);
+            });
+
         }).catch(error => {
             setCreatingConvo(false);
             dispatch(errorActions.setError('Error', error.response.data.message));

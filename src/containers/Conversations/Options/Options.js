@@ -82,7 +82,8 @@ const Options = props => {
                 }
             }).then(() => {
                 props.history.push('/conversations');
-                return localDB.deleteMessagesWithConvoId(convoId);
+                localDB.deleteMessagesWithConvoId(convoId);
+                localDB.deleteConversationWithId(convoId);
 
             }).catch(error => {
                 let errorMessage = 'You cannot leave this conversation while you are offline.';

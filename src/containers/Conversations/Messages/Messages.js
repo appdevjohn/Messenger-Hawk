@@ -67,7 +67,9 @@ const Messages = props => {
                         localDB.updateConversation(newConvoData);
                     });
                     localDB.deleteMessagesWithConvoId(convoId).then(() => {
-                        newMessages.forEach(msg => {
+                        const limitedMessages = newMessages.slice().sort((a, b) => a - b).slice(0, 256);
+
+                        limitedMessages.forEach(msg => {
                             localDB.addMessage(msg);
                         });
                     });
@@ -130,6 +132,10 @@ const Messages = props => {
                 });
 
                 return prevMessages.map(msg => ({ ...msg })).concat(messagesToAdd)
+            });
+
+            updateMessages.forEach(msg => {
+                localDB.addMessage(msg);
             });
 
             // Clear message updates for this conversation.

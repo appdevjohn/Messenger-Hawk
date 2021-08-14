@@ -25,6 +25,10 @@ export const updateConversation = conversation => {
     return db.collection('conversations').doc({ id: conversation.id }).set(conversation);
 }
 
+export const deleteConversationWithId = convoId => {
+    return db.collection('conversations').doc({ id: convoId }).delete();
+}
+
 export const deleteAllConversations = () => {
     return db.collection('conversations').delete();
 }

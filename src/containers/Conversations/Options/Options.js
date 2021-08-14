@@ -23,8 +23,10 @@ const Options = props => {
 
     useEffect(() => {
         localDB.getConversationWithId(convoId).then(convo => {
-            setMembers(convo.members);
-            setConvoName(convo.name);
+            if (convo) {
+                setMembers(convo.members);
+                setConvoName(convo.name);
+            }
         });
 
         if (token && convoId) {
@@ -80,6 +82,8 @@ const Options = props => {
                 }
             }).then(() => {
                 props.history.push('/conversations');
+                return localDB.deleteMessagesWithConvoId(convoId);
+
             }).catch(error => {
                 let errorMessage = 'You cannot leave this conversation while you are offline.';
                 if (error.response) {

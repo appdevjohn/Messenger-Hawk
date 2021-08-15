@@ -150,7 +150,6 @@ const Account = props => {
             }
 
             <div className={classes.destructiveButtonsContainer}>
-                <SubmitButton title="Reset Password" onClick={() => { }} disabled />
                 <SubmitButton title="Delete Account" onClick={() => { }} disabled />
             </div>
             <TabBar />

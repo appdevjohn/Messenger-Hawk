@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as authActions from '../../store/actions/auth';
 import TextInput from '../../components/TextInput/TextInput';
 import SubmitButton from '../../components/SubmitButton/SubmitButton';
+import Button from '../../components/Button/Button';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 
 import classes from './AuthForm.module.css';
@@ -52,12 +53,24 @@ const SignUp = props => {
         dispatch(authActions.startSignUp(firstName, lastName, email, username, password, confirmPassword));
     }
 
+    const onLogIn = () => {
+        dispatch(authActions.startLogIn(email, password));
+    }
+
     const onConfirmEmail = () => {
         dispatch(authActions.startConfirmEmail(token, confirmationNum));
     }
 
-    const onLogIn = () => {
-        dispatch(authActions.startLogIn(email, password));
+    const onReConfirmEmail = () => {
+        
+    }
+
+    const onRequestNewPassword = () => {
+
+    }
+
+    const onResetPassword = () => {
+
     }
 
     return (
@@ -82,7 +95,21 @@ const SignUp = props => {
                 <Route path="/auth/confirm-email" exact>
                     <TextInput type="text" placeholder="Verification Code" value={confirmationNum} onChange={event => setConfirmationNum(event.target.value)} />
                     <SubmitButton title="Confirm" onClick={onConfirmEmail} />
+                    <Button title="Re-Send Code" onClick={onReConfirmEmail} />
                 </Route>
+
+
+                <Route path="/auth/request-new-password" exact>
+                    <TextInput type="email" placeholder="email" value={email} onChange={event => {}} />
+                    <SubmitButton title="Request" onClick={onRequestNewPassword} />
+                </Route>
+                <Route path="/auth/reset-password" exact>
+                    <TextInput type="password" placeholder="email" value={email} onChange={event => {}} />
+                    <SubmitButton title="Reset Password" onClick={onConfirmEmail} />
+                    <Button title="Re-Send Code" onClick={onResetPassword} />
+                </Route>
+
+
                 <Route>
                     <Redirect to="/auth/login" />
                 </Route>

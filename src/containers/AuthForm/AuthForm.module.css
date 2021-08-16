@@ -12,3 +12,16 @@
     text-decoration: none;
     color: var(--accent-color);
 }
+
+.verificationOptionsContainer {
+    width: 100%;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.verificationOptionsContainer > Button {
+    margin-left: 1rem;
+}

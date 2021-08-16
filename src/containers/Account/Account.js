@@ -55,7 +55,7 @@ const Account = props => {
             localDB.ensureUserIsSaved(userData);
 
             setEditingProfilePic(null);
-            
+
         }).catch(error => {
             dispatch(errorActions.setError('Error', error.response.data.message));
         });
@@ -133,7 +133,9 @@ const Account = props => {
             <NavBar title="Account" rightButton={{ type: 'Log Out', to: '/auth/logout' }} />
 
             <div className={classes.profilePicture} onClick={() => { uploadRef.current.click() }}>
-                <img src={localProfilePicURL || profilePicURL} alt={`${firstName} ${lastName}`} />
+                {(localProfilePicURL || profilePicURL) ?
+                    <img src={localProfilePicURL || profilePicURL} alt={`${firstName} ${lastName}`} /> :
+                    <div>No Picture Uploaded</div>}
                 <div className={classes.profilePictureEdit}>Edit</div>
             </div>
             <input type="file" onChange={e => setEditingProfilePic(e.target.files[0])} ref={uploadRef} style={{ display: 'none' }} />

@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 
 import MessageBlock from './MessageBlock/MessageBlock';
+import Button from '../Button/Button';
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 
 import classes from './MessageView.module.css';
 
@@ -31,6 +33,10 @@ const MessageView = props => {
 
     return (
         <div className={classes.MessageView}>
+            {props.showLoadOlderMessagesButton ? <div className={classes.btnContainer}>
+                {props.isLoadingOlderMessages ? <LoadingIndicator /> :
+                    <Button title="Load More" onClick={props.onLoadOlderMessages} />}
+            </div> : null}
             {messageBlocks.map(block => {
                 return <MessageBlock
                     senderName={block.senderName}
@@ -51,7 +57,11 @@ MessageView.propTypes = {
         content: PropTypes.string,
         type: PropTypes.string
     })).isRequired,
-    highlightId: PropTypes.string.isRequired
+    highlightId: PropTypes.string.isRequired,
+    pagination: PropTypes.bool,
+    showLoadOlderMessagesButton: PropTypes.bool,
+    onLoadOlderMessages: PropTypes.func,
+    isLoadingOlderMessages: PropTypes.bool
 }
 
 export default MessageView;

@@ -13,6 +13,45 @@ import ComposeBox from '../../../components/ComposeBox/ComposeBox';
 
 import classes from './Messages.module.css';
 
+const messageFetchLimit = 256;
+
+const fetchMessages = (token, convoId, limit, offset, messagesOnly) => {
+    return api.get(`/conversations/${convoId}${messagesOnly ? '/messages' : ''}?limit=${limit}&offset=${offset}`, {
+        headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        }
+    }).then(response => {
+        const newMessages = response.data.messages.map(message => {
+            return {
+                id: message.id,
+                userId: message.userId,
+                convoId: message.convoId,
+                userFullName: message.userData.firstName + ' ' + message.userData.lastName,
+                userUsername: message.userData.username,
+                userProfilePic: message.userData.profilePicURL,
+                timestamp: new Date(message.createdAt),
+                content: message.content,
+                type: message.type,
+                delivered: 'delivered'
+            }
+        });
+
+        if (messagesOnly) {
+            return { newMessages: newMessages };
+        } else {
+            return {
+                newMessages: newMessages,
+                newConvoName: response.data.conversation.name,
+                newMembers: response.data.members
+            };
+        }
+
+    }).catch(error => {
+        throw new Error(error);
+    });
+}
+
 const Messages = props => {
     const convoId = props.match.params.id;
     const { userId, token, history, onReadMessage } = props;
@@ -21,6 +60,7 @@ const Messages = props => {
     const dispatch = useDispatch();
 
     const [didFinishLoading, setDidFinishLoading] = useState(false);
+    const [isLoadingOlderMessages, setIsLoadingOlderMessages] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [convoName, setConvoName] = useState('');
     const [messages, setMessages] = useState([]);
@@ -31,29 +71,8 @@ const Messages = props => {
         // Fetch this conversation
         const fetchConversation = () => {
             if (token) {
-                api.get('/conversations/' + convoId + '?limit=256', {
-                    headers: {
-                        Authorization: 'Bearer ' + token,
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-
-                    // Set the state with convo data.
-                    const newMessages = response.data.messages.map(message => {
-                        return {
-                            id: message.id,
-                            userId: message.userId,
-                            convoId: message.convoId,
-                            userFullName: message.userData.firstName + ' ' + message.userData.lastName,
-                            userUsername: message.userData.username,
-                            userProfilePic: message.userData.profilePicURL,
-                            timestamp: new Date(message.createdAt),
-                            content: message.content,
-                            type: message.type,
-                            delivered: 'delivered'
-                        }
-                    });
-                    setConvoName(response.data.conversation.name);
+                fetchMessages(token, convoId, messageFetchLimit, 0, false).then(({ newMessages, newConvoName, newMembers }) => {
+                    setConvoName(newConvoName);
                     setMessages(newMessages);
                     setDidFinishLoading(true);
 
@@ -61,8 +80,8 @@ const Messages = props => {
                     localDB.getConversationWithId(convoId).then(convo => {
                         const newConvoData = {
                             ...convo,
-                            name: response.data.conversation.name,
-                            members: response.data.members
+                            name: newConvoName,
+                            members: newMembers
                         }
                         localDB.updateConversation(newConvoData);
                     });
@@ -249,7 +268,7 @@ const Messages = props => {
                 'Content-Type': 'multipart/form-data'
             },
             onUploadProgress: progressEvent => {
-                console.log(progressEvent);
+                // console.log(progressEvent);
             }
         }).then(response => {
             setIsUploading(false);
@@ -268,8 +287,6 @@ const Messages = props => {
                 delivered: 'delivered'
             }
 
-            console.log(newMessage);
-
             setMessages(oldMessages => {
                 const newMessages = oldMessages.map(msg => ({ ...msg }));
                 newMessages.push(newMessage);
@@ -279,7 +296,25 @@ const Messages = props => {
 
         }).catch(error => {
             setIsUploading(false);
-            console.error(error);
+
+            const errorMessage = error.response?.data?.message || 'File upload failed.';
+            dispatch(errorActions.setError('File Error', errorMessage));
+        });
+    }
+
+    const loadOlderMessagesHandler = () => {
+        setIsLoadingOlderMessages(true);
+
+        fetchMessages(token, convoId, messageFetchLimit, messages.length, true).then(({ newMessages }) => {
+            setIsLoadingOlderMessages(false);
+
+            if (newMessages.length === 0) {
+                dispatch(errorActions.setError('Up to Date', 'There are no older messages to load.'));
+            } else {
+                setMessages(oldMessages => {
+                    return oldMessages.map(msg => ({ ...msg })).concat(newMessages);
+                });
+            }
         });
     }
 
@@ -291,7 +326,11 @@ const Messages = props => {
                 rightButton={{ type: 'options', to: '/conversations/' + convoId + '/options' }} />
             <MessageView
                 highlightId={userId || ''}
-                messages={messages} />
+                messages={messages}
+                pagination={true}
+                showLoadOlderMessagesButton={messages.length >= messageFetchLimit}
+                onLoadOlderMessages={loadOlderMessagesHandler}
+                isLoadingOlderMessages={isLoadingOlderMessages} />
             {!didFinishLoading ? <LoadingIndicator /> : null}
             <ComposeBox
                 sendMessage={sendMessageHandler}

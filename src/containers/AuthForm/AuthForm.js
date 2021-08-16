@@ -62,7 +62,11 @@ const SignUp = props => {
     }
 
     const onReConfirmEmail = () => {
-        
+
+    }
+
+    const onGoBackFromConfirmEmail = () => {
+        dispatch(authActions.startLogOut());
     }
 
     const onRequestNewPassword = () => {
@@ -95,16 +99,19 @@ const SignUp = props => {
                 <Route path="/auth/confirm-email" exact>
                     <TextInput type="text" placeholder="Verification Code" value={confirmationNum} onChange={event => setConfirmationNum(event.target.value)} />
                     <SubmitButton title="Confirm" onClick={onConfirmEmail} />
-                    <Button title="Re-Send Code" onClick={onReConfirmEmail} />
+                    <div className={classes.verificationOptionsContainer}>
+                        <Button title="Re-Send Code" onClick={onReConfirmEmail} />
+                        <Button title="Go Back" onClick={onGoBackFromConfirmEmail} />
+                    </div>
                 </Route>
 
 
                 <Route path="/auth/request-new-password" exact>
-                    <TextInput type="email" placeholder="email" value={email} onChange={event => {}} />
+                    <TextInput type="email" placeholder="email" value={email} onChange={event => { }} />
                     <SubmitButton title="Request" onClick={onRequestNewPassword} />
                 </Route>
                 <Route path="/auth/reset-password" exact>
-                    <TextInput type="password" placeholder="email" value={email} onChange={event => {}} />
+                    <TextInput type="password" placeholder="email" value={email} onChange={event => { }} />
                     <SubmitButton title="Reset Password" onClick={onConfirmEmail} />
                     <Button title="Re-Send Code" onClick={onResetPassword} />
                 </Route>

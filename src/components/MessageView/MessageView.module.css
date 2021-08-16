@@ -2,3 +2,8 @@
     width: calc(100% - 30px);
     margin-bottom: 84px;
 }
+
+.btnContainer {
+    text-align: center;
+    margin: 1rem 0;
+}

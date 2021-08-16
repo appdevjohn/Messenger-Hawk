@@ -2,6 +2,7 @@ import api from '../../api';
 import * as localDB from '../../localDatabase';
 import * as actionTypes from '../actionTypes';
 import * as userActions from '../actions/user';
+import { deleteDatabase } from '../../localDatabase';
 
 export const startSignUp = (firstName, lastName, email, username, password, confirmPassword) => {
     return dispatch => {
@@ -143,6 +144,26 @@ export const startLogOut = () => {
     }
 }
 
+export const startDeleteAccount = token => {
+    return dispatch => {
+        dispatch(setLoading(true));
+
+        return api.delete('/auth/delete-account', {
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            deleteDatabase();
+            return dispatch(startLogOut());
+
+        }).catch(error => {
+            dispatch(setLoading(false));
+            return dispatch(setError(error.response?.data?.message || 'Could not delete account.'));
+        })
+    }
+}
+
 export const authCheckState = () => {
     return dispatch => {
         dispatch({
@@ -196,6 +217,13 @@ export const setLoading = isLoading => {
     return {
         type: actionTypes.AUTH_SET_LOADING,
         loading: isLoading
+    }
+}
+
+export const setError = error => {
+    return {
+        type: actionTypes.AUTH_SET_ERROR,
+        error: error
     }
 }
 

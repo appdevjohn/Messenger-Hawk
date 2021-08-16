@@ -85,6 +85,13 @@ const authSetLoading = (state, action) => {
     }
 }
 
+const authSetError = (state, action) => {
+    return {
+        ...state,
+        error: action.error
+    }
+}
+
 const authClearError = (state, action) => {
     return {
         ...state,
@@ -102,6 +109,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.AUTH_SET_ACTIVATED: return authSetActivated(state, action);
         case actionTypes.AUTH_SET_REDIRECT_PATH: return authSetRedirectPath(state, action);
         case actionTypes.AUTH_SET_LOADING: return authSetLoading(state, action);
+        case actionTypes.AUTH_SET_ERROR: return authSetError(state, action);
         case actionTypes.AUTH_CLEAR_ERROR: return authClearError(state, action);
         default: return state;
     }

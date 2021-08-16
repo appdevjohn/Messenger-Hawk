@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import api from '../../api';
 import * as localDB from '../../localDatabase';
+import * as authActions from '../../store/actions/auth';
 import * as userActions from '../../store/actions/user';
 import * as errorActions from '../../store/actions/error';
 import NavBar from '../../navigation/NavBar/NavBar';
@@ -96,6 +97,10 @@ const Account = props => {
         }
     }
 
+    const deleteAccountHandler = () => {
+        dispatch(authActions.startDeleteAccount(token));
+    }
+
     let localProfilePicURL = null;
     if (editingProfilePic) {
         localProfilePicURL = URL.createObjectURL(editingProfilePic);
@@ -152,7 +157,7 @@ const Account = props => {
             }
 
             <div className={classes.destructiveButtonsContainer}>
-                <SubmitButton title="Delete Account" onClick={() => { }} disabled />
+                <SubmitButton title="Delete Account" onClick={deleteAccountHandler} />
             </div>
             <TabBar />
         </div>

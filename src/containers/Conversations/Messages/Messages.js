@@ -27,7 +27,7 @@ const fetchMessages = (token, convoId, limit, offset, messagesOnly) => {
                 id: message.id,
                 userId: message.userId,
                 convoId: message.convoId,
-                userFullName: message.userData.firstName + ' ' + message.userData.lastName,
+                userFullName: message.userData.username ? message.userData.firstName + ' ' + message.userData.lastName : 'Deleted Account',
                 userUsername: message.userData.username,
                 userProfilePic: message.userData.profilePicURL,
                 timestamp: new Date(message.createdAt),

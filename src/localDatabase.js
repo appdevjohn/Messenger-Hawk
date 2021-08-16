@@ -8,6 +8,10 @@ export const initDatabase = () => {
     db.collection('conversations').get();
 }
 
+export const deleteDatabase = () => {
+    db.delete();
+}
+
 // Conversations
 export const getConversations = () => {
     return db.collection('conversations').get();

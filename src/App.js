@@ -32,7 +32,7 @@ function App() {
 
     useEffect(() => {
         // Initializaing Socket.IO
-        if (!socketRef.current && userId) {
+        if (!socketRef.current && token) {
             socketRef.current = io(api.defaults.baseURL);
 
             socketRef.current.on('message', message => {
@@ -44,11 +44,11 @@ function App() {
 
             socketRef.current.on('connect', () => {
                 console.log('Connected to Server');
-                socketRef.current.emit('subscribe', { userId: userId });
+                socketRef.current.emit('subscribe', { token: token });
             });
         }
 
-    }, [dispatch, userId]);
+    }, [dispatch, token]);
 
     const messageReadHandler = (convoId, messageId) => {
         if (socketRef.current && userId) {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import MessageBubble from './MessageBubble/MessageBubble';
 
 import classes from './MessageBlock.module.css';
+import emptyProfilePic from '../../../assets/empty-profile-pic.png';
 
 const MessageBlock = props => {
     let messageBubbles = props.messages.map(message => {
@@ -12,7 +13,7 @@ const MessageBlock = props => {
     return (
         <div className={classes.MessageBlock}>
             <div className={classes.senderImageContainer}>
-                <img className={classes.senderImage} src={props.senderImg} alt="Profile" />
+                <img className={classes.senderImage} src={props.senderImg || emptyProfilePic} alt="Profile" />
             </div>
             <div>
                 <div className={classes.senderName}>{props.senderName}</div>

@@ -210,9 +210,10 @@ export const setLoading = isLoading => {
     }
 }
 
-export const setError = () => {
+export const setError = error => {
     return {
-        type: actionTypes.AUTH_SET_ERROR
+        type: actionTypes.AUTH_SET_ERROR,
+        error: error
     }
 }
 

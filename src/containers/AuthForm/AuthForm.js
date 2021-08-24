@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { withRouter, Link, Switch, Route, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
+import api from '../../api';
 import * as authActions from '../../store/actions/auth';
 import TextInput from '../../components/TextInput/TextInput';
 import SubmitButton from '../../components/SubmitButton/SubmitButton';
@@ -62,7 +63,16 @@ const SignUp = props => {
     }
 
     const onReConfirmEmail = () => {
-
+        api.put('/auth/resend-verification-code', null, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            dispatch(authActions.setError(response.data.message || 'A new verification code has been sent.'));
+        }).catch(error => {
+            dispatch(authActions.setError(error.response?.data?.message || 'There was an error sending a new verification code.'));
+        })
     }
 
     const onGoBackFromConfirmEmail = () => {

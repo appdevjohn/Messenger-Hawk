@@ -110,24 +110,14 @@ export const startConfirmEmail = (token, code) => {
             localStorage.setItem('activated', response.data.activated);
             localStorage.setItem('token', response.data.token);
             dispatch({
-                type: actionTypes.AUTH_SET_ACTIVATED,
-                activated: response.data.activated,
-                token: response.data.token,
-                error: null
+                type: actionTypes.AUTH_ACTIVATE_SUCCESS,
+                token: response.data.token
             });
+
         }).catch(error => {
-            let errorMessage = 'There was an error activating your account.';
-            if (error.response) {
-                errorMessage = error.response.data.message;
-            } else {
-                dispatch({
-                    type: actionTypes.AUTH_LOG_OUT
-                });
-            }
             dispatch({
-                type: actionTypes.AUTH_SET_ACTIVATED,
-                activated: false,
-                error: errorMessage
+                type: actionTypes.AUTH_ACTIVATE_FAIL,
+                error: error.response?.data?.message || 'There was an error activating your account.'
             });
         });
     }
@@ -153,7 +143,7 @@ export const startDeleteAccount = token => {
                 Authorization: 'Bearer ' + token,
                 'Content-Type': 'application/json'
             }
-        }).then(response => {
+        }).then(() => {
             deleteDatabase();
             return dispatch(startLogOut());
 
@@ -220,10 +210,9 @@ export const setLoading = isLoading => {
     }
 }
 
-export const setError = error => {
+export const setError = () => {
     return {
-        type: actionTypes.AUTH_SET_ERROR,
-        error: error
+        type: actionTypes.AUTH_SET_ERROR
     }
 }
 

@@ -61,11 +61,20 @@ const authActivate = (state, action) => {
     }
 }
 
-const authSetActivated = (state, action) => {
+const authActivateSuccess = (state, action) => {
     return {
         ...state,
-        activated: action.activated,
+        activated: true,
         token: action.token,
+        loading: false,
+        error: null
+    }
+}
+
+const authActivateFail = (state, action) => {
+    return {
+        ...state,
+        activated: false,
         loading: false,
         error: action.error
     }
@@ -106,7 +115,8 @@ const reducer = (state = initialState, action) => {
         case actionTypes.AUTH_FAIL: return authFail(state, action);
         case actionTypes.AUTH_LOG_OUT: return authLogOut(state, action);
         case actionTypes.AUTH_ACTIVATE: return authActivate(state, action);
-        case actionTypes.AUTH_SET_ACTIVATED: return authSetActivated(state, action);
+        case actionTypes.AUTH_ACTIVATE_SUCCESS: return authActivateSuccess(state, action);
+        case actionTypes.AUTH_ACTIVATE_FAIL: return authActivateFail(state, action);
         case actionTypes.AUTH_SET_REDIRECT_PATH: return authSetRedirectPath(state, action);
         case actionTypes.AUTH_SET_LOADING: return authSetLoading(state, action);
         case actionTypes.AUTH_SET_ERROR: return authSetError(state, action);

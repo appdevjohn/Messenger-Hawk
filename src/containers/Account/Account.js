@@ -58,7 +58,7 @@ const Account = props => {
             setEditingProfilePic(null);
 
         }).catch(error => {
-            dispatch(errorActions.setError('Error', error.response.data.message));
+            dispatch(errorActions.setError('Error', error.response?.data?.message || 'There was an error uploading the image.'));
         });
     }
 

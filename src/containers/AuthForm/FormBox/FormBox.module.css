@@ -1,0 +1,23 @@
+.FormBox {
+    display: inline-block;
+    padding: 2rem 0.75rem;
+    border: none;
+    border-radius: 32px;
+    box-shadow: 0px 1px 4px #979797;
+    text-align: center;
+    width: 80%;
+    max-width: 30rem;
+    margin: 1rem 0;
+}
+
+.header {
+    margin: 0 0 1.5rem 0;
+}
+
+.title {
+    margin: 0;
+}
+
+.message {
+    margin-top: 0.5rem;
+}

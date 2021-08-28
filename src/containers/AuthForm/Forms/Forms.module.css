@@ -1,0 +1,22 @@
+.Input {
+    width: 100%;
+    text-align: center;
+    margin: 0.35rem 0;
+}
+
+.Button {
+    width: 100%;
+}
+
+.inputs {
+    margin: 1rem 0;
+}
+
+.extraOptions {
+    display: block;
+    text-align: center;
+}
+
+.authMessage {
+    margin: 1rem 0;
+}

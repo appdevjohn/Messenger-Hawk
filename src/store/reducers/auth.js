@@ -5,7 +5,7 @@ const initialState = {
     token: undefined,
     activated: undefined,
     loading: false,
-    error: null,
+    message: null,
     redirectPath: '/'
 }
 
@@ -16,7 +16,7 @@ const authStart = (state, action) => {
         token: null,
         activated: false,
         loading: true,
-        error: null
+        message: null
     }
 }
 
@@ -27,7 +27,7 @@ const authSuccess = (state, action) => {
         token: action.token,
         activated: action.activated,
         loading: false,
-        error: null
+        message: null
     }
 }
 
@@ -38,7 +38,7 @@ const authFail = (state, action) => {
         token: null,
         activated: false,
         loading: false,
-        error: action.error
+        message: action.message
     }
 }
 
@@ -49,7 +49,7 @@ const authLogOut = (state, action) => {
         token: null,
         activated: false,
         loading: false,
-        error: null
+        message: null
     }
 }
 
@@ -67,7 +67,7 @@ const authActivateSuccess = (state, action) => {
         activated: true,
         token: action.token,
         loading: false,
-        error: null
+        message: null
     }
 }
 
@@ -76,7 +76,7 @@ const authActivateFail = (state, action) => {
         ...state,
         activated: false,
         loading: false,
-        error: action.error
+        message: action.message
     }
 }
 
@@ -94,17 +94,17 @@ const authSetLoading = (state, action) => {
     }
 }
 
-const authSetError = (state, action) => {
+const authSetMessage = (state, action) => {
     return {
         ...state,
-        error: action.error
+        message: action.message
     }
 }
 
-const authClearError = (state, action) => {
+const authClearMessage = (state, action) => {
     return {
         ...state,
-        error: null
+        message: null
     }
 }
 
@@ -119,8 +119,8 @@ const reducer = (state = initialState, action) => {
         case actionTypes.AUTH_ACTIVATE_FAIL: return authActivateFail(state, action);
         case actionTypes.AUTH_SET_REDIRECT_PATH: return authSetRedirectPath(state, action);
         case actionTypes.AUTH_SET_LOADING: return authSetLoading(state, action);
-        case actionTypes.AUTH_SET_ERROR: return authSetError(state, action);
-        case actionTypes.AUTH_CLEAR_ERROR: return authClearError(state, action);
+        case actionTypes.AUTH_SET_MESSAGE: return authSetMessage(state, action);
+        case actionTypes.AUTH_CLEAR_MESSAGE: return authClearMessage(state, action);
         default: return state;
     }
 }

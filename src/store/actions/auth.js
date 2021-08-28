@@ -11,7 +11,7 @@ export const startSignUp = (firstName, lastName, email, username, password, conf
         if (password !== confirmPassword) {
             return dispatch({
                 type: actionTypes.AUTH_FAIL,
-                error: 'Your passwords do not match.'
+                message: 'Your passwords do not match.'
             });
         }
 
@@ -43,12 +43,12 @@ export const startSignUp = (firstName, lastName, email, username, password, conf
             if (error.response) {
                 return dispatch({
                     type: actionTypes.AUTH_FAIL,
-                    error: error.response.data.message
+                    message: error.response.data.message
                 });
             } else {
                 return dispatch({
                     type: actionTypes.AUTH_FAIL,
-                    error: 'An error occurred trying to log in.'
+                    message: 'An error occurred trying to log in.'
                 });
             }
         });
@@ -84,12 +84,12 @@ export const startLogIn = (email, password) => {
             if (error.response) {
                 return dispatch({
                     type: actionTypes.AUTH_FAIL,
-                    error: error.response.data.message
+                    message: error.response.data.message
                 });
             } else {
                 return dispatch({
                     type: actionTypes.AUTH_FAIL,
-                    error: 'An error occurred trying to log in.'
+                    message: 'An error occurred trying to log in.'
                 });
             }
         });
@@ -117,7 +117,7 @@ export const startConfirmEmail = (token, code) => {
         }).catch(error => {
             dispatch({
                 type: actionTypes.AUTH_ACTIVATE_FAIL,
-                error: error.response?.data?.message || 'There was an error activating your account.'
+                message: error.response?.data?.message || 'There was an error activating your account.'
             });
         });
     }
@@ -149,7 +149,7 @@ export const startDeleteAccount = token => {
 
         }).catch(error => {
             dispatch(setLoading(false));
-            return dispatch(setError(error.response?.data?.message || 'Could not delete account.'));
+            return dispatch(setMessage(error.response?.data?.message || 'Could not delete account.'));
         })
     }
 }
@@ -210,15 +210,15 @@ export const setLoading = isLoading => {
     }
 }
 
-export const setError = error => {
+export const setMessage = message => {
     return {
-        type: actionTypes.AUTH_SET_ERROR,
-        error: error
+        type: actionTypes.AUTH_SET_MESSAGE,
+        message: message
     }
 }
 
-export const clearError = () => {
+export const clearMessage = () => {
     return {
-        type: actionTypes.AUTH_CLEAR_ERROR
+        type: actionTypes.AUTH_CLEAR_MESSAGE
     }
 }

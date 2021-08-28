@@ -28,16 +28,18 @@ const VerifyEmail = props => {
                 {props.isLoading ? <LoadingIndicator /> : <div className={formsClasses.authMessage}>{props.authMessage}</div>}
                 <button className={[sharedClasses.Button, formsClasses.Button].join(' ')} onClick={submitHandler}>Activate Account</button>
             </FormBox>
-            <button
-                className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')}
-                onClick={props.onResendCode}>
-                Resend Code
-            </button>
-            <button
-                className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')}
-                onClick={props.onLogOut}>
-                Back
-            </button>
+            <div className={formsClasses.otherOptions}>
+                <button
+                    className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')}
+                    onClick={props.onResendCode}>
+                    Resend Code
+                </button>
+                <button
+                    className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')}
+                    onClick={props.onLogOut}>
+                    Back
+                </button>
+            </div>
         </Fragment>
     )
 }

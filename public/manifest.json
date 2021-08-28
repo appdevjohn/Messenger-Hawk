@@ -1,6 +1,7 @@
 {
-  "short_name": "React Chat",
-  "name": "React Chat - Messaging on the Web",
+  "short_name": "Messenger Hawk",
+  "name": "Messenger Hawk - Messaging on the Web",
+  "description": "Messenger Hawk is a messaging app that works on the web using open source technologies, and it can be installed as a progressive web app to work similarly to a native mobile app.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +21,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#403D58",
   "background_color": "#ffffff"
 }

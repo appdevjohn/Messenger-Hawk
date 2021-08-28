@@ -29,8 +29,10 @@ const RequestNewPassword = props => {
                 {props.isLoading ? <LoadingIndicator /> : <div className={formsClasses.authMessage}>{props.authMessage}</div>}
                 <button className={[sharedClasses.Button, formsClasses.Button].join(' ')} onClick={submitHandler}>Request New Password</button>
             </FormBox>
-            <Link className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')} to="/auth/login">Log In</Link>
-            <Link className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')} to="/auth/signup">Sign Up</Link>
+            <div className={formsClasses.otherOptions}>
+                <Link className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')} to="/auth/login">Log In</Link>
+                <Link className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')} to="/auth/signup">Sign Up</Link>
+            </div>
         </Fragment>
     )
 }

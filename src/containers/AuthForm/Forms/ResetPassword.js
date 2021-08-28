@@ -38,8 +38,10 @@ const ResetPassword = props => {
                 {props.isLoading ? <LoadingIndicator /> : <div className={formsClasses.authMessage}>{props.authMessage}</div>}
                 <button className={[sharedClasses.Button, formsClasses.Button].join(' ')} onClick={submitHandler}>Reset</button>
             </FormBox>
-            <Link className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')} to="/auth/request-new-password">Didn't Get Link</Link>
-            <Link className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')} to="/auth/login">Log In</Link>
+            <div className={formsClasses.otherOptions}>
+                <Link className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')} to="/auth/request-new-password">Didn't Get Link</Link>
+                <Link className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')} to="/auth/login">Log In</Link>
+            </div>
         </Fragment>
     )
 }

@@ -12,11 +12,13 @@
     margin: 1rem 0;
 }
 
-.extraOptions {
-    display: block;
-    text-align: center;
-}
-
 .authMessage {
     margin: 1rem 0;
+}
+
+.otherOptions {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 }

@@ -10,8 +10,9 @@ import VerifyEmail from './Forms/VerifyEmail';
 import RequestNewPassword from './Forms/RequestNewPassword';
 import ResetPassword from './Forms/ResetPassword';
 
-
 import classes from './AuthForm.module.css';
+import hawkImg from '../../assets/hawk.svg';
+import hawkWhiteImg from '../../assets/hawk-white.svg';
 
 const AuthForm = props => {
     const token = useSelector(state => state.auth.token);
@@ -103,7 +104,8 @@ const AuthForm = props => {
 
     return (
         <div className={classes.SignUp}>
-            <h1>Messenger Hawk</h1>
+            <img className={[classes.logo, classes.lightModeOnly].join(' ')} src={hawkImg} alt="Logo" />
+            <img className={[classes.logo, classes.darkModeOnly].join(' ')} src={hawkWhiteImg} alt="Logo" />
             <Switch>
                 <Route path="/auth/signup" exact>
                     <SignUp onSubmit={onSignUp} authMessage={authMessage} isLoading={isLoading} />

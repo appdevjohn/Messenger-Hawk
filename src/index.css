@@ -1,4 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
+@font-face {
+    font-family: 'Roboto';
+    src: url('assets/fonts/roboto/Roboto-Regular.ttf') format('opentype');
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url('assets/fonts/roboto/Roboto-Medium.ttf') format('opentype');
+    font-weight: 500;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url('assets/fonts/roboto/Roboto-Bold.ttf') format('opentype');
+    font-weight: 700;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url('assets/fonts/roboto/Roboto-Black.ttf') format('opentype');
+    font-weight: 900;
+}
 
 :root {
     color-scheme: light dark;

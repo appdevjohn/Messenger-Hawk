@@ -1,7 +1,14 @@
 .SignUp {
-    display: block;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     margin-top: 5rem;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
 }
 
 .alternateModeLink {
@@ -20,4 +27,28 @@
 
 .verificationOptionsContainer > Button {
     margin-left: 1rem;
+}
+
+.darkModeOnly {
+    display: none;
+}
+
+@media (max-width: 40rem) {
+    .SignUp {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 2rem;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .lightModeOnly {
+        display: none;
+    }
+
+    .darkModeOnly {
+        display: inline;
+    }
 }

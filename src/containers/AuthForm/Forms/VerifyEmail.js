@@ -16,7 +16,7 @@ const VerifyEmail = props => {
 
     return (
         <Fragment>
-            <FormBox title="Verify Email">
+            <FormBox title="Verify Email" message="An activation code was emailed to you.">
                 <div className={formsClasses.inputs}>
                     <input
                         className={[sharedClasses.Input, formsClasses.Input].join(' ')}

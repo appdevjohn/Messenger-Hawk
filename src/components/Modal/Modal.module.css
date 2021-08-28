@@ -40,6 +40,10 @@
     flex-direction: row-reverse;
 }
 
+.options button {
+    margin-left: 1rem;
+}
+
 @keyframes move-up {
     from {
         opacity: 0;

@@ -8,6 +8,7 @@ import * as userActions from '../../store/actions/user';
 import * as errorActions from '../../store/actions/error';
 import NavBar from '../../navigation/NavBar/NavBar';
 import TabBar from '../../navigation/TabBar/TabBar';
+import Modal from '../../components/Modal/Modal';
 import Button from '../../components/Button/Button';
 import SubmitButton from '../../components/SubmitButton/SubmitButton';
 import TextInput from '../../components/TextInput/TextInput';
@@ -31,6 +32,7 @@ const Account = props => {
     const [editingLastName, setLastName] = useState('');
     const [editingUsername, setUsername] = useState('');
     const [editingProfilePic, setEditingProfilePic] = useState(null);
+    const [isConfirmingDeleteAccount, setIsConfirmingDeleteAccount] = useState(false);
 
     useEffect(() => { setFirstName(firstName || ''); }, [firstName]);
     useEffect(() => { setLastName(lastName || ''); }, [lastName]);
@@ -98,6 +100,7 @@ const Account = props => {
     }
 
     const deleteAccountHandler = () => {
+        setIsConfirmingDeleteAccount(false);
         dispatch(authActions.startDeleteAccount(token));
     }
 
@@ -135,6 +138,14 @@ const Account = props => {
 
     return (
         <div className={classes.Account}>
+            {isConfirmingDeleteAccount ? <Modal
+                title="Delete Account"
+                body="If you delete your account, any messages you have sent won't be deleted until everyone leaves the conversations they were sent in."
+                options={[
+                    { title: 'Cancel', onClick: () => setIsConfirmingDeleteAccount(false) },
+                    { title: 'Delete', onClick: deleteAccountHandler },
+                ]} /> : null}
+
             <NavBar title="Account" rightButton={{ type: 'Log Out', to: '/auth/logout' }} />
 
             <div className={classes.profilePicture} onClick={() => { uploadRef.current.click() }}>
@@ -157,7 +168,7 @@ const Account = props => {
             }
 
             <div className={classes.destructiveButtonsContainer}>
-                <SubmitButton title="Delete Account" onClick={deleteAccountHandler} />
+                <SubmitButton title="Delete Account" onClick={() => setIsConfirmingDeleteAccount(true)} />
             </div>
             <TabBar />
         </div>

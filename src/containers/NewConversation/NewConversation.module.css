@@ -1,3 +1,13 @@
 .NewConversation {
     display: block;
 }
+
+.convoNameContainer {
+    margin: 1rem;
+    height: 2rem;
+}
+
+.convoNameContainer input {
+    height: 100%;
+    width: 100%;
+}

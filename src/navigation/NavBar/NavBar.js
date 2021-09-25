@@ -6,6 +6,7 @@ import classes from './NavBar.module.css';
 import backImg from '../../assets/back.png';
 import addImg from '../../assets/add.png';
 import optionsImg from '../../assets/options.png';
+import logoutImg from '../../assets/logout.png';
 
 const NavBar = props => {
 
@@ -22,6 +23,11 @@ const NavBar = props => {
             case 'options':
                 rightButtonImg = optionsImg;
                 rightButtonAlt = 'Options';
+                break;
+
+            case 'logout':
+                rightButtonImg = logoutImg;
+                rightButtonAlt = 'Log Out';
                 break;
 
             default:
@@ -42,7 +48,8 @@ const NavBar = props => {
                 <div className={classes.title}>{props.title}</div>
                 {props.rightButton ?
                     <Link to={props.rightButton.to} className={classes.rightButton}>
-                        {rightButtonImg ? <img src={rightButtonImg} alt={rightButtonAlt} /> : rightButtonAlt}
+                        {rightButtonImg ? <img src={rightButtonImg} alt={rightButtonAlt} /> : 
+                        <div className={classes.rightButton}>{rightButtonAlt}</div>}
                     </Link>
                     : <div className={classes.rightButton}></div>}
             </div>

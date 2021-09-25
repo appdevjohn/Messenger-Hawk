@@ -20,6 +20,10 @@
     font-size: 1rem;
     min-width: 12ch;
     background-color: transparent;
+    box-shadow: none;
+    text-align: left;
+    border-radius: initial;
+    padding: initial;
 }
 
 .input:focus {

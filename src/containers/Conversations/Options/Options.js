@@ -7,8 +7,6 @@ import * as localDB from '../../../localDatabase';
 import * as errorActions from '../../../store/actions/error';
 import NavBar from '../../../navigation/NavBar/NavBar';
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator';
-import TextInput from '../../../components/TextInput/TextInput';
-import SubmitButton from '../../../components/SubmitButton/SubmitButton';
 
 import classes from './Options.module.css';
 
@@ -105,11 +103,13 @@ const Options = props => {
 
     const optionsContent = (
         <Fragment>
-            <TextInput
-                type="text"
-                placeholder="Conversation Name"
-                value={convoName}
-                onChange={e => setConvoName(e.target.value)} />
+            <div className={classes.convoNameContainer}>
+                <input
+                    type="text"
+                    placeholder="Conversation Name"
+                    value={convoName}
+                    onChange={e => setConvoName(e.target.value)} />
+            </div>
             <div className={classes.membersContainer}>
                 {memberTable}
             </div>
@@ -120,7 +120,14 @@ const Options = props => {
         <div className={classes.Options}>
             <NavBar title="Options" leftButton={{ type: 'back', to: '/conversations/' + convoId }} />
             {didFinishLoading ? optionsContent : <LoadingIndicator />}
-            <SubmitButton title="Leave Conversation" onClick={leaveConversationHandler} disabled={!didFinishLoading} />
+            <div className="SubmitBtnContainer">
+                <button
+                    className={['Button', 'SubmitBtn'].join(' ')}
+                    onClick={leaveConversationHandler}
+                    disabled={!didFinishLoading}>
+                    Leave Conversation
+                </button>
+            </div>
         </div>
     )
 }

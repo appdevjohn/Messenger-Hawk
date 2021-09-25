@@ -27,15 +27,6 @@
     --invalid-color: #d14f4f;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --content-background: #8b8b8a;
-        --accent-color: #7a68ff;
-        --placeholder-text-color: #dddcdc;
-        --invalid-color: #d14f4f;
-    }
-}
-
 * {
     box-sizing: border-box;
 }
@@ -50,4 +41,82 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+input {
+    box-shadow: 0 1px 4px #bebebe;
+    border: none;
+    border-radius: 8px;
+    background-color: #F2EFEA;
+    color: black;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0.5rem;
+}
+
+input::placeholder {
+    color: #999999;
+}
+
+input:active, input:focus {
+    outline: none;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+}
+
+.Button {
+    cursor: pointer;
+    display: inline-block;
+    padding: 10px 14px;
+    border: none;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    border-radius: 0.5rem;
+    background-color: var(--accent-color);
+    color: white;
+    font-size: 1rem;
+}
+
+.Button:disabled {
+    background-color: #CCCCCC;
+}
+
+.UnemphasizedBtn {
+    box-shadow: none;
+    background-color: transparent;
+    color: var(--accent-color);
+    padding: 0.5rem;
+    text-decoration: none;
+}
+
+.SubmitBtnContainer {
+    margin: 1rem;
+}
+
+.SubmitBtn {
+    width: 100%;
+    padding: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --content-background: #8b8b8a;
+        --accent-color: #7a68ff;
+        --placeholder-text-color: #dddcdc;
+        --invalid-color: #d14f4f;
+    }
+
+    body {
+        background-color: black;
+    }
+
+    input {
+        box-shadow: none;
+        border-radius: 8px;
+        background-color: #444444;
+        color: white;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: 400;
+        padding: 0.5rem;
+    }
 }

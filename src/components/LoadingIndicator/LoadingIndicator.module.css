@@ -65,3 +65,17 @@
         transform: rotate(360deg);
     }
 }
+
+@media (prefers-color-scheme: dark) {
+    .LoadingIndicator {
+        background: -moz-linear-gradient(left, #000000 10%, rgba(255, 255, 255, 0) 42%);
+        background: -webkit-linear-gradient(left, #000000 10%, rgba(255, 255, 255, 0) 42%);
+        background: -o-linear-gradient(left, #000000 10%, rgba(255, 255, 255, 0) 42%);
+        background: -ms-linear-gradient(left, #000000 10%, rgba(255, 255, 255, 0) 42%);
+        background: linear-gradient(to right, #000000 10%, rgba(255, 255, 255, 0) 42%);
+    }
+
+    .LoadingIndicator:after {
+        background: #000000;
+    }
+}

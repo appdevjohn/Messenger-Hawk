@@ -7,8 +7,6 @@ import * as localDB from '../../localDatabase';
 import * as errorActions from '../../store/actions/error';
 import NavBar from '../../navigation/NavBar/NavBar';
 import TypedTagInput from '../../components/TypedTagInput/TypedTagInput';
-import TextInput from '../../components/TextInput/TextInput';
-import SubmitButton from '../../components/SubmitButton/SubmitButton';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 
 import classes from './NewConversation.module.css';
@@ -89,11 +87,22 @@ const NewConversation = props => {
                         return false;
                     });
                 }, [props.token])} />
-            <TextInput type="text" placeholder="Conversation Name" value={convoName} onChange={e => setConvoName(e.target.value)} />
-            {creatingConvo ? <LoadingIndicator /> : <SubmitButton
-                title="Create New Conversation"
-                disabled={recipients.length === 0}
-                onClick={createConversationHandler} />}
+            <div className={classes.convoNameContainer}>
+                <input
+                    type="text"
+                    placeholder="Conversation Name"
+                    value={convoName}
+                    onChange={e => setConvoName(e.target.value)} />
+            </div>
+            {creatingConvo ? <LoadingIndicator /> :
+                <div className="SubmitBtnContainer">
+                    <button
+                        className={['Button', 'SubmitBtn'].join(' ')}
+                        onClick={createConversationHandler}
+                        disabled={recipients.length === 0}>
+                        Create New Conversation
+                    </button>
+                </div>}
         </div>
     )
 }

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import FormBox from '../FormBox/FormBox';
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator';
 
-import sharedClasses from '../../../shared.module.css';
 import formsClasses from '../Forms/Forms.module.css';
 
 const VerifyEmail = props => {
@@ -19,23 +18,22 @@ const VerifyEmail = props => {
             <FormBox title="Verify Email" message="An activation code was emailed to you.">
                 <div className={formsClasses.inputs}>
                     <input
-                        className={[sharedClasses.Input, formsClasses.Input].join(' ')}
                         type="text"
                         placeholder="activation code"
                         value={activateToken}
                         onChange={e => setActivateToken(e.target.value)} />
                 </div>
                 {props.isLoading ? <LoadingIndicator /> : <div className={formsClasses.authMessage}>{props.authMessage}</div>}
-                <button className={[sharedClasses.Button, formsClasses.Button].join(' ')} onClick={submitHandler}>Activate Account</button>
+                <button className={['Button', formsClasses.Button].join(' ')} onClick={submitHandler}>Activate Account</button>
             </FormBox>
             <div className={formsClasses.otherOptions}>
                 <button
-                    className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')}
+                    className={['Button', 'UnemphasizedBtn'].join(' ')}
                     onClick={props.onResendCode}>
                     Resend Code
                 </button>
                 <button
-                    className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')}
+                    className={['Button', 'UnemphasizedBtn'].join(' ')}
                     onClick={props.onLogOut}>
                     Back
                 </button>

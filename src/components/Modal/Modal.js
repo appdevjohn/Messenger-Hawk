@@ -1,12 +1,16 @@
 import PropTypes from 'prop-types';
 
-import Button from '../Button/Button';
-
 import classes from './Modal.module.css';
 
 const Modal = props => {
     const options = props.options.map(option => {
-        return <Button title={option.title} onClick={option.onClick} disabled={option.disabled} key={option.title + option.onClick} />
+        return <button
+            className="Button"
+            onClick={option.onClick}
+            disabled={option.disabled}
+            key={option.title + option.onClick}>
+            {option.title}
+        </button>
     });
 
     return (

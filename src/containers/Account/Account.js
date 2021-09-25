@@ -10,8 +10,6 @@ import NavBar from '../../navigation/NavBar/NavBar';
 import TabBar from '../../navigation/TabBar/TabBar';
 import Modal from '../../components/Modal/Modal';
 import Button from '../../components/Button/Button';
-import SubmitButton from '../../components/SubmitButton/SubmitButton';
-import TextInput from '../../components/TextInput/TextInput';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 
 import classes from './Account.module.css';
@@ -118,21 +116,27 @@ const Account = props => {
 
     const editingInfoUI = (
         <Fragment>
-            <TextInput
-                type="text"
-                placeholder="First Name"
-                value={editingFirstName}
-                onChange={e => setFirstName(e.target.value)} />
-            <TextInput
-                type="text"
-                placeholder="Last Name"
-                value={editingLastName}
-                onChange={e => setLastName(e.target.value)} />
-            <TextInput
-                type="text"
-                placeholder="username"
-                value={editingUsername}
-                onChange={e => setUsername(e.target.value)} />
+            <div className={classes.editingInputContainer}>
+                <input
+                    type="text"
+                    placeholder="First Name"
+                    value={editingFirstName}
+                    onChange={e => setFirstName(e.target.value)} />
+            </div>
+            <div className={classes.editingInputContainer}>
+                <input
+                    type="text"
+                    placeholder="Last Name"
+                    value={editingLastName}
+                    onChange={e => setLastName(e.target.value)} />
+            </div>
+            <div className={classes.editingInputContainer}>
+                <input
+                    type="text"
+                    placeholder="username"
+                    value={editingUsername}
+                    onChange={e => setUsername(e.target.value)} />
+            </div>
         </Fragment>
     )
 
@@ -146,7 +150,7 @@ const Account = props => {
                     { title: 'Delete', onClick: deleteAccountHandler },
                 ]} /> : null}
 
-            <NavBar title="Account" rightButton={{ type: 'Log Out', to: '/auth/logout' }} />
+            <NavBar title="Account" rightButton={{ type: 'logout', to: '/auth/logout' }} />
 
             <div className={classes.profilePicture} onClick={() => { uploadRef.current.click() }}>
                 {(localProfilePicURL || profilePicURL) ?
@@ -156,8 +160,16 @@ const Account = props => {
             </div>
             <input type="file" onChange={e => setEditingProfilePic(e.target.files[0])} ref={uploadRef} style={{ display: 'none' }} />
             {editingProfilePic ? <div className={classes.imageUploadOptions}>
-                <Button title="Upload" onClick={uploadProfilePicHandler} />
-                <Button title="Cancel" onClick={() => setEditingProfilePic(null)} />
+                <button
+                    className="Button"
+                    onClick={uploadProfilePicHandler}>
+                    Upload
+                </button>
+                <button
+                    className="Button"
+                    onClick={() => setEditingProfilePic(null)}>
+                    Cancel
+                </button>
             </div> : null}
 
             {isEditing ? editingInfoUI : displayedInfoUI}
@@ -168,7 +180,13 @@ const Account = props => {
             }
 
             <div className={classes.destructiveButtonsContainer}>
-                <SubmitButton title="Delete Account" onClick={() => setIsConfirmingDeleteAccount(true)} />
+                <div className="SubmitBtnContainer">
+                    <button
+                        className={['Button', 'SubmitBtn'].join(' ')}
+                        onClick={() => setIsConfirmingDeleteAccount}>
+                        Delete Account
+                    </button>
+                </div>
             </div>
             <TabBar />
         </div>

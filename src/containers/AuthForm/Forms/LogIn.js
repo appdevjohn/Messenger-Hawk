@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import FormBox from '../FormBox/FormBox';
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator';
 
-import sharedClasses from '../../../shared.module.css';
 import formsClasses from '../Forms/Forms.module.css';
 
 const LogIn = props => {
@@ -21,23 +20,23 @@ const LogIn = props => {
             <FormBox title="Log In">
                 <div className={formsClasses.inputs}>
                     <input
-                        className={[sharedClasses.Input, formsClasses.Input].join(' ')}
+                        className={formsClasses.Input}
                         type="email" placeholder="email"
                         value={email}
                         onChange={e => setEmail(e.target.value)} />
                     <input
-                        className={[sharedClasses.Input, formsClasses.Input].join(' ')}
+                        className={formsClasses.Input}
                         type="password"
                         placeholder="password"
                         value={password}
                         onChange={e => setPassword(e.target.value)} />
                 </div>
                 {props.isLoading ? <LoadingIndicator /> : <div className={formsClasses.authMessage}>{props.authMessage}</div>}
-                <button className={[sharedClasses.Button, formsClasses.Button].join(' ')} onClick={submitHandler}>Log In</button>
+                <button className={['Button', formsClasses.Button].join(' ')} onClick={submitHandler}>Log In</button>
             </FormBox>
             <div className={formsClasses.otherOptions}>
-                <Link className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')} to="/auth/signup">Sign Up</Link>
-                <Link className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')} to="/auth/request-new-password">Forgot Password</Link>
+                <Link className={['Button', 'UnemphasizedBtn'].join(' ')} to="/auth/signup">Sign Up</Link>
+                <Link className={['Button', 'UnemphasizedBtn'].join(' ')} to="/auth/request-new-password">Forgot Password</Link>
             </div>
         </Fragment>
     )

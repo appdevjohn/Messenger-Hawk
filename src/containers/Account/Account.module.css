@@ -66,3 +66,13 @@
 .destructiveButtonsContainer {
     margin-top: 6rem;
 }
+
+.editingInputContainer {
+    margin: 1rem;
+    height: 2rem;
+}
+
+.editingInputContainer input {
+    height: 100%;
+    width: 100%;
+}

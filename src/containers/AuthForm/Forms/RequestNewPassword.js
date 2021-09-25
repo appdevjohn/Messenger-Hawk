@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import FormBox from '../FormBox/FormBox';
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator';
 
-import sharedClasses from '../../../shared.module.css';
 import formsClasses from '../Forms/Forms.module.css';
 
 const RequestNewPassword = props => {
@@ -20,18 +19,18 @@ const RequestNewPassword = props => {
             <FormBox title="Forgot Password" message="You'll be emailed a password reset link.">
                 <div className={formsClasses.inputs}>
                     <input
-                        className={[sharedClasses.Input, formsClasses.Input].join(' ')}
+                        className={formsClasses.Input}
                         type="email"
                         placeholder="Email"
                         value={email}
                         onChange={e => setEmail(e.target.value)} />
                 </div>
                 {props.isLoading ? <LoadingIndicator /> : <div className={formsClasses.authMessage}>{props.authMessage}</div>}
-                <button className={[sharedClasses.Button, formsClasses.Button].join(' ')} onClick={submitHandler}>Request New Password</button>
+                <button className={['Button', formsClasses.Button].join(' ')} onClick={submitHandler}>Request New Password</button>
             </FormBox>
             <div className={formsClasses.otherOptions}>
-                <Link className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')} to="/auth/login">Log In</Link>
-                <Link className={[sharedClasses.Button, sharedClasses.UnemphasizedBtn].join(' ')} to="/auth/signup">Sign Up</Link>
+                <Link className={['Button', 'UnemphasizedBtn'].join(' ')} to="/auth/login">Log In</Link>
+                <Link className={['Button', 'UnemphasizedBtn'].join(' ')} to="/auth/signup">Sign Up</Link>
             </div>
         </Fragment>
     )

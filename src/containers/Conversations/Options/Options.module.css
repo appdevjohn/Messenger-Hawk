@@ -3,6 +3,16 @@
     text-align: center;
 }
 
+.convoNameContainer {
+    margin: 1rem;
+    height: 2rem;
+}
+
+.convoNameContainer input {
+    width: 100%;
+    height: 100%;
+}
+
 .membersContainer {
     display: block;
     margin: 1rem;
@@ -17,4 +27,15 @@
     align-items: center;
     padding: 0.5rem 1rem;
     border-bottom: 0.5px solid #eee;
+}
+
+@media (prefers-color-scheme: dark) {
+    .membersContainer {
+        box-shadow: none;
+        border: 1px solid #666666;
+    }
+    
+    .memberRow {
+        border-bottom: 0.5px solid #333333;
+    }
 }

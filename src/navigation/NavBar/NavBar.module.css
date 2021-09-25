@@ -14,6 +14,7 @@
     font-size: 1.25rem;
     font-weight: 700;
     text-align: center;
+    z-index: 50;
 }
 
 .spacer {
@@ -35,11 +36,13 @@
 .leftButton {
     align-items: flex-start;
     text-decoration: none;
+    color: var(--accent-color);
 }
 
 .rightButton {
     align-items: flex-end;
     text-decoration: none;
+    color: var(--accent-color);
 }
 
 .leftButton img, .rightButton img {
@@ -49,8 +52,8 @@
 
 @media (prefers-color-scheme: dark) {
     .NavBar {
-        background-color: #222222;
-        box-shadow: 1px 0px 4px #000000;
+        background-color: #000000;
+        box-shadow: 1px 0px 4px #979797;
     }
 
     .leftButton img, .rightButton img {

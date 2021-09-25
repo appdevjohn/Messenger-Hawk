@@ -7,6 +7,7 @@
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
+    "http-server": "^13.0.2",
     "localbase": "^0.7.5",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
@@ -16,7 +17,6 @@
     "react-scripts": "4.0.3",
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
-    "serve": "^12.0.0",
     "socket.io-client": "^4.1.2",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.4",
@@ -36,7 +36,7 @@
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "prod": "serve build",
+    "prod": "http-server ./build -p 80",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

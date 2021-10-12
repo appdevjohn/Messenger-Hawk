@@ -26,6 +26,11 @@
     animation: move-up 0.2s;
 }
 
+.Modal button {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 .content {
     display: block;
 }
@@ -63,5 +68,12 @@
     to {
         opacity: 1;
         backdrop-filter: blur(10px);
+    }
+}
+/*  */
+@media (prefers-color-scheme: dark) {
+    .Modal {
+        box-shadow: 0px 1px 16px #979797;
+        background-color: black;
     }
 }

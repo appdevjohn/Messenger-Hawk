@@ -18,6 +18,7 @@ const VerifyEmail = props => {
             <FormBox title="Verify Email" message="An activation code was emailed to you.">
                 <div className={formsClasses.inputs}>
                     <input
+                        className={formsClasses.Input}
                         type="text"
                         placeholder="activation code"
                         value={activateToken}

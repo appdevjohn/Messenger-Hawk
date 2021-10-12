@@ -9,7 +9,6 @@ import * as errorActions from '../../store/actions/error';
 import NavBar from '../../navigation/NavBar/NavBar';
 import TabBar from '../../navigation/TabBar/TabBar';
 import Modal from '../../components/Modal/Modal';
-import Button from '../../components/Button/Button';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 
 import classes from './Account.module.css';
@@ -98,6 +97,7 @@ const Account = props => {
     }
 
     const deleteAccountHandler = () => {
+        console.log('delete?')
         setIsConfirmingDeleteAccount(false);
         dispatch(authActions.startDeleteAccount(token));
     }
@@ -175,7 +175,11 @@ const Account = props => {
             {isEditing ? editingInfoUI : displayedInfoUI}
             {isLoading ? <LoadingIndicator /> :
                 <div className={classes.editButtonContainer}>
-                    <Button title={isEditing ? 'Done' : 'Edit'} onClick={toggleEditHandler} />
+                    <button
+                        className="Button"
+                        onClick={toggleEditHandler}>
+                        {isEditing ? 'Done' : 'Edit'}
+                    </button>
                 </div>
             }
 
@@ -183,7 +187,7 @@ const Account = props => {
                 <div className="SubmitBtnContainer">
                     <button
                         className={['Button', 'SubmitBtn'].join(' ')}
-                        onClick={() => setIsConfirmingDeleteAccount}>
+                        onClick={() => setIsConfirmingDeleteAccount(true)}>
                         Delete Account
                     </button>
                 </div>

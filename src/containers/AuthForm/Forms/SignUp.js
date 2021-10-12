@@ -24,37 +24,37 @@ const SignUp = props => {
             <FormBox title="Sign Up">
                 <div className={formsClasses.inputs}>
                     <input
-                    className={formsClasses.Input}
+                        className={formsClasses.Input}
                         type="email"
                         placeholder="email"
                         value={email}
                         onChange={e => setEmail(e.target.value)} />
                     <input
-                    className={formsClasses.Input}
+                        className={formsClasses.Input}
                         type="password"
                         placeholder="password"
                         value={password}
                         onChange={e => setPassword(e.target.value)} />
                     <input
-                    className={formsClasses.Input}
+                        className={formsClasses.Input}
                         type="password"
                         placeholder="confirm password"
                         value={confirmPassword}
                         onChange={e => setConfirmPassword(e.target.value)} />
                     <input
-                    className={formsClasses.Input}
+                        className={formsClasses.Input}
                         type="text"
                         placeholder="first name"
                         value={firstName}
                         onChange={e => setFirstName(e.target.value)} />
                     <input
-                    className={formsClasses.Input}
+                        className={formsClasses.Input}
                         type="text"
                         placeholder="last name"
                         value={lastName}
                         onChange={e => setLastName(e.target.value)} />
                     <input
-                    className={formsClasses.Input}
+                        className={formsClasses.Input}
                         type="text"
                         placeholder="username"
                         value={username}

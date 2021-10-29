@@ -1,12 +1,11 @@
-# Social Messaging
+# Messenger Hawk
 
-This project is intended to be a general social media client as a react app.
+This is a social media client made with React. The goal is to build a progressive web app that will feel as native as possible. It will feature numerous popular social media features including messaging and posting, and it is being designed to leave out addictive aspects of popular social networks.
 
 ### Current State
-Right now, this project contains components to be a messaging client. There are components for message bubbles, a message view, and a compose box. It's made to work great in browsers for both desktop and mobile.
-
-### Goal
-The goal, for now, is for this to be a robust starting point for a social network web app.
+General navigation and authentication is complete. Additionally, the messaging system is robust and ready to go. Upcoming features include implementing groups, events, and posts. Later on, stories will be implemented as they have been everywhere else, but without the unhealthy aspects.
 
 ### Getting Started
-To try it out, simply clone this project, `npm start`, and open `localhost:3000` in your browser.
+To try it out, simply clone this project, `npm start`, and open `localhost:3000` in your browser. It can also be run in a docker container with `docker run -it -p 3000:3000 messenger-hawk`.
+
+Note that to see any functionality requires being logged in, and being logged in requires connecting to the backend. The backend can be found [here](https://github.com/appdevjohn/Social-Network-Backend), and it can easily be spun up by following the setup instructions.

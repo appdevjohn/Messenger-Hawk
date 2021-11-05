@@ -11,6 +11,8 @@ import Conversations from './containers/Conversations/Conversations';
 import NewConversation from './containers/NewConversation/NewConversation';
 import Messages from './containers/Conversations/Messages/Messages';
 import ConversationOptions from './containers/Conversations/Options/Options';
+import Posts from './containers/Posts/Posts';
+import Post from './containers/Post/Post';
 import Account from './containers/Account/Account';
 import AuthForm from './containers/AuthForm/AuthForm';
 import Modal from './components/Modal/Modal';
@@ -89,6 +91,12 @@ function App() {
                 </Route>
                 <Route path="/conversations/:id/options" exact>
                     <ConversationOptions userId={userId} token={token} />
+                </Route>
+                <Route path="/posts" exact>
+                    <Posts userId={userId} token={token} />
+                </Route>
+                <Route path="/posts/:id" exact>
+                    <Post userId={userId} token={token} />
                 </Route>
                 <Route path="/account" exact>
                     <Account userId={userId} token={token} />

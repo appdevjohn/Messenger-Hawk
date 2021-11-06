@@ -13,6 +13,7 @@ import Messages from './containers/Conversations/Messages/Messages';
 import ConversationOptions from './containers/Conversations/Options/Options';
 import Posts from './containers/Posts/Posts';
 import Post from './containers/Post/Post';
+import AddGroup from './containers/AddGroup/AddGroup';
 import Account from './containers/Account/Account';
 import AuthForm from './containers/AuthForm/AuthForm';
 import Modal from './components/Modal/Modal';
@@ -97,6 +98,9 @@ function App() {
                 </Route>
                 <Route path="/posts/:id" exact>
                     <Post userId={userId} token={token} />
+                </Route>
+                <Route path="/add-group" exact>
+                    <AddGroup userId={userId} token={token} />
                 </Route>
                 <Route path="/account" exact>
                     <Account userId={userId} token={token} />

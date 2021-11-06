@@ -9,6 +9,7 @@ import NavBar from '../../../navigation/NavBar/NavBar';
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator';
 
 import classes from './Options.module.css';
+import backImg from '../../../assets/back.png';
 
 const Options = props => {
     const dispatch = useDispatch();
@@ -118,7 +119,7 @@ const Options = props => {
 
     return (
         <div className={classes.Options}>
-            <NavBar title="Options" leftButton={{ type: 'back', to: '/conversations/' + convoId }} />
+            <NavBar title="Options" leftButton={{ img: backImg, alt: 'Back', to: '/conversations/' + convoId }} />
             {didFinishLoading ? optionsContent : <LoadingIndicator />}
             <div className="SubmitBtnContainer">
                 <button

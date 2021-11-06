@@ -6,6 +6,7 @@ import MessageView from '../../components/MessageView/MessageView';
 import ComposeBox from '../../components/ComposeBox/ComposeBox';
 
 import classes from './Post.module.css';
+import backImg from '../../assets/back.png';
 
 const Post = props => {
     const [messages, setMessages] = useState([
@@ -70,7 +71,7 @@ const Post = props => {
 
     return (
         <div className={classes.Post}>
-            <NavBar title="John's Post" leftButton={{ type: 'back', to: '/posts' }} />
+            <NavBar title="John's Post" leftButton={{ img: backImg, alt: 'Back', to: '/posts' }} />
             <PostDetails
                 imgSrc="https://dummyimage.com/128/f2efea/000000.png"
                 name="John Champion"

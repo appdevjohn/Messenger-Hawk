@@ -4,6 +4,8 @@ import TableView from '../../components/TableView/TableView';
 import PostCell from '../../components/PostCell/PostCell';
 
 import classes from './Posts.module.css';
+import groupImg from '../../assets/group.png';
+import addImg from '../../assets/add.png';
 
 const Posts = props => {
     const posts = [
@@ -30,9 +32,16 @@ const Posts = props => {
             body="I know that airports are traditionally hated by everyone for the constant rush and anxiety…" />
     ]
 
+    const viewGroups = () => {
+        console.log('view groups');
+    }
+
     return (
         <div className={classes.Posts}>
-            <NavBar title="Posts" rightButton={{ type: 'add', to: '/new-post' }} />
+            <NavBar
+                title="Posts"
+                leftButton={{ img: groupImg, alt: 'Groups', onClick: viewGroups }}
+                rightButton={{ img: addImg, alt: 'New Post', to: '/new-post' }} />
             <TableView>
                 {posts}
             </TableView>

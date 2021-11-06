@@ -29,6 +29,10 @@
     height: 2rem;
 }
 
+.leftButton, .rightButton {
+    cursor: pointer;
+}
+
 .title {
     align-items: center;
 }

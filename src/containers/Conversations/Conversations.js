@@ -10,6 +10,7 @@ import TableView from '../../components/TableView/TableView';
 import ConvoCell from '../../components/ConvoCell/ConvoCell';
 
 import classes from './Conversations.module.css';
+import addImg from '../../assets/add.png';
 
 const Conversations = props => {
     const { token } = props;
@@ -85,7 +86,7 @@ const Conversations = props => {
 
     return (
         <div className={classes.Conversations}>
-            <NavBar title="Conversations" rightButton={{ type: 'add', to: '/new-conversation' }} />
+            <NavBar title="Conversations" rightButton={{ img: addImg, alt: 'New Conversation', to: '/new-conversation' }} />
             <TableView>
                 {conversationListings}
                 {!didFinishLoading ? <LoadingIndicator /> : null}

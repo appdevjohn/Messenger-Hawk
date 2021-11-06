@@ -3,55 +3,43 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import classes from './NavBar.module.css';
-import backImg from '../../assets/back.png';
-import addImg from '../../assets/add.png';
-import optionsImg from '../../assets/options.png';
-import logoutImg from '../../assets/logout.png';
 
 const NavBar = props => {
 
-    let rightButtonImg;
-    let rightButtonAlt;
-
-    if (props.rightButton) {
-        switch (props.rightButton.type) {
-            case 'add':
-                rightButtonImg = addImg;
-                rightButtonAlt = 'Add';
-                break;
-
-            case 'options':
-                rightButtonImg = optionsImg;
-                rightButtonAlt = 'Options';
-                break;
-
-            case 'logout':
-                rightButtonImg = logoutImg;
-                rightButtonAlt = 'Log Out';
-                break;
-
-            default:
-                rightButtonImg = null;
-                rightButtonAlt = props.rightButton.type;
-                break;
+    let leftButton = null;
+    if (props.leftButton) {
+        const imgElement = <img src={props.leftButton.img} alt={props.leftButton.alt} />
+        if (props.leftButton.to) {
+            leftButton = <Link to={props.leftButton.to} className={classes.leftButton}>{imgElement}</Link>
+        } else if (props.leftButton.onClick) {
+            leftButton = <div className={classes.leftButton} role="button" onClick={props.leftButton.onClick}>{imgElement}</div>
+        } else {
+            leftButton = <div className={classes.leftButton}>{imgElement}</div>
         }
+    } else {
+        leftButton = <div className={classes.leftButton}></div>
+    }
+
+    let rightButton = null;
+    if (props.rightButton) {
+        const imgElement = <img src={props.rightButton.img} alt={props.rightButton.alt} />
+        if (props.rightButton.to) {
+            rightButton = <Link to={props.rightButton.to} className={classes.rightButton}>{imgElement}</Link>
+        } else if (props.rightButton.onClick) {
+            rightButton = <div className={classes.rightButton} role="button" onClick={props.rightButton.onClick}>{imgElement}</div>
+        } else {
+            rightButton = <div className={classes.rightButton}>{imgElement}</div>
+        }
+    } else {
+        rightButton = <div className={classes.rightButton}></div>
     }
 
     return (
         <Fragment>
             <div className={classes.NavBar}>
-                {props.leftButton ?
-                    <Link to={props.leftButton.to} className={classes.leftButton}>
-                        <img src={backImg} alt="Back" />
-                    </Link>
-                    : <div className={classes.leftButton}></div>}
+                {leftButton}
                 <div className={classes.title}>{props.title}</div>
-                {props.rightButton ?
-                    <Link to={props.rightButton.to} className={classes.rightButton}>
-                        {rightButtonImg ? <img src={rightButtonImg} alt={rightButtonAlt} /> : 
-                        <div className={classes.rightButton}>{rightButtonAlt}</div>}
-                    </Link>
-                    : <div className={classes.rightButton}></div>}
+                {rightButton}
             </div>
             <div className={classes.spacer}></div>
         </Fragment>
@@ -61,12 +49,16 @@ const NavBar = props => {
 NavBar.propTypes = {
     title: PropTypes.string,
     leftButton: PropTypes.shape({
-        type: PropTypes.string,
-        to: PropTypes.string
+        img: PropTypes.string.isRequired,
+        alt: PropTypes.string.isRequired,
+        to: PropTypes.string,
+        onClick: PropTypes.func
     }),
     rightButton: PropTypes.shape({
-        type: PropTypes.string,
-        to: PropTypes.string
+        img: PropTypes.string.isRequired,
+        alt: PropTypes.string.isRequired,
+        to: PropTypes.string,
+        onClick: PropTypes.func
     })
 }
 

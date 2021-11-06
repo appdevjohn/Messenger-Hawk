@@ -12,6 +12,7 @@ import Modal from '../../components/Modal/Modal';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 
 import classes from './Account.module.css';
+import logoutImg from '../../assets/logout.png';
 
 const Account = props => {
     const dispatch = useDispatch();
@@ -150,7 +151,7 @@ const Account = props => {
                     { title: 'Delete', onClick: deleteAccountHandler },
                 ]} /> : null}
 
-            <NavBar title="Account" rightButton={{ type: 'logout', to: '/auth/logout' }} />
+            <NavBar title="Account" rightButton={{ img: logoutImg, alt: 'Log Out', to: '/auth/logout' }} />
 
             <div className={classes.profilePicture} onClick={() => { uploadRef.current.click() }}>
                 {(localProfilePicURL || profilePicURL) ?

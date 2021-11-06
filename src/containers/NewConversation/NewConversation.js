@@ -10,7 +10,7 @@ import TypedTagInput from '../../components/TypedTagInput/TypedTagInput';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 
 import classes from './NewConversation.module.css';
-
+import backImg from '../../assets/back.png';
 
 const NewConversation = props => {
     const [recipients, setRecipients] = useState([]);
@@ -51,7 +51,7 @@ const NewConversation = props => {
 
     return (
         <div className={classes.NewConversation}>
-            <NavBar title="New Conversation" leftButton={{ type: 'back', to: '/conversations' }} />
+            <NavBar title="New Conversation" leftButton={{ img: backImg, alt: 'Back', to: '/conversations' }} />
             <TypedTagInput
                 placeholder="add user..."
                 tags={recipients}

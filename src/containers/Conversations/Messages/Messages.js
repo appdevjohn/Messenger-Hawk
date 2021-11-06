@@ -12,6 +12,8 @@ import MessageView from '../../../components/MessageView/MessageView';
 import ComposeBox from '../../../components/ComposeBox/ComposeBox';
 
 import classes from './Messages.module.css';
+import backImg from '../../../assets/back.png';
+import optionsImg from '../../../assets/options.png';
 
 const messageFetchLimit = 256;
 
@@ -322,8 +324,8 @@ const Messages = props => {
         <div className={classes.Messages}>
             <NavBar
                 title={convoName}
-                leftButton={{ type: 'back', to: '/conversations' }}
-                rightButton={{ type: 'options', to: '/conversations/' + convoId + '/options' }} />
+                leftButton={{ img: backImg, alt: 'Back', to: '/conversations' }}
+                rightButton={{ img: optionsImg, alt: 'Options', to: '/conversations/' + convoId + '/options' }} />
             <MessageView
                 highlightId={userId || ''}
                 messages={messages}

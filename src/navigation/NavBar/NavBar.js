@@ -47,7 +47,7 @@ const NavBar = props => {
 }
 
 NavBar.propTypes = {
-    title: PropTypes.string,
+    title: PropTypes.element,
     leftButton: PropTypes.shape({
         img: PropTypes.string.isRequired,
         alt: PropTypes.string.isRequired,

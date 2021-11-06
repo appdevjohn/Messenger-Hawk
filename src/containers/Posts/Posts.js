@@ -32,15 +32,15 @@ const Posts = props => {
             body="I know that airports are traditionally hated by everyone for the constant rush and anxiety…" />
     ]
 
-    const viewGroups = () => {
-        console.log('view groups');
+    const groupNameClicked = () => {
+        console.log('clicked');
     }
 
     return (
         <div className={classes.Posts}>
             <NavBar
-                title="Posts"
-                leftButton={{ img: groupImg, alt: 'Groups', onClick: viewGroups }}
+                title={<div className={classes.groupName} onClick={groupNameClicked}>Nintendo Gamers</div>}
+                leftButton={{ img: groupImg, alt: 'Groups', to: '/add-group' }}
                 rightButton={{ img: addImg, alt: 'New Post', to: '/new-post' }} />
             <TableView>
                 {posts}

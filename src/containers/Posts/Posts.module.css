@@ -1,3 +1,17 @@
 .Posts {
     display: block;
 }
+
+.groupName {
+    cursor: pointer;
+}
+
+.groupName::after {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-left: 4px;
+    clip-path: polygon(0 0, 100% 0, 50% 80%);
+    background-color: var(--accent-color);
+}

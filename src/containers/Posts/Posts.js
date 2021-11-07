@@ -1,5 +1,8 @@
+import { useState, Fragment } from 'react';
+
 import NavBar from '../../navigation/NavBar/NavBar';
 import TabBar from '../../navigation/TabBar/TabBar';
+import FloatingOptions from '../../components/FloatingOptions/FloatingOptions';
 import TableView from '../../components/TableView/TableView';
 import PostCell from '../../components/PostCell/PostCell';
 
@@ -32,14 +35,28 @@ const Posts = props => {
             body="I know that airports are traditionally hated by everyone for the constant rush and anxiety…" />
     ]
 
-    const groupNameClicked = () => {
-        console.log('clicked');
-    }
+    const [showGroups, setShowGroups] = useState(false);
+
+    const navBarTitle = (
+        <Fragment>
+            <div
+                className={showGroups ? [classes.groupName, classes.groupNameActive].join(' ') : classes.groupName}
+                onClick={() => setShowGroups(show => !show)}>
+                Nintendo Gamers
+            </div>
+            {showGroups ?
+                <FloatingOptions
+                    style={{ top: '100%' }}
+                    onDismiss={() => setShowGroups(false)}
+                    options={[{ title: 'Group 1', onClick: () => { } }, { title: 'Group 2', onClick: () => { } }]} />
+                : null}
+        </Fragment>
+    )
 
     return (
         <div className={classes.Posts}>
             <NavBar
-                title={<div className={classes.groupName} onClick={groupNameClicked}>Nintendo Gamers</div>}
+                title={navBarTitle}
                 leftButton={{ img: groupImg, alt: 'Groups', to: '/add-group' }}
                 rightButton={{ img: addImg, alt: 'New Post', to: '/new-post' }} />
             <TableView>

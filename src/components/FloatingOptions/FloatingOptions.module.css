@@ -1,0 +1,31 @@
+.FloatingOptions {
+    z-index: 110;
+    position: absolute;
+    display: inline-block;
+    width: 80%;
+    max-width: 20rem;
+    background-color: #CCCCCC;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px 2px lightgray;
+}
+
+.option {
+    padding: 8px;
+    font-size: 1rem;
+    color: black;
+    cursor: pointer;
+}
+
+.option:not(:first-child) {
+    border-top: 1px solid gray;
+}
+
+.backdrop {
+    position: absolute;
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}

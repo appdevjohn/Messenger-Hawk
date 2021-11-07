@@ -4,6 +4,7 @@
 
 .groupName {
     cursor: pointer;
+    user-select: none;
 }
 
 .groupName::after {
@@ -14,4 +15,8 @@
     margin-left: 4px;
     clip-path: polygon(0 0, 100% 0, 50% 80%);
     background-color: var(--accent-color);
+}
+
+.groupNameActive::after {
+    clip-path: polygon(50% 0, 100% 80%, 0 80%);
 }

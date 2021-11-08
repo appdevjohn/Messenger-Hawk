@@ -43,7 +43,7 @@ code {
     monospace;
 }
 
-input {
+input, textarea {
     box-shadow: 0 1px 4px #bebebe;
     border: none;
     border-radius: 8px;
@@ -53,6 +53,10 @@ input {
     font-size: 1rem;
     font-weight: 400;
     padding: 0.5rem;
+}
+
+textarea {
+    text-align: left;
 }
 
 input::placeholder {

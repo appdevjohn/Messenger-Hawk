@@ -1,0 +1,15 @@
+.inputContainer {
+    margin: 0 1rem;
+}
+
+.input {
+    width: 100%;
+}
+
+.inputName {
+    text-align: left;
+}
+
+.inputDescription {
+    resize: vertical;
+}

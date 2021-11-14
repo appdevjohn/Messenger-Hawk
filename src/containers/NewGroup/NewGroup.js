@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { withRouter } from 'react-router';
 
+import api from '../../api';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 import NavBar from '../../navigation/NavBar/NavBar';
 
@@ -7,6 +10,8 @@ import classes from './NewGroup.module.css';
 import backImg from '../../assets/back.png';
 
 const NewGroup = props => {
+    const token = useSelector(state => state.auth.token);
+
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -14,9 +19,22 @@ const NewGroup = props => {
     const createGroupHandler = () => {
         setIsLoading(true);
 
-        setTimeout(() => {
+        api.post('/groups/new', {
+            name: name,
+            description: description
+        }, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
             setIsLoading(false);
-        }, 500)
+            console.log(response.data);
+            props.history.push('/groups');
+        }).catch(error => {
+            console.error(error);
+            setIsLoading(false);
+        });
     }
 
     return (
@@ -44,4 +62,4 @@ const NewGroup = props => {
     )
 }
 
-export default NewGroup;
+export default withRouter(NewGroup);

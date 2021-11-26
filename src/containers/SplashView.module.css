@@ -1,0 +1,13 @@
+.SplashView {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.SplashViewMessage {
+    font-size: 1.25rem;
+    color: darkgray;
+    user-select: none;
+}

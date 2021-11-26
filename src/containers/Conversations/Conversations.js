@@ -10,6 +10,7 @@ import TableView from '../../components/TableView/TableView';
 import ConvoCell from '../../components/ConvoCell/ConvoCell';
 
 import classes from './Conversations.module.css';
+import splashClasses from '../SplashView.module.css';
 import addImg from '../../assets/add.png';
 
 const Conversations = props => {
@@ -83,6 +84,16 @@ const Conversations = props => {
             unread={convoUpdates[convo.id] !== undefined || convo.unread}
             key={convo.id} />
     });
+
+    if (conversations.length === 0) {
+        return (
+            <div className={splashClasses.SplashView}>
+                <NavBar title="Conversations" rightButton={{ img: addImg, alt: 'New Conversation', to: '/new-conversation' }} />
+                <div className={splashClasses.SplashViewMessage}>No Conversations. Why not start one?</div>
+                <TabBar />
+            </div>
+        )
+    }
 
     return (
         <div className={classes.Conversations}>

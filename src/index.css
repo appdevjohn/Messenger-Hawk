@@ -78,6 +78,7 @@ input:active, input:focus {
     background-color: var(--accent-color);
     color: white;
     font-size: 1rem;
+    text-decoration: none;
 }
 
 .Button:disabled {

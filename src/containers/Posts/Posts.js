@@ -7,6 +7,7 @@ import TableView from '../../components/TableView/TableView';
 import PostCell from '../../components/PostCell/PostCell';
 
 import classes from './Posts.module.css';
+import splashClasses from '../SplashView.module.css';
 import groupImg from '../../assets/group.png';
 import addImg from '../../assets/add.png';
 
@@ -52,6 +53,18 @@ const Posts = props => {
                 : null}
         </Fragment>
     )
+
+    if (posts.length === 0) {
+        return (
+            <div className={splashClasses.SplashView}>
+                <NavBar
+                    title="Groups"
+                    leftButton={{ img: groupImg, alt: 'Groups', to: '/add-group' }} />
+                <div className={splashClasses.SplashViewMessage}>No Groups. Why not create one?</div>
+                <TabBar />
+            </div>
+        )
+    }
 
     return (
         <div className={classes.Posts}>

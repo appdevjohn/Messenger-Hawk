@@ -95,7 +95,7 @@ function App() {
                     <ConversationOptions userId={userId} token={token} />
                 </Route>
                 <Route path="/posts" exact>
-                    <Posts userId={userId} token={token} />
+                    <Posts />
                 </Route>
                 <Route path="/posts/:id" exact>
                     <Post userId={userId} token={token} />

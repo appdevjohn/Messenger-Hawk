@@ -12,6 +12,84 @@ export const deleteDatabase = () => {
     db.delete();
 }
 
+//Groups
+export const getGroups = () => {
+    return db.collection('groups').get().then(groups => {
+        if (!groups) {
+            return [];
+        } else if (!Array.isArray(groups)) {
+            return [groups];
+        } else {
+            return groups;
+        }
+    })
+}
+
+export const getGroupWithId = groupId => {
+    return db.collection('groups').doc({ id: groupId }).get();
+}
+
+export const addGroup = group => {
+    return db.collection('groups').add(group);
+}
+
+export const updateGroup = group => {
+    return db.collection('groups').doc({ id: group.id }).set(group);
+}
+
+export const deleteGroup = groupId => {
+    return db.collection('groups').doc({ id: groupId }).delete();
+}
+
+export const deleteAllGroups = () => {
+    return db.collection('groups').delete();
+}
+
+export const setLastViewedGroupId = groupId => {
+    return localStorage.setItem('defaultGroupId', groupId);
+}
+
+export const getLastViewedGroupId = () => {
+    return localStorage.getItem('defaultGroupId');
+}
+
+export const deleteLastViewedGroupId = () => {
+    return localStorage.removeItem('defaultGroupId');
+}
+
+//Posts
+export const getPostsFromGroup = groupId => {
+    return db.collection('posts').get().then(posts => {
+        if (!posts) {
+            return [];
+        } else if (!Array.isArray(posts)) {
+            return [posts];
+        } else {
+            return posts;
+        }
+    });
+}
+
+export const getPost = postId => {
+    return db.collection('posts').doc({ id: postId }).get();
+}
+
+export const addPost = post => {
+    return db.collection('posts').add(post);
+}
+
+export const updatePost = post => {
+    return db.collection('posts').doc({ id: post.id }).set(post);
+}
+
+export const deletePost = postId => {
+    return db.collection('posts').doc({ id: postId }).delete();
+}
+
+export const deleteAllPosts = () => {
+    return db.collection('posts').delete();
+}
+
 // Conversations
 export const getConversations = () => {
     return db.collection('conversations').get();

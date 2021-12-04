@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import api from '../../api';
 import * as localDB from '../../localDatabase';
-import * as activeGroupActions from '../../store/actions/activeGroup';
+// import * as groupsActions from '../../store/actions/groups';
 import NavBar from '../../navigation/NavBar/NavBar';
 import TabBar from '../../navigation/TabBar/TabBar';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
@@ -19,29 +19,14 @@ import addImg from '../../assets/add.png';
 const Posts = props => {
     const dispatch = useDispatch();
     const token = useSelector(state => state.auth.token);
-    const activeGroupId = useSelector(state => state.activeGroupId);
+    const groups = useSelector(state => state.groups.groups);
+    const activeGroup = useSelector(state => state.groups.activeGroup);
 
     const [showGroups, setShowGroups] = useState(false);
-    const [groups, setGroups] = useState([]);
     const [posts, setPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        const getGroups = async () => {
-            if (token) {
-                const response = await api.get('/groups', {
-                    headers: {
-                        Authorization: 'Bearer ' + token,
-                        'Conotent-Type': 'application/json'
-                    }
-                });
-
-                return response.data.groups;
-            } else {
-                return null;
-            }
-        }
-
         const getPosts = async (groupId) => {
             if (token && groupId) {
                 const response = await api.get(`/posts?groupId=${groupId}`, {
@@ -61,41 +46,10 @@ const Posts = props => {
             setIsLoading(true);
 
             try {
-                const localGroups = await localDB.getGroups();
-                setGroups(localGroups);
-
-                const groupId = await localDB.getLastViewedGroupId();
-                let newActiveGroupId = null;
-                if (groupId) {
-                    newActiveGroupId = groupId;
-                } else if (localGroups.length > 0) {
-                    newActiveGroupId = localGroups[0].id;
-                    localDB.setLastViewedGroupId(newActiveGroupId);
-                };
-                dispatch(activeGroupActions.setActiveGroup(newActiveGroupId));
-
-                const localPosts = await localDB.getPostsFromGroup(newActiveGroupId);
+                const localPosts = await localDB.getPostsFromGroup(activeGroup.id);
                 setPosts(localPosts);
 
-                const serverGroups = await getGroups();
-                if (serverGroups) {
-                    console.log(serverGroups);
-                    localDB.deleteAllGroups();
-                    serverGroups.forEach(g => {
-                        localDB.addGroup(g);
-                    });
-                    setGroups(serverGroups);
-
-                    if (serverGroups.length > 0 && serverGroups.findIndex(g => g.id === newActiveGroupId) < 0) {
-                        localDB.setLastViewedGroupId(serverGroups[0].id);
-                        dispatch(activeGroupActions.setActiveGroup(serverGroups[0].id));
-                    } else if (serverGroups.length === 0) {
-                        localDB.deleteLastViewedGroupId();
-                        dispatch(activeGroupActions.setActiveGroup(null));
-                    }
-                }
-
-                const serverPosts = await getPosts();
+                const serverPosts = await getPosts(activeGroup.id);
                 if (serverPosts) {
                     localDB.deleteAllPosts();
                     serverPosts.forEach(p => {
@@ -113,9 +67,9 @@ const Posts = props => {
         }
 
         fetchData();
-    }, [setGroups, setPosts, dispatch, token])
+    }, [setPosts, dispatch, activeGroup, token])
 
-    const activeGroupIndex = groups.findIndex(g => g.id === activeGroupId);
+    const activeGroupIndex = groups.findIndex(g => g.id === activeGroup?.id);
 
     const navBarTitle = activeGroupIndex >= 0 ? (
         <Fragment>
@@ -153,12 +107,26 @@ const Posts = props => {
     } else if (posts.length > 0 && isLoading) {
         viewBody = (
             <Fragment>
-                {posts.map(p => <PostCell key={p.id} imgSrc={p.imgSrc} name={p.name} time={p.time} title={p.title} body={p.body} />)}
+                {posts.map(p => <PostCell 
+                key={p.id}
+                postId={p.id} 
+                imgSrc={p.userData.profilePicURL} 
+                name={p.userData.firstName} 
+                time={new Date(p.createdAt)} 
+                title={p.title} 
+                body={p.text} />)}
                 <LoadingIndicator />
             </Fragment>
         )
     } else if (posts.length > 0 && !isLoading) {
-        viewBody = posts.map(p => <PostCell key={p.id} imgSrc={p.imgSrc} name={p.name} time={p.time} title={p.title} body={p.body} />);
+        viewBody = posts.map(p => <PostCell
+            key={p.id}
+            postId={p.id}
+            imgSrc={p.userData.profilePicURL}
+            name={p.userData.firstName}
+            time={new Date(p.createdAt)}
+            title={p.title}
+            body={p.text} />);
     } else if (posts.length === 0 && isLoading) {
         viewBody = <LoadingIndicator />
     } else {

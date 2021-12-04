@@ -7,11 +7,13 @@ import api from './api';
 import * as authActions from './store/actions/auth';
 import * as errorActions from './store/actions/error';
 import * as updateActions from './store/actions/updates';
+import * as groupsActions from './store/actions/groups';
 import Conversations from './containers/Conversations/Conversations';
 import NewConversation from './containers/NewConversation/NewConversation';
 import Messages from './containers/Conversations/Messages/Messages';
 import ConversationOptions from './containers/Conversations/Options/Options';
 import Posts from './containers/Posts/Posts';
+import NewPost from './containers/NewPost/NewPost';
 import Post from './containers/Post/Post';
 import AddGroup from './containers/AddGroup/AddGroup';
 import NewGroup from './containers/NewGroup/NewGroup';
@@ -33,6 +35,12 @@ function App() {
     useEffect(() => {
         dispatch(authActions.authCheckState());
     }, [dispatch]);
+
+    useEffect(() => {
+        if (token) {
+            dispatch(groupsActions.checkActiveGroup(token));
+        }
+    }, [token, dispatch]);
 
     useEffect(() => {
         // Initializaing Socket.IO
@@ -96,6 +104,9 @@ function App() {
                 </Route>
                 <Route path="/posts" exact>
                     <Posts />
+                </Route>
+                <Route path="/new-post">
+                    <NewPost />
                 </Route>
                 <Route path="/posts/:id" exact>
                     <Post userId={userId} token={token} />

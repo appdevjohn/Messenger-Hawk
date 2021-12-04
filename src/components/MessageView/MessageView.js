@@ -57,7 +57,6 @@ MessageView.propTypes = {
         type: PropTypes.string
     })).isRequired,
     highlightId: PropTypes.string.isRequired,
-    pagination: PropTypes.bool,
     showLoadOlderMessagesButton: PropTypes.bool,
     onLoadOlderMessages: PropTypes.func,
     isLoadingOlderMessages: PropTypes.bool

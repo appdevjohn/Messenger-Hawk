@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { withRouter } from 'react-router';
 
+import api from '../../api';
 import NavBar from '../../navigation/NavBar/NavBar';
+import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 import PostDetails from '../../components/PostDetails/PostDetails';
 import MessageView from '../../components/MessageView/MessageView';
 import ComposeBox from '../../components/ComposeBox/ComposeBox';
@@ -9,57 +13,17 @@ import classes from './Post.module.css';
 import backImg from '../../assets/back.png';
 
 const Post = props => {
-    const [messages, setMessages] = useState([
-        {
-            id: '2',
-            senderId: '1',
-            timestamp: new Date(Date.now() - 256),
-            content: 'sit amet, consectetuer',
-            type: 'text'
-        },
-        {
-            id: '1',
-            senderId: '1',
-            timestamp: new Date(Date.now() - 512),
-            content: 'Lorem ipsum dolor',
-            type: 'text'
-        },
-        {
-            id: '3',
-            senderId: '2',
-            timestamp: new Date(Date.now() - 128),
-            content: 'adipiscing elit. Aenean commodo ligula',
-            type: 'text'
-        },
-        {
-            id: '4',
-            senderId: '1',
-            timestamp: new Date(Date.now() - 64),
-            content: 'eget dolor. Aenean massa.',
-            type: 'text'
-        },
-        {
-            id: '5',
-            senderId: '2',
-            timestamp: new Date(Date.now() - 32),
-            content: 'Cum sociis',
-            type: 'text'
-        },
-        {
-            id: '6',
-            senderId: '2',
-            timestamp: new Date(Date.now() - 16),
-            content: 'natoque penatibus et magnis dis',
-            type: 'text'
-        },
-        {
-            id: '7',
-            senderId: '1',
-            timestamp: new Date(Date.now() - 8),
-            content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
-            type: 'text'
-        }
-    ]);
+    const postId = props.match.params.id;
+    const token = useSelector(state => state.auth.token);
+    const userId = useSelector(state => state.auth.userId);
+    const activeGroup = useSelector(state => state.groups.activeGroup);
+
+    const [originalPosterName, setOriginalPosterName] = useState('');
+    const [postTimestamp, setPostTimestamp] = useState('');
+    const [postTitle, setPostTitle] = useState('');
+    const [postText, setPostText] = useState('');
+    const [messages, setMessages] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         window.scroll(0, document.body.scrollHeight);
@@ -67,41 +31,83 @@ const Post = props => {
 
     useEffect(() => {
         window.scroll(0, 0);
-    }, []);
+        console.log(postId, activeGroup, token);
+        if (postId && activeGroup && token) {
+            setIsLoading(true);
+            api.get(`/posts/${postId}`, {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                console.log(response.data);
+                const post = response.data.post;
+                setOriginalPosterName(`${post.userData.firstName} ${post.userData.lastName}`);
+                setPostTimestamp(new Date(post.createdAt));
+                setPostTitle(post.title);
+                setPostText(post.text);
+                setIsLoading(false);
+            }).catch(error => {
+                console.error(error);
+                setIsLoading(false);
+            });
+        }
+    }, [postId, activeGroup, token]);
+
+    const sendMessageHandler = message => {
+        const newMessage = {
+            id: Math.random().toString(),
+            senderId: '1',
+            timestamp: new Date(),
+            content: message,
+            type: 'text'
+        };
+        setMessages(oldMessages => {
+            const newMessages = oldMessages.map(m => ({ ...m }));
+            newMessages.push(newMessage);
+            return newMessages;
+        });
+    }
+
+    const loadOlderMessagesHandler = () => {
+
+    }
+
+    const uploadFileMessageHandler = () => {
+
+    }
+
+    if (isLoading) {
+        return (
+            <div className={classes.Post}>
+                <NavBar title="John's Post" leftButton={{ img: backImg, alt: 'Back', to: '/posts' }} />
+                <LoadingIndicator />
+            </div>
+        )
+    }
 
     return (
         <div className={classes.Post}>
             <NavBar title="John's Post" leftButton={{ img: backImg, alt: 'Back', to: '/posts' }} />
             <PostDetails
                 imgSrc="https://dummyimage.com/128/f2efea/000000.png"
-                name="John Champion"
-                time={new Date()}
-                title="Does anybody else absolutely love the feeling of airports?"
-                body="I know that airports are traditionally hated by everyone for the constant rush and anxiety, but for me, I love them. The feeling of sitting in a seat (especially at night) watching so much happen around me reminds me how small I am in relation to the rest of the world, and I love this feeling so much. Does anyone else feel like this in airports?" />
+                name={originalPosterName}
+                time={postTimestamp || new Date()}
+                title={postTitle}
+                body={postText} />
             <MessageView
-                highlightId={props.highlightId}
-                senders={props.senders}
-                messages={messages} />
+                highlightId={userId || ''}
+                messages={messages}
+                showLoadOlderMessagesButton={false}
+                onLoadOlderMessages={loadOlderMessagesHandler}
+                isLoadingOlderMessages={false} />
             <ComposeBox
-                sendMessage={message => {
-                    const newMessage = {
-                        id: Math.random().toString(),
-                        senderId: '1',
-                        timestamp: new Date(),
-                        content: message,
-                        type: 'text'
-                    };
-                    setMessages(oldMessages => {
-                        const newMessages = oldMessages.map(m => ({ ...m }));
-                        newMessages.push(newMessage);
-                        return newMessages;
-                    });
-                }}
-                becameActive={() => {
-                    window.scroll(0, document.body.scrollHeight);
-                }} />
+                sendMessage={sendMessageHandler}
+                becameActive={() => window.scroll(0, document.body.scrollHeight)}
+                onUploadFile={uploadFileMessageHandler}
+                disableUpload={false} />
         </div>
     )
 }
 
-export default Post;
+export default withRouter(Post);

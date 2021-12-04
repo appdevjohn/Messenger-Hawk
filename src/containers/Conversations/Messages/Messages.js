@@ -329,7 +329,6 @@ const Messages = props => {
             <MessageView
                 highlightId={userId || ''}
                 messages={messages}
-                pagination={true}
                 showLoadOlderMessagesButton={messages.length >= messageFetchLimit}
                 onLoadOlderMessages={loadOlderMessagesHandler}
                 isLoadingOlderMessages={isLoadingOlderMessages} />

@@ -21,6 +21,7 @@ const Posts = props => {
     const token = useSelector(state => state.auth.token);
     const groups = useSelector(state => state.groups.groups);
     const activeGroup = useSelector(state => state.groups.activeGroup);
+    const groupsLoading = useSelector(state => state.groups.loading);
 
     const [showGroups, setShowGroups] = useState(false);
     const [posts, setPosts] = useState([]);
@@ -43,6 +44,7 @@ const Posts = props => {
         }
 
         const fetchData = async () => {
+            if (!activeGroup) { return }
             setIsLoading(true);
 
             try {
@@ -100,9 +102,9 @@ const Posts = props => {
     }
 
     let viewBody = null;
-    if (groups.length === 0 && isLoading) {
+    if (groups.length === 0 && groupsLoading) {
         viewBody = <LoadingIndicator />
-    } else if (groups.length === 0 && !isLoading) {
+    } else if (groups.length === 0 && !groupsLoading) {
         viewBody = <div className={splashClasses.SplashViewMessage}>No Groups. Why not create one?</div>
     } else if (posts.length > 0 && isLoading) {
         viewBody = (

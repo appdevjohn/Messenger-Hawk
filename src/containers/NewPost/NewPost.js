@@ -9,7 +9,7 @@ import backImg from '../../assets/back.png';
 
 const NewPost = props => {
     const token = useSelector(state => state.auth.token);
-    const activeGroup = useSelector(state => state.activeGroup);
+    const activeGroup = useSelector(state => state.groups.activeGroup);
 
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');

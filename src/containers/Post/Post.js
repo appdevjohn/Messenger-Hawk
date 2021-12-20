@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router';
 
 import api from '../../api';
+import * as localDB from '../../localDatabase';
 import NavBar from '../../navigation/NavBar/NavBar';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 import PostDetails from '../../components/PostDetails/PostDetails';
@@ -16,7 +17,7 @@ const Post = props => {
     const postId = props.match.params.id;
     const token = useSelector(state => state.auth.token);
     const userId = useSelector(state => state.auth.userId);
-    const activeGroup = useSelector(state => state.groups.activeGroup);
+    const user = useSelector(state => state.user);
 
     const [originalPosterName, setOriginalPosterName] = useState('');
     const [postTimestamp, setPostTimestamp] = useState('');
@@ -31,8 +32,7 @@ const Post = props => {
 
     useEffect(() => {
         window.scroll(0, 0);
-        console.log(postId, activeGroup, token);
-        if (postId && activeGroup && token) {
+        if (postId && token) {
             setIsLoading(true);
             api.get(`/posts/${postId}`, {
                 headers: {
@@ -40,31 +40,108 @@ const Post = props => {
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
-                console.log(response.data);
                 const post = response.data.post;
                 setOriginalPosterName(`${post.userData.firstName} ${post.userData.lastName}`);
                 setPostTimestamp(new Date(post.createdAt));
                 setPostTitle(post.title);
                 setPostText(post.text);
+
+                const messages = response.data.messages.map(m => {
+                    return {
+                        id: m.id,
+                        userId: m.userId,
+                        postId: m.postId,
+                        userFullName: m.userData.firstName + ' ' + m.userData.lastName,
+                        userUsername: m.userData.username,
+                        userProfilePic: m.userData.profilePicURL,
+                        timestamp: new Date(m.createdAt),
+                        content: m.content,
+                        type: m.type,
+                        delivered: 'delivered'
+                    }
+                });
+                console.log(messages);
+                setMessages(messages);
+
                 setIsLoading(false);
             }).catch(error => {
                 console.error(error);
                 setIsLoading(false);
             });
         }
-    }, [postId, activeGroup, token]);
+    }, [postId, token]);
+
+    useEffect(() => {
+        window.scroll(0, document.body.scrollHeight);
+
+        // Get all messages that have not started the delivery process.
+        const undeliveredMessages = messages.filter(msg => msg.delivered === 'not delivered');
+
+        for (const message of undeliveredMessages) {
+
+            // Set a new delivered status for this message so it won't be sent twice.
+            setMessages(oldMessages => {
+                const updatedMessage = {
+                    ...message,
+                    delivered: 'delivering'
+                }
+                const newMessages = oldMessages.filter(msg => msg.id !== updatedMessage.id);
+                newMessages.push(updatedMessage);
+                return newMessages
+            });
+
+            // Send the message.
+            api.post('/posts/add-message', {
+                postId: postId,
+                content: message.content,
+                type: 'text'
+            }, {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+
+                // Update the displayed message with updated information from the server.
+                const updatedMessage = {
+                    ...message,
+                    id: response.data.message.id,
+                    postId: response.data.message.postId,
+                    userFullName: response.data.message.userData.firstName + ' ' + response.data.message.userData.lastName,
+                    userUsername: response.data.message.userData.username,
+                    timestamp: new Date(response.data.message.createdAt),
+                    delivered: 'delivered'
+                }
+                setMessages(oldMessages => {
+                    const newMessages = oldMessages.filter(msg => msg.id !== message.id);
+                    newMessages.push(updatedMessage);
+                    return newMessages
+                });
+                localDB.addMessage(updatedMessage);
+
+            }).catch(error => {
+                console.error(error);
+            });
+        }
+
+    }, [messages, postId, token])
 
     const sendMessageHandler = message => {
         const newMessage = {
             id: Math.random().toString(),
-            senderId: '1',
+            userId: userId,
+            userFullName: user.firstName + ' ' + user.lastName,
+            userUsername: user.username,
+            userProfilePic: user.profilePicURL,
             timestamp: new Date(),
             content: message,
-            type: 'text'
+            type: 'text',
+            delivered: 'not delivered'
         };
         setMessages(oldMessages => {
             const newMessages = oldMessages.map(m => ({ ...m }));
             newMessages.push(newMessage);
+            console.log(newMessages);
             return newMessages;
         });
     }

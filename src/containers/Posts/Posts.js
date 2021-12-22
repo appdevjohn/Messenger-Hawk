@@ -1,5 +1,6 @@
 import { useState, useEffect, Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import api from '../../api';
 import * as localDB from '../../localDatabase';
@@ -84,7 +85,10 @@ const Posts = props => {
                 <FloatingOptions
                     style={{ top: '100%' }}
                     onDismiss={() => setShowGroups(false)}
-                    options={groups.map(g => ({ title: g.name, onClick: () => { } }))} />
+                    options={[
+                        ...groups.map(g => ({ title: g.name, onClick: () => { } })),
+                        { title: 'Join/Create Group', onClick: () => props.history.push('/join-group') }
+                    ]} />
                 : null}
         </Fragment>
     ) : 'No Group Selected';
@@ -94,7 +98,7 @@ const Posts = props => {
             <div className={splashClasses.SplashView}>
                 <NavBar
                     title="Groups"
-                    leftButton={{ img: groupImg, alt: 'Groups', to: '/add-group' }} />
+                    leftButton={{ img: groupImg, alt: 'Groups', to: '/join-group' }} />
                 <div className={splashClasses.SplashViewMessage}>No Groups. Why not create one?</div>
                 <TabBar />
             </div>
@@ -109,14 +113,14 @@ const Posts = props => {
     } else if (posts.length > 0 && isLoading) {
         viewBody = (
             <Fragment>
-                {posts.map(p => <PostCell 
-                key={p.id}
-                postId={p.id} 
-                imgSrc={p.userData.profilePicURL} 
-                name={p.userData.firstName} 
-                time={new Date(p.createdAt)} 
-                title={p.title} 
-                body={p.text} />)}
+                {posts.map(p => <PostCell
+                    key={p.id}
+                    postId={p.id}
+                    imgSrc={p.userData.profilePicURL}
+                    name={p.userData.firstName}
+                    time={new Date(p.createdAt)}
+                    title={p.title}
+                    body={p.text} />)}
                 <LoadingIndicator />
             </Fragment>
         )
@@ -139,7 +143,7 @@ const Posts = props => {
         <div className={(posts.length === 0 && !isLoading > 0) || (groups.length === 0 && !isLoading) ? splashClasses.SplashView : classes.Posts}>
             <NavBar
                 title={navBarTitle}
-                leftButton={{ img: groupImg, alt: 'Groups', to: '/add-group' }}
+                leftButton={{ img: groupImg, alt: 'Groups', to: '/join-group' }}
                 rightButton={groups.length > 0 ? { img: addImg, alt: 'New Post', to: '/new-post' } : null} />
             <TableView>
                 {viewBody}
@@ -149,4 +153,4 @@ const Posts = props => {
     )
 }
 
-export default Posts;
+export default withRouter(Posts);

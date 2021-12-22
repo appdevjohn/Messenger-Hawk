@@ -39,7 +39,7 @@ const NewGroup = props => {
 
     return (
         <div className={classes.NewGroup}>
-            <NavBar title="New Group" leftButton={{ img: backImg, alt: 'Back', to: '/add-group' }} />
+            <NavBar title="New Group" leftButton={{ img: backImg, alt: 'Back', to: '/join-group' }} />
             <div className={classes.inputContainer}>
                 <input
                     className={[classes.input, classes.inputName].join(' ')}

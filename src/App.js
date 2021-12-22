@@ -15,7 +15,7 @@ import ConversationOptions from './containers/Conversations/Options/Options';
 import Posts from './containers/Posts/Posts';
 import NewPost from './containers/NewPost/NewPost';
 import Post from './containers/Post/Post';
-import AddGroup from './containers/AddGroup/AddGroup';
+import JoinGroup from './containers/JoinGroup/JoinGroup';
 import NewGroup from './containers/NewGroup/NewGroup';
 import Account from './containers/Account/Account';
 import AuthForm from './containers/AuthForm/AuthForm';
@@ -111,8 +111,8 @@ function App() {
                 <Route path="/posts/:id" exact>
                     <Post userId={userId} token={token} />
                 </Route>
-                <Route path="/add-group" exact>
-                    <AddGroup userId={userId} token={token} />
+                <Route path="/join-group" exact>
+                    <JoinGroup userId={userId} token={token} />
                 </Route>
                 <Route path="/new-group" exact>
                     <NewGroup userId={userId} token={token} />

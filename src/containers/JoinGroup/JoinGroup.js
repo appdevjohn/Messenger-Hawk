@@ -1,3 +1,7 @@
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
+import api from '../../api';
 import NavBar from '../../navigation/NavBar/NavBar';
 
 import classes from './JoinGroup.module.css';
@@ -5,12 +9,52 @@ import backImg from '../../assets/back.png';
 import addImg from '../../assets/add.png';
 
 const JoinGroup = props => {
+    const token = useSelector(state => state.auth.token);
+
+    const [groupResults, setGroupResults] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        if (searchQuery.length >= 3 && token) {
+
+            const axiosController = new AbortController();
+
+            const timeout = setTimeout(() => {
+                setIsLoading(true);
+
+                api.get(`/groups/search/${searchQuery}`, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        'Content-Type': 'application/json',
+                        signal: axiosController.signal
+                    }
+                }).then(response => {
+                    setGroupResults(response.data.groups);
+                    setIsLoading(false);
+                }).catch(error => {
+                    console.error(error);
+                    setIsLoading(false);
+                });
+            }, 500);
+
+            return () => {
+                clearTimeout(timeout);
+                axiosController.abort();
+                setIsLoading(false);
+            }
+        }
+    }, [searchQuery, token]);
+
     return (
         <div className={classes.JoinGroup}>
             <NavBar
                 title="Join Group"
                 leftButton={{ img: backImg, alt: 'Back', to: '/posts' }}
                 rightButton={{ img: addImg, alt: 'Create Group', to: '/new-group' }} />
+            <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
+            <div>{groupResults.map(gr => <div key={gr.id}>{gr.name}</div>)}</div>
+            {isLoading ? <div>Loading...</div> : null}
         </div>
     )
 }

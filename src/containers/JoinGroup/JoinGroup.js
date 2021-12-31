@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 
 import api from '../../api';
 import NavBar from '../../navigation/NavBar/NavBar';
+import GroupCell from './GroupCell/GroupCell';
 
 import classes from './JoinGroup.module.css';
 import backImg from '../../assets/back.png';
@@ -43,6 +44,8 @@ const JoinGroup = props => {
                 axiosController.abort();
                 setIsLoading(false);
             }
+        } else {
+            setGroupResults([]);
         }
     }, [searchQuery, token]);
 
@@ -52,8 +55,8 @@ const JoinGroup = props => {
                 title="Join Group"
                 leftButton={{ img: backImg, alt: 'Back', to: '/posts' }}
                 rightButton={{ img: addImg, alt: 'Create Group', to: '/new-group' }} />
-            <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
-            <div>{groupResults.map(gr => <div key={gr.id}>{gr.name}</div>)}</div>
+            <input className={['ListSearchInput', classes.search].join(' ')} placeholder="Search Groups" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
+            <div>{groupResults.map(gr => <GroupCell name={gr.name} description={gr.description} id={gr.id} key={gr.id} />)}</div>
             {isLoading ? <div>Loading...</div> : null}
         </div>
     )

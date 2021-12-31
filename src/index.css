@@ -68,7 +68,22 @@ input:active, input:focus {
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
 }
 
-.Button {
+.ListSearchInput {
+    background-color: transparent;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    text-align: left;
+    border-bottom: 1px solid #eeeeee;
+    border-radius: 0;
+}
+
+.ListSearchInput:active, .ListSearchInput:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+button {
     cursor: pointer;
     display: inline-block;
     padding: 10px 14px;
@@ -81,7 +96,7 @@ input:active, input:focus {
     text-decoration: none;
 }
 
-.Button:disabled {
+button:disabled {
     background-color: #CCCCCC;
 }
 

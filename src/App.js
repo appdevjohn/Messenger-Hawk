@@ -16,6 +16,7 @@ import Posts from './containers/Posts/Posts';
 import NewPost from './containers/NewPost/NewPost';
 import Post from './containers/Post/Post';
 import JoinGroup from './containers/JoinGroup/JoinGroup';
+import Group from './containers/Group/Group';
 import NewGroup from './containers/NewGroup/NewGroup';
 import Account from './containers/Account/Account';
 import AuthForm from './containers/AuthForm/AuthForm';
@@ -113,6 +114,9 @@ function App() {
                 </Route>
                 <Route path="/join-group" exact>
                     <JoinGroup userId={userId} token={token} />
+                </Route>
+                <Route path="/groups/:id" exact>
+                    <Group />
                 </Route>
                 <Route path="/new-group" exact>
                     <NewGroup userId={userId} token={token} />

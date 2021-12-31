@@ -98,7 +98,7 @@ const Posts = props => {
             <div className={splashClasses.SplashView}>
                 <NavBar
                     title="Groups"
-                    leftButton={{ img: groupImg, alt: 'Groups', to: '/join-group' }} />
+                    leftButton={{ img: groupImg, alt: 'Groups', to: `/groups/${activeGroup?.id}` }} />
                 <div className={splashClasses.SplashViewMessage}>No Groups. Why not create one?</div>
                 <TabBar />
             </div>
@@ -143,7 +143,7 @@ const Posts = props => {
         <div className={(posts.length === 0 && !isLoading > 0) || (groups.length === 0 && !isLoading) ? splashClasses.SplashView : classes.Posts}>
             <NavBar
                 title={navBarTitle}
-                leftButton={{ img: groupImg, alt: 'Groups', to: '/join-group' }}
+                leftButton={{ img: groupImg, alt: 'Groups', to: `/groups/${activeGroup?.id}` }}
                 rightButton={groups.length > 0 ? { img: addImg, alt: 'New Post', to: '/new-post' } : null} />
             <TableView>
                 {viewBody}

@@ -60,7 +60,6 @@ const Post = props => {
                         delivered: 'delivered'
                     }
                 });
-                console.log(messages);
                 setMessages(messages);
 
                 setIsLoading(false);
@@ -141,7 +140,6 @@ const Post = props => {
         setMessages(oldMessages => {
             const newMessages = oldMessages.map(m => ({ ...m }));
             newMessages.push(newMessage);
-            console.log(newMessages);
             return newMessages;
         });
     }

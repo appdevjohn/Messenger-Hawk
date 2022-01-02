@@ -1,8 +1,9 @@
 import { useState, useEffect, Fragment } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import api from '../../api';
+import * as groupActions from '../../store/actions/groups';
 import NavBar from '../../navigation/NavBar/NavBar';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 
@@ -10,15 +11,19 @@ import classes from './Group.module.css';
 import backImg from '../../assets/back.png';
 
 const Group = props => {
+    const dispatch = useDispatch();
+
     const groupId = props.match.params.id;
     const token = useSelector(state => state.auth.token);
     const userId = useSelector(state => state.auth.userId);
+    const joinedGroups = useSelector(state => state.groups.groups);
+    const isChangingGroups = useSelector(state => state.groups.changing);
 
     const [group, setGroup] = useState(null);
     const [members, setMembers] = useState([]);
+    const isMember = group && joinedGroups ? (joinedGroups.find(g => g.id === group.id) ? true : false) : null;
 
     const [isLoading, setIsLoading] = useState(false);
-    const [isJoiningGroup, setIsJoiningGroup] = useState(false);
 
     useEffect(() => {
         if (token && groupId) {
@@ -30,7 +35,6 @@ const Group = props => {
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
-                console.log(response.data);
                 setGroup(response.data.group);
                 setMembers(response.data.members);
                 setIsLoading(false);
@@ -42,25 +46,11 @@ const Group = props => {
     }, [token, groupId])
 
     const requestJoinHandler = () => {
-        if (groupId && userId) {
-            setIsJoiningGroup(true);
+        dispatch(groupActions.requestJoinGroup(groupId, userId, token));
+    }
 
-            api.post(`/groups/${groupId}/add-user`, {
-                userId: userId,
-                approved: true
-            }, {
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                console.log(response);
-                setIsJoiningGroup(false);
-            }).catch(error => {
-                console.error(error);
-                setIsJoiningGroup(false);
-            });
-        }
+    const leaveGroupHandler = () => {
+        dispatch(groupActions.requestLeaveGroup(groupId, userId, token));
     }
 
     const makeAdminHandler = newAdminId => {
@@ -92,11 +82,13 @@ const Group = props => {
 
     return (
         <div className={classes.Group}>
-            <NavBar title="Group" leftButton={{ img: backImg, alt: 'Back', to: '/' }} />
+            <NavBar title="Group" leftButton={{ img: backImg, alt: 'Back', onClick: props.history.goBack }} />
             {viewContent}
             {isLoading ? <LoadingIndicator /> : null}
-            <button onClick={requestJoinHandler} disabled={!groupId || !userId}>Join Group</button>
-            {isJoiningGroup ? <LoadingIndicator /> : null}
+            {isMember
+                ? <button onClick={leaveGroupHandler}>Leave Group</button>
+                : <button onClick={requestJoinHandler}>Join Group</button>}
+            {isChangingGroups ? <LoadingIndicator /> : null}
         </div>
     )
 }

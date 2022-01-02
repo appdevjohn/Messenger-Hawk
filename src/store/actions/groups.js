@@ -16,6 +16,57 @@ export const setGroups = groups => {
     }
 }
 
+export const requestJoinGroup = (groupId, userId, token) => {
+    return dispatch => {
+        if (groupId && userId) {
+            dispatch({ type: actionTypes.GROUP_CHANGING, changing: true });
+    
+            api.post(`/groups/${groupId}/add-user`, {
+                userId: userId,
+                approved: true
+            }, {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                const joinedGroup = response.data.group;
+                localDB.addGroup(joinedGroup);
+                dispatch({ type: actionTypes.GROUP_ADD, group: joinedGroup });
+                dispatch({ type: actionTypes.GROUP_CHANGING, changing: false });
+            }).catch(error => {
+                console.error(error);
+                dispatch({ type: actionTypes.GROUP_CHANGING, changing: false });
+            });
+        }
+    }
+}
+
+export const requestLeaveGroup = (groupId, userId, token) => {
+    return dispatch => {
+        if (groupId && userId) {
+            dispatch({ type: actionTypes.GROUP_CHANGING, changing: false });
+
+            api.post(`/groups/${groupId}/remove-user`, {
+                userId: userId
+            }, {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                const leftGroupId = response.data.group.id;
+                localDB.deleteGroup(leftGroupId);
+                dispatch({ type: actionTypes.GROUP_REMOVE, groupId: leftGroupId })
+                dispatch({ type: actionTypes.GROUP_CHANGING, changing: false });
+            }).catch(error => {
+                console.error(error);
+                dispatch({ type: actionTypes.GROUP_CHANGING, changing: false });
+            });
+        }
+    }
+}
+
 export const checkActiveGroup = token => {
     const getGroups = async () => {
         if (token) {

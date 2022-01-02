@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 
 import api from '../../api';
 import * as localDB from '../../localDatabase';
-// import * as groupsActions from '../../store/actions/groups';
+import * as groupsActions from '../../store/actions/groups';
 import NavBar from '../../navigation/NavBar/NavBar';
 import TabBar from '../../navigation/TabBar/TabBar';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
@@ -74,36 +74,24 @@ const Posts = props => {
 
     const activeGroupIndex = groups.findIndex(g => g.id === activeGroup?.id);
 
-    const navBarTitle = activeGroupIndex >= 0 ? (
+    const navBarTitle = (
         <Fragment>
             <div
                 className={showGroups ? [classes.groupName, classes.groupNameActive].join(' ') : classes.groupName}
                 onClick={() => setShowGroups(show => !show)}>
-                {groups[activeGroupIndex].name}
+                {activeGroupIndex >= 0 ? groups[activeGroupIndex].name : 'No Group Selected'}
             </div>
             {showGroups ?
                 <FloatingOptions
                     style={{ top: '100%' }}
                     onDismiss={() => setShowGroups(false)}
                     options={[
-                        ...groups.map(g => ({ title: g.name, onClick: () => { } })),
+                        ...groups.map(g => ({ title: g.name, onClick: () => { dispatch(groupsActions.setActiveGroupId(g.id)); setShowGroups(false); } })),
                         { title: 'Join/Create Group', onClick: () => props.history.push('/join-group') }
                     ]} />
                 : null}
         </Fragment>
-    ) : 'No Group Selected';
-
-    if (groups.length === 0) {
-        return (
-            <div className={splashClasses.SplashView}>
-                <NavBar
-                    title="Groups"
-                    leftButton={{ img: groupImg, alt: 'Groups', to: `/groups/${activeGroup?.id}` }} />
-                <div className={splashClasses.SplashViewMessage}>No Groups. Why not create one?</div>
-                <TabBar />
-            </div>
-        )
-    }
+    );
 
     let viewBody = null;
     if (groups.length === 0 && groupsLoading) {

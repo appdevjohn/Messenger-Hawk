@@ -38,9 +38,11 @@ const NewPost = props => {
     return (
         <div className={classes.NewPost}>
             <NavBar title="New Post" leftButton={{ img: backImg, alt: 'Back', to: '/posts' }} />
-            <input name="title" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} />
-            <input name="text" placeholder="Text" value={text} onChange={e => setText(e.target.value)} />
-            <button onClick={newPostHandler} disabled={!activeGroup}>Post</button>
+            <input className={classes.titleInput} name="title" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} />
+            <textarea className={classes.textContentInput} name="text" placeholder="Text" value={text} onChange={e => setText(e.target.value)} />
+            <div className={classes.buttonContainer}>
+                <button className="SubmitBtn" onClick={newPostHandler} disabled={!activeGroup}>Post</button>
+            </div>
         </div>
     )
 }

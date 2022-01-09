@@ -21,6 +21,7 @@ const Group = props => {
 
     const [group, setGroup] = useState(null);
     const [members, setMembers] = useState([]);
+    const [requests, setRequests] = useState([]);
     const isMember = group && joinedGroups ? (joinedGroups.find(g => g.id === group.id) ? true : false) : null;
 
     const [isLoading, setIsLoading] = useState(false);
@@ -37,9 +38,10 @@ const Group = props => {
             }).then(response => {
                 setGroup(response.data.group);
                 setMembers(response.data.members);
+                setRequests(response.data.requests);
                 setIsLoading(false);
             }).catch(error => {
-                console.error(error);
+                console.error(error.response.data.message);
                 setIsLoading(false);
             });
         }
@@ -53,14 +55,56 @@ const Group = props => {
         dispatch(groupActions.requestLeaveGroup(groupId, userId, token));
     }
 
-    const makeAdminHandler = newAdminId => {
+    const makeAdminHandler = (newAdminId, status) => {
         api.put(`/groups/${groupId}/set-admin`, {
             userId: newAdminId,
-            admin: true
+            admin: status
+        }, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
         }).then(response => {
-            console.log(response.data);
+            setMembers(oldMembers => {
+                const newMembers = oldMembers.map(m => ({ ...m }));
+                const updatedMember = newMembers.find(m => m.id === response.data.userId);
+                updatedMember.admin = response.data.admin;
+                return newMembers;
+            });
         }).catch(error => {
-            console.error(error);
+            console.error(error.response.data.message);
+        });
+    }
+
+    const removeUserHandler = removedUserId => {
+        api.post(`/groups/${groupId}/remove-user`, {
+            userId: removedUserId,
+        }, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            setMembers(member => member.filter(m => m.id !== response.data.userId));
+        }).catch(error => {
+            console.error(error.response.data.message);
+        });
+    }
+
+    const approveUserHandler = approvedUserId => {
+        api.put(`/groups/${groupId}/requests/${approvedUserId}/approve`, {}, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            const newMember = requests.find(m => m.id === response.data.userId);
+            if (newMember) {
+                setMembers(requests => [...requests.map(r => ({ ...r })), { ...newMember }]);
+            }
+            setRequests(member => member.map(m => ({ ...m })).filter(m => m.id !== response.data.userId));
+        }).catch(error => {
+            console.error(error.response.data.message);
         });
     }
 
@@ -73,7 +117,22 @@ const Group = props => {
                 {members.map(m => (
                     <div className={classes.member} key={m.id}>
                         <div>{m.firstName} {m.lastName}</div>
-                        {!m.admin ? <button className="UnemphasizedBtn" onClick={() => makeAdminHandler(m.id)}>Make Admin</button> : null}
+                        {!m.admin
+                            ? <Fragment>
+                                <button className="UnemphasizedBtn" onClick={() => makeAdminHandler(m.id, true)}>Make Admin</button>
+                                <button className="UnemphasizedBtn" onClick={() => removeUserHandler(m.id)}>Remove</button>
+                            </Fragment>
+                            : <Fragment>
+                                <button className="UnemphasizedBtn" onClick={() => makeAdminHandler(m.id, false)}>Revoke Admin</button>
+                                <button className="UnemphasizedBtn" onClick={() => removeUserHandler(m.id)}>Remove</button>
+                            </Fragment>}
+                    </div>
+                ))}
+                {requests.map(r => (
+                    <div className={classes.member} key={r.id}>
+                        <div>{r.firstName} {r.lastName}</div>
+                        <button className="UnemphasizedBtn" onClick={() => approveUserHandler(r.id)}>Approve</button>
+                        <button className="UnemphasizedBtn" onClick={() => removeUserHandler(r.id)}>Deny</button>
                     </div>
                 ))}
             </Fragment>

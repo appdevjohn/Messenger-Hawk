@@ -20,7 +20,7 @@ export const requestJoinGroup = (groupId, userId, token) => {
     return dispatch => {
         if (groupId && userId) {
             dispatch({ type: actionTypes.GROUP_CHANGING, changing: true });
-    
+
             api.post(`/groups/${groupId}/add-user`, {
                 userId: userId,
                 approved: true

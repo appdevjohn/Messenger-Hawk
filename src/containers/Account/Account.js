@@ -98,7 +98,6 @@ const Account = props => {
     }
 
     const deleteAccountHandler = () => {
-        console.log('delete?')
         setIsConfirmingDeleteAccount(false);
         dispatch(authActions.startDeleteAccount(token));
     }

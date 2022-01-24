@@ -6,3 +6,19 @@
     padding: 1rem;
     border-bottom: 1px solid #eeeeee;
 }
+
+.memberContainer, .requestContainer {
+    margin: 1rem;
+}
+
+.membersTitle, .requestsTitle {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0.5rem 0;
+}
+
+.members, .requests {
+    box-shadow: 0 1px 4px #bebebe;
+    border-radius: 8px;
+    overflow: hidden;
+}

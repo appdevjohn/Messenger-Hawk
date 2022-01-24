@@ -29,7 +29,6 @@ const NewGroup = props => {
             }
         }).then(response => {
             setIsLoading(false);
-            console.log(response.data);
             props.history.push('/groups');
         }).catch(error => {
             console.error(error);

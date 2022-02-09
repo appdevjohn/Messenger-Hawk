@@ -112,7 +112,7 @@ export const checkActiveGroup = token => {
 
             if (serverGroups.length > 0 && serverGroups.findIndex(g => g.id === newActiveGroupId) < 0) {
                 localDB.setLastViewedGroupId(serverGroups[0].id);
-                dispatch(setActiveGroupId(serverGroups[0]));
+                dispatch(setActiveGroupId(serverGroups[0].id));
             } else if (serverGroups.length === 0) {
                 localDB.deleteLastViewedGroupId();
                 dispatch(setActiveGroupId(null));

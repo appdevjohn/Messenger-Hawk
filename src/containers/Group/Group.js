@@ -169,18 +169,13 @@ const Group = props => {
             <div className={classes.memberContainer}>
                 <div className={classes.membersTitle}>Members</div>
                 <div className={classes.members}>
-                    {members.map(m => (
+                    {members.filter(m => m.id !== userId).map(m => (
                         <div className={classes.member} key={m.id}>
                             <div>{m.firstName} {m.lastName}</div>
                             {!m.admin
-                                ? <Fragment>
-                                    <button className="UnemphasizedBtn" onClick={() => makeAdminHandler(m.id, true)}>Make Admin</button>
-                                    <button className="UnemphasizedBtn" onClick={() => removeUserHandler(m.id)}>Remove</button>
-                                </Fragment>
-                                : <Fragment>
-                                    <button className="UnemphasizedBtn" onClick={() => makeAdminHandler(m.id, false)}>Revoke Admin</button>
-                                    <button className="UnemphasizedBtn" onClick={() => removeUserHandler(m.id)}>Remove</button>
-                                </Fragment>}
+                                ? <button className="UnemphasizedBtn" onClick={() => makeAdminHandler(m.id, true)}>Make Admin</button>
+                                : <button className="UnemphasizedBtn" onClick={() => makeAdminHandler(m.id, false)}>Revoke Admin</button>}
+                            <button className="UnemphasizedBtn" onClick={() => removeUserHandler(m.id)}>Remove</button>
                             {m.isLoading ? <LoadingIndicator /> : null}
                         </div>
                     ))}

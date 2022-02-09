@@ -135,6 +135,7 @@ const Posts = props => {
                 rightButton={groups.length > 0 ? { img: addImg, alt: 'New Post', to: '/new-post' } : null} />
             <TableView>
                 {viewBody}
+                <div style={{ height: '48px' }}>{/* Spacing for below the tab bar. */}</div>
             </TableView>
             <TabBar />
         </div>

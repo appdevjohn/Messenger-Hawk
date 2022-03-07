@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useEffect, Fragment } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 
 import api from '../../api';
+import * as errorActions from '../../store/actions/error';
 import * as localDB from '../../localDatabase';
+import Modal from '../../components/Modal/Modal';
 import NavBar from '../../navigation/NavBar/NavBar';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 import PostDetails from '../../components/PostDetails/PostDetails';
@@ -12,18 +14,24 @@ import ComposeBox from '../../components/ComposeBox/ComposeBox';
 
 import classes from './Post.module.css';
 import backImg from '../../assets/back.png';
+import deleteImg from '../../assets/delete.png';
 
 const Post = props => {
     const postId = props.match.params.id;
     const token = useSelector(state => state.auth.token);
     const userId = useSelector(state => state.auth.userId);
     const user = useSelector(state => state.user);
+    const dispatch = useDispatch();
 
     const [originalPosterName, setOriginalPosterName] = useState('');
+    const [originalPosterImageURL, setOriginalPosterImageURL] = useState(null);
     const [postTimestamp, setPostTimestamp] = useState('');
     const [postTitle, setPostTitle] = useState('');
     const [postText, setPostText] = useState('');
     const [messages, setMessages] = useState([]);
+
+    const [willDeletePost, setWillDeletePost] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -42,6 +50,7 @@ const Post = props => {
             }).then(response => {
                 const post = response.data.post;
                 setOriginalPosterName(`${post.userData.firstName} ${post.userData.lastName}`);
+                setOriginalPosterImageURL(post.userData.profilePicURL);
                 setPostTimestamp(new Date(post.createdAt));
                 setPostTitle(post.title);
                 setPostText(post.text);
@@ -61,6 +70,14 @@ const Post = props => {
                     }
                 });
                 setMessages(messages);
+
+                localDB.deleteMessagesWithPostId(postId).then(() => {
+                    const limitedMessages = messages.slice().sort((a, b) => a - b).slice(0, 256);
+
+                    limitedMessages.forEach(msg => {
+                        localDB.addMessage(msg);
+                    });
+                });
 
                 setIsLoading(false);
             }).catch(error => {
@@ -148,40 +165,120 @@ const Post = props => {
 
     }
 
-    const uploadFileMessageHandler = () => {
+    const uploadFileMessageHandler = event => {
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append('attachment', file, file.name);
+        formData.append('postId', postId);
 
+        setIsUploading(true);
+
+        api.post('/posts/add-message', formData, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'multipart/form-data'
+            },
+            onUploadProgress: progressEvent => {
+                // console.log(progressEvent);
+            }
+        }).then(response => {
+            setIsUploading(false);
+
+            const message = response.data.message;
+            const newMessage = {
+                id: message.id,
+                userId: message.userId,
+                postId: message.postId,
+                userFullName: message.userData.firstName + ' ' + message.userData.lastName,
+                userUsername: message.userData.username,
+                userProfilePic: message.userData.profilePicURL,
+                timestamp: new Date(message.createdAt),
+                content: message.content,
+                type: message.type,
+                delivered: 'delivered'
+            }
+
+            setMessages(oldMessages => {
+                const newMessages = oldMessages.map(msg => ({ ...msg }));
+                newMessages.push(newMessage);
+                return newMessages;
+            });
+            localDB.addMessage(newMessage);
+
+        }).catch(error => {
+            setIsUploading(false);
+
+            const errorMessage = error.response?.data?.message || 'File upload failed.';
+            dispatch(errorActions.setError('File Error', errorMessage));
+        });
+    }
+
+    const deletePostHandler = () => {
+        api.delete(`/posts/${postId}`, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            const deletedPostId = response.data.post.id;
+            localDB.deletePost(deletedPostId);
+            localDB.deleteMessagesWithPostId(deletedPostId);
+            props.history.push('/posts');
+
+        }).catch(error => {
+            console.error(error);
+            setWillDeletePost(false);
+            dispatch(errorActions.setError('Deletion Error', 'There was an error deleting this post.'));
+        })
     }
 
     if (isLoading) {
         return (
             <div className={classes.Post}>
-                <NavBar title="John's Post" leftButton={{ img: backImg, alt: 'Back', to: '/posts' }} />
+                <NavBar title={postTitle} leftButton={{ img: backImg, alt: 'Back', to: '/posts' }} />
                 <LoadingIndicator />
             </div>
         )
     }
 
     return (
-        <div className={classes.Post}>
-            <NavBar title="John's Post" leftButton={{ img: backImg, alt: 'Back', to: '/posts' }} />
-            <PostDetails
-                imgSrc="https://dummyimage.com/128/f2efea/000000.png"
-                name={originalPosterName}
-                time={postTimestamp || new Date()}
-                title={postTitle}
-                body={postText} />
-            <MessageView
-                highlightId={userId || ''}
-                messages={messages}
-                showLoadOlderMessagesButton={false}
-                onLoadOlderMessages={loadOlderMessagesHandler}
-                isLoadingOlderMessages={false} />
-            <ComposeBox
-                sendMessage={sendMessageHandler}
-                becameActive={() => window.scroll(0, document.body.scrollHeight)}
-                onUploadFile={uploadFileMessageHandler}
-                disableUpload={false} />
-        </div>
+        <Fragment>
+            {willDeletePost
+                ? <Modal
+                    title="Delete Post?"
+                    body="You will not be able to restore this post, and all messages will be deleted."
+                    options={[{
+                        title: 'Cancel',
+                        onClick: () => setWillDeletePost(false)
+                    }, {
+                        title: 'Delete',
+                        onClick: deletePostHandler
+                    }]} />
+                : null}
+            <div className={classes.Post}>
+                <NavBar
+                    title={postTitle}
+                    leftButton={{ img: backImg, alt: 'Back', to: '/posts' }}
+                    rightButton={{ img: deleteImg, alt: 'Delete', onClick: () => setWillDeletePost(true) }} />
+                <PostDetails
+                    imgSrc={originalPosterImageURL}
+                    name={originalPosterName}
+                    time={postTimestamp || new Date()}
+                    title={postTitle}
+                    body={postText} />
+                <MessageView
+                    highlightId={userId || ''}
+                    messages={messages}
+                    showLoadOlderMessagesButton={false}
+                    onLoadOlderMessages={loadOlderMessagesHandler}
+                    isLoadingOlderMessages={false} />
+                <ComposeBox
+                    sendMessage={sendMessageHandler}
+                    becameActive={() => window.scroll(0, document.body.scrollHeight)}
+                    onUploadFile={uploadFileMessageHandler}
+                    disableUpload={isUploading} />
+            </div>
+        </Fragment>
     )
 }
 

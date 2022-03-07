@@ -138,6 +138,14 @@ export const deleteMessagesWithConvoId = convoId => {
     });
 }
 
+export const deleteMessagesWithPostId = postId => {
+    return db.collection('messages').doc({ postId: postId }).get().then(msg => {
+        if (msg) {
+            return db.collection('messages').doc({ postId: postId }).delete();
+        }
+    });
+}
+
 // Users
 export const getUserWithId = userId => {
     return db.collection('users').doc({ id: userId }).get()

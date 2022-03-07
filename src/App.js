@@ -118,8 +118,8 @@ function App() {
                 <Route path="/groups/:id" exact>
                     <Group />
                 </Route>
-                <Route path="/new-group" exact>
-                    <NewGroup userId={userId} token={token} />
+                <Route path={['/new-group', '/groups/:id/edit']} exact>
+                    <NewGroup />
                 </Route>
                 <Route path="/account" exact>
                     <Account userId={userId} token={token} />

@@ -28,6 +28,8 @@
 
 .input:focus {
     outline: none;
+    box-shadow: none;
+    border: none;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -1,3 +1,15 @@
+.groupDetails {
+    margin: 1rem;
+}
+
+.groupTitle {
+    margin: 0;
+}
+
+.groupDescription {
+    margin: 0;
+}
+
 .member {
     display: flex;
     flex-direction: row;
@@ -21,4 +33,10 @@
     box-shadow: 0 1px 4px #bebebe;
     border-radius: 8px;
     overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+    .member {
+        border-bottom: none;
+    }
 }

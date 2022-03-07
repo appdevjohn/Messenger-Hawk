@@ -1,15 +1,40 @@
-.inputContainer {
-    margin: 0 1rem;
-}
-
-.input {
+.nameInput {
+    background-color: transparent;
     width: 100%;
-}
-
-.inputName {
+    border: none;
+    box-shadow: none;
     text-align: left;
+    border-bottom: 1px solid #eeeeee;
+    border-radius: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+    padding: 1.5rem 1rem 0.5rem 1rem;
 }
 
-.inputDescription {
+.descriptionInput {
+    background-color: transparent;
+    width: 100%;
+    height: 8rem;
+    border: none;
+    box-shadow: none;
+    text-align: left;
+    border-bottom: 1px solid #eeeeee;
+    border-radius: 0;
     resize: vertical;
+    padding: 0.5rem 1rem 1.5rem 1rem;
+}
+
+.nameInput:active, .nameInput:focus, .descriptionInput:active, .descriptionInput:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    .nameInput {
+        border-bottom: 1px solid #444444;
+    }
+    
+    .descriptionInput {
+        border-bottom: 1px solid #444444;
+    }
 }

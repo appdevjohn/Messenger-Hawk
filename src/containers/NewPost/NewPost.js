@@ -45,7 +45,7 @@ const NewPost = props => {
             <NavBar title="New Post" leftButton={{ img: backImg, alt: 'Back', to: '/posts' }} />
             <input className={classes.titleInput} name="title" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} />
             <textarea className={classes.textContentInput} name="text" placeholder="Text" value={text} onChange={e => setText(e.target.value)} />
-            <div className={classes.buttonContainer}>
+            <div className="SubmitBtnContainer">
                 <button className="SubmitBtn" onClick={newPostHandler} disabled={!activeGroup}>Post</button>
             </div>
         </div>

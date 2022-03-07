@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
@@ -9,6 +9,7 @@ import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator
 
 import classes from './Group.module.css';
 import backImg from '../../assets/back.png';
+import optionsImg from '../../assets/options.png';
 
 const Group = props => {
     const dispatch = useDispatch();
@@ -159,12 +160,15 @@ const Group = props => {
 
     return (
         <div className={classes.Group}>
-            <NavBar title="Group" leftButton={{ img: backImg, alt: 'Back', onClick: props.history.goBack }} />
+            <NavBar 
+            title="Group" 
+            leftButton={{ img: backImg, alt: 'Back', onClick: props.history.goBack }}
+            rightButton={{ img: optionsImg, alt: 'Edit', to: `/groups/${groupId}/edit` }} />
             {group ? (
-                <Fragment>
-                    <h1>{group.name}</h1>
-                    <p>{group.description}</p>
-                </Fragment>
+                <div className={classes.groupDetails}>
+                    <h1 className={classes.groupTitle}>{group.name}</h1>
+                    <p className={classes.groupDescription}>{group.description}</p>
+                </div>
             ) : null}
             <div className={classes.memberContainer}>
                 <div className={classes.membersTitle}>Members</div>

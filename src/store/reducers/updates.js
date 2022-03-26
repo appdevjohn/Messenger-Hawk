@@ -11,7 +11,7 @@ const addMessage = (state, action) => {
     return {
         ...state,
         messages: newMessages
-    };
+    }
 }
 
 const removeMessage = (state, action) => {

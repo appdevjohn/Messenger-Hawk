@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
@@ -24,7 +24,10 @@ const Group = props => {
     const [group, setGroup] = useState(null);
     const [members, setMembers] = useState([]);
     const [requests, setRequests] = useState([]);
-    const isMember = group && joinedGroups ? (joinedGroups.find(g => g.id === group.id) ? true : false) : null;
+
+    const joinedGroup = group && joinedGroups ? joinedGroups.find(g => g.id === group.id) : null;
+    const isMember = joinedGroup && joinedGroup !== undefined;
+    const isAdmin = joinedGroup ? joinedGroup.admin : false;
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -97,13 +100,13 @@ const Group = props => {
     }
 
     const removeUserHandler = removedUserId => {
-        const isMember = members.find(m => m.id === removedUserId) !== undefined;
-        if (!isMember && requests.find(r => r.id === removedUserId) === undefined) {
+        const userIsMember = members.find(m => m.id === removedUserId) !== undefined;
+        if (!userIsMember && requests.find(r => r.id === removedUserId) === undefined) {
             dispatch(setError('Could Not Deny Request', 'This user is not a member nor is trying to be.'));
             return;
         }
 
-        if (isMember) {
+        if (userIsMember) {
             setMembers(oldMembers => {
                 const newMembers = oldMembers.map(m => ({ ...m }));
                 const updatedMember = newMembers.find(m => m.id === removedUserId);
@@ -127,7 +130,7 @@ const Group = props => {
                 'Content-Type': 'application/json'
             }
         }).then(response => {
-            if (isMember) {
+            if (userIsMember) {
                 setMembers(oldMembers => oldMembers.filter(m => m.id !== response.data.userId));
             } else {
                 setRequests(oldRequests => oldRequests.filter(m => m.id !== response.data.userId));
@@ -135,7 +138,7 @@ const Group = props => {
 
         }).catch(error => {
             console.error(error);
-            if (isMember) {
+            if (userIsMember) {
                 setMembers(oldMembers => {
                     const newMembers = oldMembers.map(m => ({ ...m }));
                     const updatedMember = newMembers.find(m => m.id === removedUserId);
@@ -197,7 +200,7 @@ const Group = props => {
             <NavBar
                 title="Group"
                 leftButton={{ img: backImg, alt: 'Back', onClick: props.history.goBack }}
-                rightButton={isMember ? { img: optionsImg, alt: 'Edit', to: `/groups/${groupId}/edit` } : null} />
+                rightButton={isAdmin ? { img: optionsImg, alt: 'Edit', to: `/groups/${groupId}/edit` } : null} />
             {group ? (
                 <div className={classes.groupDetails}>
                     <h1 className={classes.groupTitle}>{group.name}</h1>
@@ -211,10 +214,14 @@ const Group = props => {
                         {members.filter(m => m.id !== userId).map(m => (
                             <div className={classes.member} key={m.id}>
                                 <div>{m.firstName} {m.lastName}</div>
-                                {!m.admin
-                                    ? <button className="UnemphasizedBtn" onClick={() => makeAdminHandler(m.id, true)}>Make Admin</button>
-                                    : <button className="UnemphasizedBtn" onClick={() => makeAdminHandler(m.id, false)}>Revoke Admin</button>}
-                                <button className="UnemphasizedBtn" onClick={() => removeUserHandler(m.id)}>Remove</button>
+                                {isAdmin ? (
+                                    <Fragment>
+                                        {!m.admin
+                                            ? <button className="UnemphasizedBtn" onClick={() => makeAdminHandler(m.id, true)}>Make Admin</button>
+                                            : <button className="UnemphasizedBtn" onClick={() => makeAdminHandler(m.id, false)}>Revoke Admin</button>}
+                                        <button className="UnemphasizedBtn" onClick={() => removeUserHandler(m.id)}>Remove</button>
+                                    </Fragment>
+                                ) : null}
                                 {m.isLoading ? <LoadingIndicator /> : null}
                             </div>
                         ))}

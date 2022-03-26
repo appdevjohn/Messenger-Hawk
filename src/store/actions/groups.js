@@ -31,8 +31,10 @@ export const requestJoinGroup = (groupId, userId, token) => {
                 }
             }).then(response => {
                 const joinedGroup = response.data.group;
-                localDB.addGroup(joinedGroup);
-                dispatch({ type: actionTypes.GROUP_ADD, group: joinedGroup });
+                if (joinedGroup.approved) {
+                    localDB.addGroup(joinedGroup);
+                    dispatch({ type: actionTypes.GROUP_ADD, group: joinedGroup });
+                }
                 dispatch({ type: actionTypes.GROUP_CHANGING, changing: false });
             }).catch(error => {
                 console.error(error);
@@ -56,8 +58,10 @@ export const requestLeaveGroup = (groupId, userId, token) => {
                 }
             }).then(response => {
                 const leftGroupId = response.data.group.id;
-                localDB.deleteGroup(leftGroupId);
-                dispatch({ type: actionTypes.GROUP_REMOVE, groupId: leftGroupId })
+                if (response.data.removed) {
+                    localDB.deleteGroup(leftGroupId);
+                    dispatch({ type: actionTypes.GROUP_REMOVE, groupId: leftGroupId })
+                }
                 dispatch({ type: actionTypes.GROUP_CHANGING, changing: false });
             }).catch(error => {
                 console.error(error);
@@ -116,6 +120,8 @@ export const checkActiveGroup = token => {
             } else if (serverGroups.length === 0) {
                 localDB.deleteLastViewedGroupId();
                 dispatch(setActiveGroupId(null));
+            } else {
+                dispatch(setActiveGroupId(newActiveGroupId));  // This is being run again to ensure activeGroup in redux is set.
             }
         }
 

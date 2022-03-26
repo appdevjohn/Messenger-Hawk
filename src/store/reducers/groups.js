@@ -6,7 +6,7 @@ const initialState = {
     groups: [],
     changing: false,
     loading: false
-};
+}
 
 const setActiveGroupId = (state, action) => {
     return {
@@ -31,9 +31,12 @@ const addGroup = (state, action) => {
 }
 
 const removeGroup = (state, action) => {
+    const removingActiveGroup = state.activeGroupId === action.groupId;
     return {
         ...state,
-        groups: state.groups.filter(g => g.id !== action.groupId).map(g => ({ ...g }))
+        groups: state.groups.filter(g => g.id !== action.groupId).map(g => ({ ...g })),
+        activeGroup: removingActiveGroup ? null : state.activeGroup,
+        activeGroupId: removingActiveGroup ? null : state.activeGroupId
     }
 }
 

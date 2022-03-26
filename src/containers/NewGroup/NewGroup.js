@@ -89,7 +89,7 @@ const NewGroup = props => {
         }).catch(error => {
             console.error(error);
             setIsLoading(false);
-            dispatch(setError('Error Editing Group', error.response.data.message || 'There was a server error querying this data.'));
+            dispatch(setError('Error Editing Group', error.response?.data?.message || 'There was a server error querying this data.'));
         })
     }
 

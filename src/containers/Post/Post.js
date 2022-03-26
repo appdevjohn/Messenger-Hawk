@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 
 import api from '../../api';
-import * as errorActions from '../../store/actions/error';
+import { setError } from '../../store/actions/error';
 import * as localDB from '../../localDatabase';
 import Modal from '../../components/Modal/Modal';
 import NavBar from '../../navigation/NavBar/NavBar';
@@ -207,9 +207,7 @@ const Post = props => {
 
         }).catch(error => {
             setIsUploading(false);
-
-            const errorMessage = error.response?.data?.message || 'File upload failed.';
-            dispatch(errorActions.setError('File Error', errorMessage));
+            dispatch(setError('Could Not Upload File', error.response?.data?.message || 'File upload failed.'));
         });
     }
 
@@ -226,9 +224,8 @@ const Post = props => {
             props.history.push('/posts');
 
         }).catch(error => {
-            console.error(error);
             setWillDeletePost(false);
-            dispatch(errorActions.setError('Deletion Error', 'There was an error deleting this post.'));
+            dispatch(setError('Could Not Delete Post', error.response?.data?.message || 'There was an error on the server.'));
         })
     }
 

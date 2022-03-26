@@ -1,32 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import { composeWithDevTools } from '@redux-devtools/extension'
 
 import './index.css';
 import App from './App';
 import { initDatabase } from './localDatabase';
+import store from './store/store';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-
-import groupsStore from './store/reducers/groups';
-import authStore from './store/reducers/auth';
-import errorStore from './store/reducers/error';
-import userStore from './store/reducers/user';
-import updateStore from './store/reducers/updates';
-
-// Setting up Redux store
-const rootReducer = combineReducers({
-    groups: groupsStore,
-    auth: authStore,
-    error: errorStore,
-    user: userStore,
-    updates: updateStore
-});
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
 // Initializing IndexedDB database.
 initDatabase();

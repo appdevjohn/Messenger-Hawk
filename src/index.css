@@ -140,4 +140,8 @@ button:disabled {
         font-weight: 400;
         padding: 0.5rem;
     }
+
+    .ListSearchInput {
+        border-bottom: 1px solid #444444;
+    }
 }

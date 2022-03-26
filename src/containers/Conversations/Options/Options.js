@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 
 import api from '../../../api';
 import * as localDB from '../../../localDatabase';
-import * as errorActions from '../../../store/actions/error';
 import NavBar from '../../../navigation/NavBar/NavBar';
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator';
 
@@ -42,7 +41,6 @@ const Options = props => {
             }).catch(error => {
                 console.error(error);
                 setDidFinishLoading(true);
-                dispatch(errorActions.setError('Error', error.response?.data?.message));
             });
         }
     }, [token, convoId, dispatch]);
@@ -59,8 +57,7 @@ const Options = props => {
                         'Content-Type': 'application/json'
                     }
                 }).catch(error => {
-                    console.error(error.response.data.message);
-                    dispatch(errorActions.setError('Error', error.response.data.message));
+                    console.error(error);
                 });
             }, 500);
             return () => {
@@ -85,11 +82,7 @@ const Options = props => {
                 localDB.deleteConversationWithId(convoId);
 
             }).catch(error => {
-                let errorMessage = 'You cannot leave this conversation while you are offline.';
-                if (error.response) {
-                    errorMessage = error.response.data.message
-                }
-                dispatch(errorActions.setError('Error', errorMessage));
+                console.error(error);
             });
         }
     }

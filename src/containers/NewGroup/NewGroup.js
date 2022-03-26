@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 
 import api from '../../api';
-import { setError } from '../../store/actions/error';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 import NavBar from '../../navigation/NavBar/NavBar';
 
@@ -40,7 +39,6 @@ const NewGroup = props => {
             }).catch(error => {
                 console.error(error);
                 setIsGettingData(false);
-                dispatch(setError('Error Getting Group Data', error.response.data.message || 'There was a server error querying this data.'));
             });
 
             return () => {
@@ -67,7 +65,6 @@ const NewGroup = props => {
         }).catch(error => {
             console.error(error);
             setIsLoading(false);
-            dispatch(setError('Error Creating Group', error.response.data.message || 'There was a server error querying this data.'));
         });
     }
 
@@ -89,7 +86,6 @@ const NewGroup = props => {
         }).catch(error => {
             console.error(error);
             setIsLoading(false);
-            dispatch(setError('Error Editing Group', error.response?.data?.message || 'There was a server error querying this data.'));
         })
     }
 
@@ -97,7 +93,7 @@ const NewGroup = props => {
         <div className={classes.NewGroup}>
             <NavBar
                 title={groupId ? 'Edit Group' : 'New Group'}
-                leftButton={{ img: backImg, alt: 'Back', to: !groupId ? '/join-group' : null, onClick: groupId ? props.history.goBack : null }} />
+                leftButton={{ img: backImg, alt: 'Back', onClick: props.history.goBack }} />
             <input
                 className={classes.nameInput}
                 name="groupName"

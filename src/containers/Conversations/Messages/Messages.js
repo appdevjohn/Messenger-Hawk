@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import api from '../../../api';
 import * as localDB from '../../../localDatabase';
-import * as errorActions from '../../../store/actions/error';
+import { setError } from '../../../store/actions/error';
 import * as updateActions from '../../../store/actions/updates';
 import LoadingIndicator from '../../../components/LoadingIndicator/LoadingIndicator';
 import NavBar from '../../../navigation/NavBar/NavBar';
@@ -96,10 +96,8 @@ const Messages = props => {
                     });
 
                 }).catch(error => {
+                    console.error(error);
                     setDidFinishLoading(true);
-                    if (error.response) {
-                        dispatch(errorActions.setError('Error', error.response.data.message));
-                    }
                 });
             }
         }
@@ -297,10 +295,8 @@ const Messages = props => {
             localDB.addMessage(newMessage);
 
         }).catch(error => {
+            console.error(error);
             setIsUploading(false);
-
-            const errorMessage = error.response?.data?.message || 'File upload failed.';
-            dispatch(errorActions.setError('File Error', errorMessage));
         });
     }
 
@@ -311,12 +307,14 @@ const Messages = props => {
             setIsLoadingOlderMessages(false);
 
             if (newMessages.length === 0) {
-                dispatch(errorActions.setError('Up to Date', 'There are no older messages to load.'));
+                dispatch(setError('Up to Date', 'There are no older messages to load.'));
             } else {
                 setMessages(oldMessages => {
                     return oldMessages.map(msg => ({ ...msg })).concat(newMessages);
                 });
             }
+        }).catch(error => {
+            console.error(error);
         });
     }
 

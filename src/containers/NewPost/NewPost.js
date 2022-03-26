@@ -1,17 +1,14 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import api from '../../api';
-import { setError } from '../../store/actions/error';
 import NavBar from '../../navigation/NavBar/NavBar';
 
 import classes from './NewPost.module.css';
 import backImg from '../../assets/back.png';
 
 const NewPost = props => {
-    const dispatch = useDispatch();
-
     const token = useSelector(state => state.auth.token);
     const activeGroup = useSelector(state => state.groups.activeGroup);
 
@@ -33,7 +30,6 @@ const NewPost = props => {
                 props.history.push(`/posts/${response.data.post.id}`);
             }).catch(error => {
                 console.error(error);
-                dispatch(setError('Could not create post.', error.response.data.message));
             })
         } else {
             console.error('No active group to post in.')

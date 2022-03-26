@@ -1,10 +1,8 @@
 import { useState, useCallback } from 'react';
 import { withRouter } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import api from '../../api';
 import * as localDB from '../../localDatabase';
-import * as errorActions from '../../store/actions/error';
 import NavBar from '../../navigation/NavBar/NavBar';
 import TypedTagInput from '../../components/TypedTagInput/TypedTagInput';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
@@ -13,10 +11,11 @@ import classes from './NewConversation.module.css';
 import backImg from '../../assets/back.png';
 
 const NewConversation = props => {
+    const { token } = props;
+
     const [recipients, setRecipients] = useState([]);
     const [convoName, setConvoName] = useState('');
     const [creatingConvo, setCreatingConvo] = useState(false);
-    const dispatch = useDispatch();
 
     const createConversationHandler = () => {
         setCreatingConvo(true);
@@ -25,7 +24,7 @@ const NewConversation = props => {
             members: JSON.stringify(recipients)
         }, {
             headers: {
-                Authorization: 'Bearer ' + props.token,
+                Authorization: 'Bearer ' + token,
                 'Content-Type': 'application/json'
             }
         }).then(response => {
@@ -44,8 +43,8 @@ const NewConversation = props => {
             });
 
         }).catch(error => {
+            console.error(error);
             setCreatingConvo(false);
-            dispatch(errorActions.setError('Error', error.response.data.message));
         });
     }
 
@@ -57,7 +56,7 @@ const NewConversation = props => {
                 tags={recipients}
                 finalized={creatingConvo}
                 addTag={tag => setRecipients(prevState => {
-                    return [...prevState, tag];
+                    return [...new Set([...prevState, tag])];
                 })}
                 removeTag={tag => {
                     setRecipients(prevState => {
@@ -74,7 +73,7 @@ const NewConversation = props => {
                 onValidateTag={useCallback(text => {
                     return api.get('/validate-recipient/' + text, {
                         headers: {
-                            Authorization: 'Bearer ' + props.token,
+                            Authorization: 'Bearer ' + token,
                             'Content-Type': 'application/json'
                         }
                     }).then(response => {
@@ -86,7 +85,7 @@ const NewConversation = props => {
                     }).catch(() => {
                         return false;
                     });
-                }, [props.token])} />
+                }, [token])} />
             <div className={classes.convoNameContainer}>
                 <input
                     type="text"

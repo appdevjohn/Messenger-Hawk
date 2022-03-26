@@ -5,7 +5,6 @@ import api from '../../api';
 import * as localDB from '../../localDatabase';
 import * as authActions from '../../store/actions/auth';
 import * as userActions from '../../store/actions/user';
-import * as errorActions from '../../store/actions/error';
 import NavBar from '../../navigation/NavBar/NavBar';
 import TabBar from '../../navigation/TabBar/TabBar';
 import Modal from '../../components/Modal/Modal';
@@ -58,7 +57,7 @@ const Account = props => {
             setEditingProfilePic(null);
 
         }).catch(error => {
-            dispatch(errorActions.setError('Error', error.response?.data?.message || 'There was an error uploading the image.'));
+            console.error(error);
         });
     }
 
@@ -86,10 +85,9 @@ const Account = props => {
                 localDB.ensureUserIsSaved(userData);
 
             }).catch(error => {
+                console.error(error);
                 setIsEditing(false);
                 setIsLoading(false);
-
-                dispatch(errorActions.setError('Error', error.response.data.message));
             });
 
         } else {

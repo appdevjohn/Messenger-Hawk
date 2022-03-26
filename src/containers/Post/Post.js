@@ -1,9 +1,8 @@
 import { useState, useEffect, Fragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router';
 
 import api from '../../api';
-import { setError } from '../../store/actions/error';
 import * as localDB from '../../localDatabase';
 import Modal from '../../components/Modal/Modal';
 import NavBar from '../../navigation/NavBar/NavBar';
@@ -21,7 +20,6 @@ const Post = props => {
     const token = useSelector(state => state.auth.token);
     const userId = useSelector(state => state.auth.userId);
     const user = useSelector(state => state.user);
-    const dispatch = useDispatch();
 
     const [originalPosterName, setOriginalPosterName] = useState('');
     const [originalPosterImageURL, setOriginalPosterImageURL] = useState(null);
@@ -206,8 +204,8 @@ const Post = props => {
             localDB.addMessage(newMessage);
 
         }).catch(error => {
+            console.error(error);
             setIsUploading(false);
-            dispatch(setError('Could Not Upload File', error.response?.data?.message || 'File upload failed.'));
         });
     }
 
@@ -224,8 +222,8 @@ const Post = props => {
             props.history.push('/posts');
 
         }).catch(error => {
+            console.error(error);
             setWillDeletePost(false);
-            dispatch(setError('Could Not Delete Post', error.response?.data?.message || 'There was an error on the server.'));
         })
     }
 

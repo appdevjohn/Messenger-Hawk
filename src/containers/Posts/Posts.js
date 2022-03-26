@@ -87,7 +87,8 @@ const Posts = props => {
                     onDismiss={() => setShowGroups(false)}
                     options={[
                         ...groups.map(g => ({ title: g.name, onClick: () => { dispatch(groupsActions.setActiveGroupId(g.id)); setShowGroups(false); } })),
-                        { title: 'Join/Create Group', onClick: () => props.history.push('/join-group') }
+                        { title: 'Join Group', onClick: () => props.history.push('/join-group') },
+                        { title: 'Create Group', onClick: () => props.history.push('/new-group') },
                     ]} />
                 : null}
         </Fragment>
@@ -131,7 +132,7 @@ const Posts = props => {
         <div className={(posts.length === 0 && !isLoading > 0) || (groups.length === 0 && !isLoading) ? splashClasses.SplashView : classes.Posts}>
             <NavBar
                 title={navBarTitle}
-                leftButton={{ img: groupImg, alt: 'Groups', to: `/groups/${activeGroup?.id}` }}
+                leftButton={activeGroup ? { img: groupImg, alt: 'Groups', to: `/groups/${activeGroup?.id}` } : null}
                 rightButton={groups.length > 0 ? { img: addImg, alt: 'New Post', to: '/new-post' } : null} />
             <TableView>
                 {viewBody}

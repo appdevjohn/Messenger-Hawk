@@ -40,17 +40,10 @@ export const startSignUp = (firstName, lastName, email, username, password, conf
             });
 
         }).catch(error => {
-            if (error.response) {
-                return dispatch({
-                    type: actionTypes.AUTH_FAIL,
-                    message: error.response.data.message
-                });
-            } else {
-                return dispatch({
-                    type: actionTypes.AUTH_FAIL,
-                    message: 'An error occurred trying to log in.'
-                });
-            }
+            return dispatch({
+                type: actionTypes.AUTH_FAIL,
+                message: error.response?.data?.message || 'An error occurred trying to sign up.'
+            });
         });
     }
 }
@@ -81,17 +74,11 @@ export const startLogIn = (email, password) => {
             });
 
         }).catch(error => {
-            if (error.response) {
-                return dispatch({
-                    type: actionTypes.AUTH_FAIL,
-                    message: error.response.data.message
-                });
-            } else {
-                return dispatch({
-                    type: actionTypes.AUTH_FAIL,
-                    message: 'An error occurred trying to log in.'
-                });
-            }
+            console.log(error);
+            return dispatch({
+                type: actionTypes.AUTH_FAIL,
+                message: error.response?.data?.message || 'An error occurred trying to log in.'
+            });
         });
     }
 }

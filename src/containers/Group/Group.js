@@ -39,11 +39,15 @@ const Group = props => {
                 }
             }).then(response => {
                 setGroup(response.data.group);
-                setMembers(response.data.members.map(m => ({ ...m, isLoading: false })));
-                setRequests(response.data.requests.map(r => ({ ...r, isLoading: false })));
+                if (response.data.members) {
+                    setMembers(response.data.members.map(m => ({ ...m, isLoading: false })));
+                }
+                if (response.data.requests) {
+                    setRequests(response.data.requests.map(r => ({ ...r, isLoading: false })));
+                }
                 setIsLoading(false);
             }).catch(error => {
-                console.error(error.response?.data?.message);
+                console.error(error);
                 setIsLoading(false);
             });
         }
@@ -82,7 +86,7 @@ const Group = props => {
                 return newMembers;
             });
         }).catch(error => {
-            dispatch(setError('Could Not Change Admin Status', error.response?.data?.message));
+            console.error(error);
             setMembers(oldMembers => {
                 const newMembers = oldMembers.map(m => ({ ...m }));
                 const updatedMember = newMembers.find(m => m.id === newAdminId);
@@ -130,8 +134,8 @@ const Group = props => {
             }
 
         }).catch(error => {
+            console.error(error);
             if (isMember) {
-                dispatch(setError('Could Not Remove User', error.response?.data?.message || 'There was an error on the server.'));
                 setMembers(oldMembers => {
                     const newMembers = oldMembers.map(m => ({ ...m }));
                     const updatedMember = newMembers.find(m => m.id === removedUserId);
@@ -139,7 +143,6 @@ const Group = props => {
                     return newMembers;
                 });
             } else {
-                dispatch(setError('Could Not Deny Request', error.response?.data?.message || 'There was an error on the server.'));
                 setRequests(oldRequests => {
                     const newRequests = oldRequests.map(r => ({ ...r }));
                     const updatedRequest = newRequests.find(r => r.id === removedUserId);
@@ -170,7 +173,7 @@ const Group = props => {
             }
             setRequests(member => member.filter(m => m.id !== response.data.userId));
         }).catch(error => {
-            dispatch(setError('Could Not Approve User', error.response?.data?.message));
+            console.error(error);
             setRequests(oldRequests => {
                 const newRequests = oldRequests.map(r => ({ ...r }));
                 const updatedRequest = newRequests.find(m => m.id === approvedUserId);
@@ -194,7 +197,7 @@ const Group = props => {
             <NavBar
                 title="Group"
                 leftButton={{ img: backImg, alt: 'Back', onClick: props.history.goBack }}
-                rightButton={{ img: optionsImg, alt: 'Edit', to: `/groups/${groupId}/edit` }} />
+                rightButton={isMember ? { img: optionsImg, alt: 'Edit', to: `/groups/${groupId}/edit` } : null} />
             {group ? (
                 <div className={classes.groupDetails}>
                     <h1 className={classes.groupTitle}>{group.name}</h1>

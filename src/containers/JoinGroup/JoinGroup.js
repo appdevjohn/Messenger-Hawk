@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import api from '../../api';
 import NavBar from '../../navigation/NavBar/NavBar';
@@ -7,7 +8,6 @@ import GroupCell from './GroupCell/GroupCell';
 
 import classes from './JoinGroup.module.css';
 import backImg from '../../assets/back.png';
-import addImg from '../../assets/add.png';
 
 const JoinGroup = props => {
     const token = useSelector(state => state.auth.token);
@@ -53,8 +53,7 @@ const JoinGroup = props => {
         <div className={classes.JoinGroup}>
             <NavBar
                 title="Join Group"
-                leftButton={{ img: backImg, alt: 'Back', to: '/posts' }}
-                rightButton={{ img: addImg, alt: 'Create Group', to: '/new-group' }} />
+                leftButton={{ img: backImg, alt: 'Back', onClick: props.history.goBack }} />
             <input className={['ListSearchInput', classes.search].join(' ')} placeholder="Search Groups" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
             <div>{groupResults.map(gr => <GroupCell name={gr.name} description={gr.description} id={gr.id} key={gr.id} />)}</div>
             {isLoading ? <div>Loading...</div> : null}
@@ -62,4 +61,4 @@ const JoinGroup = props => {
     )
 }
 
-export default JoinGroup;
+export default withRouter(JoinGroup);

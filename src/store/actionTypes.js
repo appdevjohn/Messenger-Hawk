@@ -26,3 +26,5 @@ export const GROUP_ADD = 'GROUP_ADD';
 export const GROUP_REMOVE = 'GROUP_REMOVE';
 export const GROUP_CHANGING = 'GROUP_CHANGING';
 export const GROUP_LOADING = 'GROUP_LOADING';
+
+export const ALL_CLEAR = 'ALL_CLEAR';

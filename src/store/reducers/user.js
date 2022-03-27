@@ -33,6 +33,7 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.USER_SET: return setUser(state, action);
         case actionTypes.USER_CLEAR: return clearUser(state, action);
+        case actionTypes.ALL_CLEAR: return initialState;
         default: return state;
     }
 }

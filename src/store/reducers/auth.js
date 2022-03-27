@@ -1,9 +1,9 @@
 import * as actionTypes from '../actionTypes';
 
 const initialState = {
-    userId: undefined,
-    token: undefined,
-    activated: undefined,
+    userId: undefined,      // These three are initially undefined because we do not know if we have valid values.
+    token: undefined,       // Once the auth actions determine a logged-in state, they can become a value.
+    activated: undefined,   // This allows the viewed page to stay visible on page reload without jumping to the Auth view.
     loading: false,
     message: null,
     redirectPath: '/'

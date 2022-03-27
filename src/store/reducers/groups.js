@@ -62,6 +62,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.GROUP_REMOVE: return removeGroup(state, action);
         case actionTypes.GROUP_CHANGING: return setGroupsChanging(state, action);
         case actionTypes.GROUP_LOADING: return setLoading(state, action);
+        case actionTypes.ALL_CLEAR: return initialState;
         default: return state;
     }
 }

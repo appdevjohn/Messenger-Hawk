@@ -65,7 +65,7 @@ export const startLogIn = (email, password) => {
             localDB.ensureUserIsSaved(userData);
 
             dispatch(userActions.setUser(userData.firstName, userData.lastName, userData.username, userData.email, userData.profilePicURL));
-            
+
             return dispatch({
                 type: actionTypes.AUTH_SUCCESS,
                 userId: userData.id,
@@ -115,8 +115,9 @@ export const startLogOut = () => {
         localStorage.removeItem('userId');
         localStorage.removeItem('token');
         localStorage.removeItem('activated');
+        localStorage.removeItem('defaultGroupId');
 
-        dispatch({ type: actionTypes.USER_CLEAR });
+        dispatch({ type: actionTypes.ALL_CLEAR });
         return dispatch({ type: actionTypes.AUTH_LOG_OUT });
     }
 }
@@ -160,10 +161,9 @@ export const authCheckState = () => {
         }).then(response => {
             if (response.data.message !== 'Authenticated') {
                 dispatch(startLogOut());
-                dispatch(userActions.clearUser());
             } else {
                 localDB.ensureUserIsSaved(response.data.user);
-                
+
                 dispatch(userActions.setUser(response.data.user.firstName, response.data.user.lastName, response.data.user.username, response.data.user.email, response.data.user.profilePicURL));
             }
         }).catch(() => {
@@ -178,7 +178,7 @@ export const authCheckState = () => {
                 activated: activated
             });
         } else {
-            return dispatch({ type: actionTypes.AUTH_LOG_OUT });
+            return startLogOut();
         }
     }
 }

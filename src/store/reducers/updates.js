@@ -37,6 +37,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.UPDATE_ADD_MESSAGE: return addMessage(state, action);
         case actionTypes.UPDATE_REMOVE_MESSAGE: return removeMessage(state, action);
         case actionTypes.UPDATE_CLEAR_MESSAGES: return clearMessages(state, action);
+        case actionTypes.ALL_CLEAR: return initialState;
         default: return state;
     }
 }

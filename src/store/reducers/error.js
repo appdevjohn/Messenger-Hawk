@@ -17,6 +17,7 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ERROR_SET: return errorSet(state, action);
         case actionTypes.ERROR_CLEAR: return errorClear(state, action);
+        case actionTypes.ALL_CLEAR: return initialState;
         default: return state;
     }
 }

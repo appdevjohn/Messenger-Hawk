@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import api from '../../api';
 import NavBar from '../../navigation/NavBar/NavBar';
 import GroupCell from './GroupCell/GroupCell';
+import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 
 import classes from './JoinGroup.module.css';
 import backImg from '../../assets/back.png';
@@ -56,7 +57,7 @@ const JoinGroup = props => {
                 leftButton={{ img: backImg, alt: 'Back', onClick: props.history.goBack }} />
             <input className={['ListSearchInput', classes.search].join(' ')} placeholder="Search Groups" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
             <div>{groupResults.map(gr => <GroupCell name={gr.name} description={gr.description} id={gr.id} key={gr.id} />)}</div>
-            {isLoading ? <div>Loading...</div> : null}
+            {isLoading ? <LoadingIndicator /> : null}
         </div>
     )
 }

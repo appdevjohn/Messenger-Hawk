@@ -26,8 +26,9 @@ const Group = props => {
     const [requests, setRequests] = useState([]);
 
     const joinedGroup = group && joinedGroups ? joinedGroups.find(g => g.id === group.id) : null;
-    const isMember = joinedGroup && joinedGroup !== undefined;
-    const isAdmin = joinedGroup ? joinedGroup.admin : false;
+    const isPending = group ? group.approved === false : false;
+    const isMember = (group ? group.approved === true : false) || (joinedGroup && joinedGroup !== undefined);
+    const isAdmin = (group ? group.admin === true : false) || (joinedGroup ? joinedGroup.admin : false);
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -58,10 +59,12 @@ const Group = props => {
 
     const requestJoinHandler = () => {
         dispatch(groupActions.requestJoinGroup(groupId, userId, token));
+        setGroup(oldState => ({ ...oldState, approved: false, admin: false }));
     }
 
     const leaveGroupHandler = () => {
         dispatch(groupActions.requestLeaveGroup(groupId, userId, token));
+        setGroup(oldState => ({ ...oldState, approved: null, admin: null }));
     }
 
     const makeAdminHandler = (newAdminId, status) => {
@@ -246,7 +249,9 @@ const Group = props => {
             <div className="SubmitBtnContainer">
                 {isMember
                     ? <button className="SubmitBtn" onClick={leaveGroupHandler}>Leave Group</button>
-                    : <button className="SubmitBtn" onClick={requestJoinHandler}>Join Group</button>}
+                    : isPending
+                        ? <button className="SubmitBtn" onClick={leaveGroupHandler}>Withdraw Request to Join</button>
+                        : <button className="SubmitBtn" onClick={requestJoinHandler}>Join Group</button>}
             </div>
             {isChangingGroups ? <LoadingIndicator /> : null}
         </div>

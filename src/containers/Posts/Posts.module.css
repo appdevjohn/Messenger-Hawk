@@ -20,3 +20,8 @@
 .groupNameActive::after {
     clip-path: polygon(50% 0, 100% 80%, 0 80%);
 }
+
+.btnContainer {
+    text-align: center;
+    margin: 1rem 0;
+}

@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import api from '../../api';
 import * as localDB from '../../localDatabase';
 import * as groupsActions from '../../store/actions/groups';
+import { setError } from '../../store/actions/error';
 import NavBar from '../../navigation/NavBar/NavBar';
 import TabBar from '../../navigation/TabBar/TabBar';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
@@ -16,6 +17,23 @@ import classes from './Posts.module.css';
 import splashClasses from '../SplashView.module.css';
 import groupImg from '../../assets/group.png';
 import addImg from '../../assets/add.png';
+
+const postsPerQuery = 20;
+
+const getPosts = async (token, groupId, offset = 0) => {
+    if (token && groupId) {
+        const response = await api.get(`/posts?groupId=${groupId}&limit=${postsPerQuery}&offset=${offset}`, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Conotent-Type': 'application/json'
+            }
+        });
+
+        return response.data.posts;
+    } else {
+        return null;
+    }
+}
 
 const Posts = props => {
     const dispatch = useDispatch();
@@ -29,21 +47,6 @@ const Posts = props => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        const getPosts = async (groupId) => {
-            if (token && groupId) {
-                const response = await api.get(`/posts?groupId=${groupId}`, {
-                    headers: {
-                        Authorization: 'Bearer ' + token,
-                        'Conotent-Type': 'application/json'
-                    }
-                });
-
-                return response.data.posts;
-            } else {
-                return null;
-            }
-        }
-
         const fetchData = async () => {
             if (!activeGroup) { return }
             setIsLoading(true);
@@ -52,7 +55,7 @@ const Posts = props => {
                 const localPosts = await localDB.getPostsFromGroup(activeGroup.id);
                 setPosts(localPosts);
 
-                const serverPosts = await getPosts(activeGroup.id);
+                const serverPosts = await getPosts(token, activeGroup.id);
                 if (serverPosts) {
                     localDB.deleteAllPosts();
                     serverPosts.forEach(p => {
@@ -71,6 +74,35 @@ const Posts = props => {
 
         fetchData();
     }, [setPosts, dispatch, activeGroup, token])
+
+    const loadMorePosts = async () => {
+        if (!activeGroup) { return }
+        setIsLoading(true);
+
+        const newPosts = await getPosts(token, activeGroup.id, posts.length);
+        setIsLoading(false);
+
+        if (newPosts.length > 0) {
+            setPosts(oldPosts => {
+                const newSet = oldPosts.map(post => ({ ...post })).concat(newPosts);
+
+                // Remove duplicates
+                const keys = {};
+                for (let index = newSet.length - 1; index >= 0; index -= 1) {
+                    const post = newSet[index];
+                    if (keys[post.id]) {
+                        newSet.splice(index, 1);
+                    } else {
+                        keys[post.id] = true;
+                    }
+                }
+
+                return newSet;
+            })
+        } else {
+            dispatch(setError('Up to Date', 'There are no older posts to load.'));
+        }
+    }
 
     const activeGroupIndex = groups.findIndex(g => g.id === activeGroup?.id);
 
@@ -110,18 +142,24 @@ const Posts = props => {
                     time={new Date(p.createdAt)}
                     title={p.title}
                     body={p.text} />)}
+                <div className={classes.btnContainer}><button className="Button" onClick={loadMorePosts}>Load More</button></div>
                 <LoadingIndicator />
             </Fragment>
         )
     } else if (posts.length > 0 && !isLoading) {
-        viewBody = posts.map(p => <PostCell
-            key={p.id}
-            postId={p.id}
-            imgSrc={p.userData.profilePicURL}
-            name={p.userData.firstName}
-            time={new Date(p.createdAt)}
-            title={p.title}
-            body={p.text} />);
+        viewBody = (
+            <Fragment>
+                {posts.map(p => <PostCell
+                    key={p.id}
+                    postId={p.id}
+                    imgSrc={p.userData.profilePicURL}
+                    name={p.userData.firstName}
+                    time={new Date(p.createdAt)}
+                    title={p.title}
+                    body={p.text} />)}
+                <div className={classes.btnContainer}><button className="Button" onClick={loadMorePosts}>Load More</button></div>
+            </Fragment>
+        )
     } else if (posts.length === 0 && isLoading) {
         viewBody = <LoadingIndicator />
     } else {
